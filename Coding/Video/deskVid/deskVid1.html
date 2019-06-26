@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="deskVid1.js"></script>
+  </head>
+  <body>
+    <p> Video Input Page </p>
+    <input id="vidInput" type="file" onchange="loadMyVideo()" accept="video/*"/>
+    <br>
+    <video id="movie" onmousemove="showCoords(event)" controls width="500" height="500"></video>
+    <canvas id="c1" onmousemove="showCoords(event)" width = "500" height = "500"></canvas>
+    <br>
+    <input id="showCoordsCheck" type="checkbox"> Show Mouse Coordinates</input>
+    <p id="mouseCoords"></p>
+    <button id=pauseButton onclick="pauseButtonF()"disabled>Pause</button>
+    <input type="number" id="myTime" placeholder="0" disabled>
+    <input type="text" id="myAnn" placeholder='Insert Description' disabled>
+    <button id="recordButton" onclick="recT()" disabled> Record </button>
+    <button id="screenshotButton" onclick="takeScreenshot()" disabled> Screenshot </button>
+    <br>
+    <table id='dataTable'>
+      <tbody style="cursor:pointer">
+      </tbody>
+    </table>
+  </body>

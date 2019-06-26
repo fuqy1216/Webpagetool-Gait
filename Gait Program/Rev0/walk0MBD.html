@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <script src="js/processing.js"></script>
+  <link href="styles/walk0MBD.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+  <p id="test"> Walk rev0 - MBD </p>
+  <br>
+
+  <table frame = "box" style="display: inline-block">
+    <tr>
+      <td> <input type="text" value="L1 (mm)" disabled> </td>
+      <td> <input type="number" id="L1" value = "200" onkeyup="update()"></td>
+      <td> <input type="text" value="R1 (mm)" disabled> </td>
+      <td> <input type="number" id="R1" value = "200" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L2 (mm)" disabled> </td>
+      <td> <input type="number" id="L2" value = "200" onkeyup="update()"></td>
+      <td> <input type="text" value="R2 (mm)" disabled> </td>
+      <td> <input type="number" id="R2" value = "200" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L3 (mm)" disabled> </td>
+      <td> <input type="number" id="L3" value = "40" onkeyup="update()"></td>
+      <td> <input type="text" value="R3 (mm)" disabled> </td>
+      <td> <input type="number" id="R3" value = "40" onkeyup="update()"></td>
+    </tr>
+  </table>
+  <br>
+  <input type="file" id="cvsFileInput" onchange="handleFiles(this.files)" accept=".csv">
+  <br>
+
+  <script type = "text/javascript" src="js/walk0MBD.js"></script>
+
+  <canvas id="sketch" data-processing-sources="walk0MBD/walk0MBD.pde"></canvas>
+
+  <table id="dataTable"> </table>
+
+
+
+
+</body>
+
+</html>

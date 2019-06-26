@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <script src="js/processing.js"></script>
+  <link href="styles/walk1MBD.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+  <p id="test"> Walk rev1 - MBD </p>
+  <p> 50% Female (Half Scale: 1 pixel = 2 mm)</p>
+  <p> Left Leg = Blue <br>
+      Right Leg = Red </p>
+
+  <table frame = "box" style="display: inline-block">
+    <tr>
+      <td> <input type="text" value="Shoulder Height (mm)" disabled> </td>
+      <td> <input type="number" id="SH" value = "1324" onkeyup="update()"></td>
+      <td> <input type="text" value="Shoulder to Center (mm)" disabled> </td>
+      <td> <input type="number" id="SC" value = "209" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L1 (mm)" disabled> </td>
+      <td> <input type="number" id="L1" value = "396" onkeyup="update()"></td>
+      <td> <input type="text" value="R1 (mm)" disabled> </td>
+      <td> <input type="number" id="R1" value = "396" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L2 (mm)" disabled> </td>
+      <td> <input type="number" id="L2" value = "398" onkeyup="update()"></td>
+      <td> <input type="text" value="R2 (mm)" disabled> </td>
+      <td> <input type="number" id="R2" value = "398" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L3 (mm)" disabled> </td>
+      <td> <input type="number" id="L3" value = "65" onkeyup="update()"></td>
+      <td> <input type="text" value="R3 (mm)" disabled> </td>
+      <td> <input type="number" id="R3" value = "65" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L Heel (mm)" disabled> </td>
+      <td> <input type="number" id="LHeel" value = "40" onkeyup="update()"></td>
+      <td> <input type="text" value="R Heel (mm)" disabled> </td>
+      <td> <input type="number" id="RHeel" value = "40" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L Foot (mm)" disabled> </td>
+      <td> <input type="number" id="LFoot" value = "162" onkeyup="update()"></td>
+      <td> <input type="text" value="R Foot (mm)" disabled> </td>
+      <td> <input type="number" id="RFoot" value = "162" onkeyup="update()"></td>
+    </tr>
+    <tr>
+      <td> <input type="text" value="L Toe (mm)" disabled> </td>
+      <td> <input type="number" id="LToe" value = "44" onkeyup="update()"></td>
+      <td> <input type="text" value="R Toe (mm)" disabled> </td>
+      <td> <input type="number" id="RToe" value = "44" onkeyup="update()"></td>
+    </tr>
+  </table>
+  <br>
+  <input type="file" id="cvsFileInput" onchange="handleFiles(this.files)" accept=".csv">
+  <br>
+
+  <br>
+
+  <script type = "text/javascript" src="js/walk1MBD.js"></script>
+  <script src="js/processing.js"></script>
+  <canvas id="sketch" data-processing-sources="walk1MBD.pde"></canvas>
+  <table id="coordinates">
+    <tr>
+      <th> RHip </th>
+      <th> RKnee </th>
+      <th> RAnkle </th>
+      <th> RPivot </th>
+      <th> RToe </th>
+      <th> LHip </th>
+      <th> LKnee </th>
+      <th> LAnkle </th>
+      <th> LPivot </th>
+      <th> LToe </th>
+    </tr>
+    <tr>
+      <td id="cell1"> " </td>
+      <td id="cell2"> " </td>
+      <td id="cell3"> " </td>
+      <td id="cell4"> " </td>
+      <td id="cell5"> " </td>
+      <td id="cell6"> " </td>
+      <td id="cell7"> " </td>
+      <td id="cell8"> " </td>
+      <td id="cell9"> " </td>
+      <td id="cell10"> " </td>
+    </tr>
+  </table>
+
+  <button id="backward" onclick="minus1()"> <-- </button>
+  <button id="pauseButton" onclick="pause()"> Pause </button>
+  <button id="forward" onclick="plus1()"> --> </button>
+
+  <table id="current">
+    <tr>
+      <th> Current Time </th>
+    </tr>
+    <tr>
+      <td id="ti"><td>
+    </tr>
+
+  </table>
+  <table id="dataTable"> </table>
+
+
+
+
+</body>
+
+</html>

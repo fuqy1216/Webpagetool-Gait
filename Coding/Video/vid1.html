@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="VidPlay.js"></script>
+
+  </head>
+
+  <body>
+    <p>
+    <ul><H2>  IOE 463 Measurement and Design of Work</H2>
+    <p>     T. Armstrong, tja@umich.edu & M. Daly, mbdaly@umich.edu
+    <br>      3/15/2019
+    <p>
+    Video Address: <input type="text" id="VidURL" value="nGvHwxpdxf4">
+
+    <input type="button" id="loadVid" onclick="loadVid()" value="Load Video">
+    <p>
+
+    <div id="player"></div><br/>
+    <p>
+    <input type="button" id="contVidPause" onclick="vidPause()" value="Pause">
+    <input type="number" id="txtWrkTime"  value="0">
+    <input type="text"   id="txtWrkStep"  value="Step">
+    <input type="button" id="contRecTime" onclick="recT()" value="Record Time & Annotation">
+    <p>
+    <input type="button" id="contVidPlay" onclick="contPlay()" value="Cont. Play">
+    <input type="button" id="contGoToTlast" onclick="GoToT()" value="Go to last time">
+
+    <p><input type="text" id="txtTimeRecord"  value="0" >
+  <p>
+      <table>
+        <tr><th>Time, sec.</th><th>Element</th></tr>
+        <tr><td><ol id='lstTimes'></ol></td><td><ul id='lstSteps'></ul></td></tr>
+      </table>
+    <p>
+    Copy data & paste into spreadsheet to save & for further analysis
+  </body>
+
+</html>

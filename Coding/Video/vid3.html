@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="vidPlay3.js"></script>
+
+    <style>
+    td {
+       text-align: center;
+       }
+    </style>
+
+  </head>
+
+  <body>
+    <p>
+    <ul><H2>IOE 463 Measurement and Design of Work</H2>
+    <p>     T. Armstrong, tja@umich.edu & M. Daly, mbdaly@umich.edu
+    <br>    3/25/2019
+    <p>
+    Youtube.com Video Address: <input type="text" id="VidURL" value="ppwPCpabPs4">
+    <input type="button" id="loadVid" onclick="loadVid()" value="Load Video">
+    <p>
+    <div id="player"></div><br/>
+    <p style="font-size:10px;">Click on video or use "Pause" and "Play" buttons to control play. </br>Use "." and "," to go forward or backward 1 frame at a time.
+      <br>Use "Record" button to save time and annotations."
+      <br>Click on saved times to return to saved location.
+    <br><a href="https://sites.google.com/a/umich.edu/u-m-google-170816/accessibility/google-keyboard-shortcuts---youtube" target="_blank">Youtube shortcuts</a> (some may not work)</p>
+
+    <table>
+    <tr><td>Last Recorded  Time</td><td>Step Description</td><td>RH Description</td><td>LH Description</td><td></td><td></td><td></td></tr>
+    <tr>
+    <td><input type="number" id="txtWrkTime"  value="0"></td>
+    <td><input type="text"   id="txtA1"  value="Start" placeholder='Start'></td>
+    <td><input type="text"   id="txtA2"  value="RH" placeholder='RH'></td>
+    <td><input type="text"   id="txtA3"  value="LH" placeholder='LH'></td>
+    <td><input type="button" id="contVidPause" onclick="vidPause()" value="Pause"></td>
+    <td><input type="button" id="contVidRecord" onclick="recT()" value="Record"></td>
+    <td><input type="button" id="contVidPlay" onclick="contPlay()" value="Play"></td>
+  </tr>
+    <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><input type="button" id="contMinusPtoneSec" onclick="minusPtOneSec()" value="-0.1s"></td>
+    <td><input type="button" id="contPlusPtOneSec" onclick="plusPtOneSec()" value="+ 0.1s"></td>
+    <td></td>
+  </tr>
+  </table>
+
+    <p id="timeRecord"> 0</p>
+    <!--<p id="clickedRowText"> This Text Will Change to the clicked row </p>-->
+    <br>
+    <p id="lastSelRow"> </p>
+Click on row to reset video<br>
+    <table id='dataTable'>
+      <tbody style="cursor:pointer">
+      </tbody>
+    </table>
+
+    <p>
+    Copy data & paste into spreadsheet to save & for further analysis
+  </body>
+
+</html>

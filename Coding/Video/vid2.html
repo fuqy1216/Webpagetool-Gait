@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="vidPlay2.js"></script>
+
+    <style>
+    td {
+       text-align: center;
+       }
+    </style>
+
+  </head>
+
+  <body>
+    <p>
+    <ul><H2>IOE 463 Measurement and Design of Work</H2>
+    <p>     T. Armstrong, tja@umich.edu & M. Daly, mbdaly@umich.edu
+    <br>    3/20/2019
+    <p>
+    Video Address: <input type="text" id="VidURL" value="nGvHwxpdxf4">
+    <input type="button" id="loadVid" onclick="loadVid()" value="Load Video">
+    <p>
+    <div id="player"></div><br/>
+    <table>
+    <tr><<td>Record</td><td>Last Recorded Video Time</td><td>Enter Annotation</td><td>Pause</td><td> Record</td><td>Play</td></tr>
+    <tr><td><input type="button" id="contVidRecord" onclick="recT()" value="Record1"></td>
+    <td><input type="number" id="txtWrkTime"  value="0"></td>
+    <td><input type="text"   id="txtWrkStep"  value="Step" placeholder='Insert Annotation'></td>
+    <td><input type="button" id="contVidPause" onclick="vidPause()" value="Pause"></td>
+    <td><input type="button" id="contVidRecord" onclick="recT()" value="Record2"></td>
+    <td><input type="button" id="contVidPlay" onclick="contPlay()" value="Play"></td></tr>
+  </table>
+
+    <!-- <p id="timeRecord">  Time Recordings </p>
+    <p id="clickedRowText"> This Text Will Change to the clicked row </p>-->
+    <br>
+Click on row to reset video<br>
+    <table id='dataTable'>
+      <tbody style="cursor:pointer">
+      </tbody>
+    </table>
+
+    <p>
+    Copy data & paste into spreadsheet to save & for further analysis
+  </body>
+
+</html>

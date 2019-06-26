@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="walk1.js"></script>
+
+<style>
+body {
+    background-color:#FFFFFF;
+    width: 800px;
+}
+
+input[type="text"] 
+{
+    width: 40px;
+    border: 1px solid #CCC;
+}
+</style>
+</head>
+
+
+<body>
+<div class="p0">
+<p>
+
+<p>
+<h2>Gait Kinematics</h2>
+<p>T. Armstrong<br><A href="http://www-personal.umich.edu/~tja" target="_blank">http://www-personal.umich.edu/~tja/</A>
+<br>1/17/17</p>
+
+<table>
+<tr><td width="640">This page provides standing height data<sup>1</sup> and average body proportions<sup>2</sup> for simple posture and reach calculations.
+</td></tr>
+
+<tr><td width="640"><sup>1</sup>National Health Survey. For latest data see: <a href="https://www.cdc.gov/nchs/data/series/sr_11/sr11_252.pdf"  target="_blank">https://www.cdc.gov/nchs/data/series/sr_11/sr11_252.pd</a>
+</td></tr>
+<tr><td width="640"><sup>2</sup> Drillis, R., Contini, R., & Bluestein, M. (1966). Body segment parameters. New York University, School of Engineering and Science.<br>
+<p>
+</td></tr></table>
+
+
+
+
+<table   border="1">
+<tr><th></th><th colspan="3">Females</th><th colspan="3">Males</th></tr>
+<tr><td>Stature</td>
+	<td id="5F">1504</td>
+	<td id="50F">1618</td>
+	<td id="95F">1730</td>
+	<td id="5M">1636</td>
+	<td id="50M">1755</td>
+	<td id="95M">1880</td>
+	<td align="center">Width<br><input type="text" id="OtherHt" placeholder="Other Height" title="OtherHt"></td></tr>
+<tr><td>Select</td>
+
+	<td><input type="button" onclick="Female5()" value="5%"></td>
+	<td><input type="button" onclick="Female50()" value="Avg!"></td>
+	<td><input type="button" onclick="Female95()" value="95%"></td>
+	<td><input type="button" onclick="Male5()" value="5%"></td>
+	<td><input type="button" onclick="Male50()" value="Avg"></td>
+	<td><input type="button" onclick="Male95()" value="95%"></td>
+	<td><input type="button" onclick="Other()" value="Other"></td>
+</tr>
+</table>
+</td>
+
+<p>
+<p>
+
+<!-- Link Lengths -->
+<table>
+<tr><td width="500">
+<table id="myTable" %>
+  <tr class="header">
+    <th width="50"></th>
+    <th width="290">link</th>
+    <th width="70">Fract</th>
+    <th width="70">Calc</th> 
+    <th width-"70">Meas</th> 
+<!--    style="width:200px" align="left" -->
+  </tr>
+  <tr>
+    <td>1.</td>
+    <td>Stature</td>
+    <td>1.000</td>
+    <td id="L1">1504</td>
+    <td><input type="text" id="m1" placeholder="L1" title="OtherHt"></td>
+  </tr>
+  <tr>
+    <td>2.</td>
+    <td>Center-Shoulder</td>
+    <td id="F2">0.129</td>
+    <td id="L2">194</td>
+    <td><input type="text" id="m2" placeholder="L2" title="Center-Shoulder"></td>
+  </tr>  
+  <tr>
+    <td>3.</td>
+    <td>Center-Hip</td>
+    <td id="F3">0.096</td>
+    <td id="L3">144</td>
+    <td><input type="text" id="m3" placeholder="L3" title="Center-Hip"></td>
+  </tr>  
+  <tr>
+  	<td>4.</td>
+    <td>Shoulder Ht</td>
+    <td id="F4">0.818</td>
+    <td id="L4">1230</td>
+    <td><input type="text" id="m4" placeholder="L4" title="OtherHt"></td>
+  </tr>
+  
+  <tr>
+  	<td>5.</td>
+    <td>Hip Ht</td>
+    <td id="F5">0.530</td>
+    <td id="L5">797</td>
+    <td><input type="text" id="m5" placeholder="L5" title="OtherHt"></td>
+  </tr>
+  
+  <tr>
+    <td>6.</td>
+    <td>Upper Arm</td>
+    <td id="F6">0.188</td>
+    <td id="L6">283</td>
+    <td><input type="text" id="m6" placeholder="L6" title="OtherHt"></td>
+  </tr>
+  <tr>
+    <td>7.</td>
+    <td>Lower Arm</td>
+    <td id="F7">0.145</td>
+    <td id="L7">218</td>
+    <td><input type="text" id="m7" placeholder="L7" title="OtherHt"></td>
+  </tr>
+  <tr>
+    <td>8.</td>
+    <td>Hand</td>
+    <td id="F8">0.108</td>
+    <td id="L8">162</td>
+    <td><input type="text" id="m8" placeholder="L8" title="OtherHt"></td>
+  </tr>
+
+  <tr>
+  	<td>9.</td>
+    <td>Upper Leg</td>
+    <td id="F9">0.245</td>
+    <td id="L9">368</td>
+    <td><input type="text" id="m5" placeholder="L9" title="OtherHt"></td>
+  </tr>
+  
+    <tr>
+  	<td>10.</td>
+    <td>Lower Leg</td>
+    <td id="F10">0.246</td>
+    <td id="L10">370</td>
+    <td><input type="text" id="m5" placeholder="L10" title="OtherHt"></td>
+  </tr>
+
+    <tr>
+  	<td>11.</td>
+    <td>Ankle Height</td>
+    <td id="F11">0.039</td>
+    <td id="L11">59</td>
+    <td><input type="text" id="m5" placeholder="L11" title="OtherHt"></td>
+  </tr>
+
+  <tr>
+    <td>12.</td>
+    <td>Foot Length</td>
+    <td id="F12">0.152</td>
+    <td id="L12">229</td>
+    <td><input type="text" id="m14" placeholder="L12" title="OtherHt"></td>
+  </tr>
+  
+  <tr>
+    <td>13.</td>
+    <td>Ankle-Heel</td>
+    <td id="F13">0.17</td>
+    <td id="L13">39</td>
+    <td><input type="text" id="m15" placeholder="L13" title="OtherHt"></td>
+   </tr>
+   <tr>
+    <td>14.</td>
+    <td>Ankle-hinge point</td>
+    <td id="F14">0.83</td>
+    <td id="L14">190</td>
+    <td><input type="text" id="m16" placeholder="L14" title="OtherHt"></td>
+  </tr>
+</table>
+
+</td>
+<td><td width="300" valign="top">
+<!--		<img src="Links.jpg" alt="Drillis & Contini Link Proportions" style="width:400px;"> -->
+		</td></tr>
+</table>
+
+<p>
+<p><h2>Enter gait parameters:</h2>
+<table id="gait">
+	<tr><th style="width:250px" align="center">Parameter</th>
+		<th style="width:75px" align="center">Default</th>
+		<th style="width:50px" align="center">Measured</th></tr>
+	
+	<tr><td align="left">Lean °:</td>
+		<td id="Lean0">5</td>
+		<td><input type="text" id="Lean1" placeholder="Lean0" title="lean"></td></tr>
+	
+	<tr><td style="width:200px" align="left">Speed, mm/s: </td>
+		<td id="Speed0">1000</td>
+		<td><input type="text" id="Speed1"  placeholder="Speed0" title="speed"></td></tr>
+	
+	<tr><td style="width:20px" align="left">Step=0.5*Stature, mm:</td>
+		<td id="Step0">752</td>
+		<td><input type="text" id="Stride1" placeholder="Stride0" title="stride"></td></td></tr>
+	
+	<tr><td style="width:200px" align="left">Stance/(Swing+stance):</td>
+		<td id="Stance0">0.60</td>
+		<td><input type="text" id="Swing1"  placeholder="Swing0" title="swing/stance"></td></tr>
+	
+	<tr><td style="width:200px" align="left">Toe clearance, mm:</td>
+		<td id-"ToeCl0>10</td>
+		<td><input type="text" id="ToeCl"  placeholder="ToeCl0" title="ToeCl"></td></tr>
+	</table>
+<p>
+	<table>
+	<tr><th style="width:250px" align="center">Angle</th>
+		<th style="width:75px" align="center">Global<sup>1</sup></th>
+		<th style="width:75px" align="center">Local<sup>2</sup></th>
+		<th style="width:50px" align="center">Enter<sup>3</sup></th></tr>
+		
+	<tr><td style="width:200px" align="left">Pelvis Angle @t1<sup>4</sup>, deg:</td>
+		<td id="A00" align="center">-60</td>
+		<td id="A01" align="center">-145</td>
+		<td><input type="text" id="A02" placeholder="A00" title="pelvis angle"></td></tr>
+	
+	<tr><td style="width:200px" align="left">Upper Leg @t1<sup>4</sup>, deg:</td>
+		<td id="A10" align="center">-60</td>
+		<td id="A11" align="center">0</td>
+		<td><input type="text" id="A12" placeholder="A10" title="upper leg<sup>1</sup>"></td></tr>
+		
+	<tr><td style="width:200px" align="left">Lower Leg @t1<sup>4</sup>, deg:</td>
+		<td id="A20" align="center">-75</td>
+		<td id="A21" align="center">-15</td>
+		<td><input type="text" id="A22" placeholder="A20" title="lower leg"></td></tr>
+	
+	<tr><td style="width:200px" align="left">Foot @t1<sup>4</sup>, deg:</td>
+		<td id="A30" align="center">-75</td>
+		<td id="A31" align="center">0</td>
+		<td><input type="text" id="A32" placeholder="A30" title="foot"></td></tr>
+	
+	<tr><td style="width:200px" align="left">Foot @t3<sup>5</sup>, deg:</td>
+		<td id="A40" align="center"></td>
+		<td id="A41" align="center">0</td>
+		<td><input type="text" id="A42" placeholder="A40" title="knee angle"></td></tr>
+	
+	<tr><td style="width:200px" align="left">Lower Leg @t4<sup>6</sup>, deg:</td>
+		<td id="A50 align="center">-120</td>
+		<td id="A51" align="center">-30</td>
+		<td><input type="text" id="A52" placeholder="A50" title="knee angle"></td></tr>
+		
+	<tr><td style="width:200px" align="left">Ankle max Flx, deg:</td>
+		<td id="A60 align="center"></td>
+		<td id="A61" align="center"></td>
+		<td><input type="text" id="A62" placeholder="A50" title="knee angle"></td></tr>
+		
+	<tr><td style="width:200px" align="left">Ankle max Ext, deg:</td>
+		<td id="A70 align="center"></td>
+		<td id="A71" align="center"></td>
+		<td><input type="text" id="A72" placeholder="A50" title="knee angle"></td></tr>					
+	
+	<tr><td style="width:200px" align="left">Ankle Control: normal/rigid/flaccid</td>
+		<td id="A80 align="center"></td>
+		<td id="A81" align="center"></td>
+		<td><input type="text" id="A82" placeholder="A50" title="knee angle"></td></tr>					
+	
+	<tr><td style="width:200px" align="right">Enter: </td>
+		<td id="Global" align="center"><input type="button" onclick="AnglesGlobal()" value="Global Angles"><br></td>
+		<td id="Local" align="center">	<input type="button" onclick="AnglesLocal()" value="Local Angles"></td></tr>
+	</table>
+	<p><sup>1</sup>Global coordinates with respect to horizontal axis<br>
+	<sup>2</sup>Local coordinates with respect to proximal link<br>
+	<sup>3</sup>Enter measured values in global or local coordinates<br>
+	<sup>4</sup>Heel contact -- begin stance phase 1st foot<br>
+	<sup>5</sup>Heel contact second foot -- begin stance phase 2nd foot<br>
+	<sup>6</sup>"toe off" or end kick -- begin forward swing<br>	
+
+
+	<p><input type="button" onclick="initializeposture()" value="Compute initial position">
+
+
+
+<P id="step0">Step</P>
+
+<p>
+
+<p>
+<canvas id="StepCanvas" width="800" height="1000" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+</body>
+</html>
