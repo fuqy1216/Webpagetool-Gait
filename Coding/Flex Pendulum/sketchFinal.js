@@ -119,6 +119,7 @@ function setup() {
   pendRadio.option('Single Pendulum');
   pendRadio.option('Double Pendulum');
   pendRadio.option('Double Pendulum with Foot');
+  pendRadio.option('Inverted Pendulum');
   pendRadio.position(130, 10);
   pendRadio.style('text-align', 'center');
   pendRadio.value('Double Pendulum with Foot');
@@ -348,12 +349,14 @@ function draw() {
     var theta1 = Number(theta0_1_Input.value())*PI/180.0 + PI/2;
     var theta2 = Number(theta0_2_Input.value())*PI/180.0 + PI/2;
     line(width/2, height/2, width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1));
+    if (pendState < 4){
     if (pendState >= 2) line(width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1), width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2));
     ellipse(width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1), mass1*4, mass1*4);
     if (pendState >= 2) ellipse(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), mass2*4, mass2*4);
     if (pendState >= 3) {
       line(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2) + footFraction*len3*100*Math.cos(theta2 + PI/2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2) + footFraction*len3*100*Math.sin(theta2 + PI/2));
       line(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2) + (1 - footFraction)*len3*100*Math.cos(theta2 - PI/2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2) + (1 - footFraction)*len3*100*Math.sin(theta2 - PI/2));
+    }
     }
   }
   if (active == 1) {
@@ -367,7 +370,7 @@ function draw() {
       jPos1Label.html('(' + round(len1*100*Math.cos(drawTheta1)*100)/100 + ', ' + -1*round(len1*100*Math.sin(drawTheta1)*100)/100 +')');
       drawTimeLabel.html('Time: ' + drawIndex/1000 + ' seconds');
     }
-    if (pendState >= 2) {
+    if ((pendState >= 2)&&(pendState < 4)) {
       drawTheta2 = theta2Array[drawIndex] + PI/2;
       var jointX = width/2 + (len1*100)*Math.cos(drawTheta1);
       var jointY = height/2 + (len1*100)*Math.sin(drawTheta1);
@@ -496,8 +499,8 @@ function start() {
   // Print Min/Max of Motion
   //console.log('Theta 1:');
   findMotionData(theta1Array, 1);
-  if (pendState == 1) findPeriod(theta1Array);
-  if (pendState > 1) {
+  if ((pendState == 1)||(pendState == 4)) findPeriod(theta1Array);
+  if ((pendState > 1)&&(pendState < 4)) {
     //console.log('Theta 2:');
     findMotionData(theta2Array, 2);
   }
@@ -655,7 +658,22 @@ function calculateTheta(t) {
       index = index + 1;
     }
   }
-
+  if (pendState == 4) {
+    var theta =  PI - theta0_1*PI/180.0;
+    var thetaDot = thetaDot0_1*PI/180.0;
+    var thetaDoubleDot;
+    var index = 0;
+    for (var i = 0; i < t; i = i + deltaT) {
+      thetaDoubleDot = singlePend_getThetaDoubleDot(theta, thetaDot);
+      theta = theta + thetaDot * deltaT;
+      thetaDot = thetaDot + thetaDoubleDot * deltaT;
+      timeArray[index] = i;
+      theta1Array[index] = theta;
+      thetaDot1Array[index] = thetaDot;
+      thetaDbDot1Array[index] = thetaDoubleDot;
+      index = index + 1;
+    }
+  }
 }
 
 
