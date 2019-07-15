@@ -1,3 +1,6 @@
+loadScript('js-solver.js', function() {
+  //alert('script ready!'); 
+});
 // Canvas
 var myCan;
 
@@ -24,6 +27,10 @@ var len3Label;
 var len4 = 2;
 var len4Input;
 var len4Label;
+// Length of Forth Pendulum
+var len5 = 0.1;
+var len5Input;
+var len5Label;
 // Mass of First Pendulum
 var mass1 = 1.0;
 var mass1Input;
@@ -53,11 +60,11 @@ var theta0_4 = -10.0;
 var theta0_4_Input;
 var theta0_4_Label;
 // Initial Angular Velocity of First Pendulum
-var thetaDot0_1 = -150.0;
+var thetaDot0_1 = -170.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 100.0;
+var thetaDot0_2 = 120.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
@@ -69,7 +76,7 @@ var mu_ = 0.1;
 var mu_Input;
 var mu_Label;
 // K - Coefficient of Spring Constant
-var k_ = 0.0;
+var k_ = 10.0;
 var k_Input;
 var k_Label;
 // Time Interval
@@ -130,7 +137,31 @@ var footFraction;
 var footFractionSlider;
 var footFractionLabel;
 
+var triangleSolver = new Solver({
+  //thetas need to be in radians
+  domega0: '(-F1*l3*cos(theta1)+T3+F2*l3*sin(theta1)-m3*g*0.5*l3*cos(theta0))/I3',
+  E1:'-0.5*domega0*l3*sin(theta0)-0.5*dtheta0^2*l3*cos(theta0)-(-F7+F2*cos(theta0+theta1)+F1*sin(theta0+theta1))/m3',
+  E2:'0.5*domega0*l3*cos(theta0)-0.5*dtheta0^2*l3*sin(theta0)-((F8+F2*sin(theta0+theta1)-F1*cos(theta0+theta1))/m3-g)',
+  dv1x:'-domega0*l3*sin(theta0)-dtheta0^2*l3*cos(theta0)',
+  dv1y:'domega0*l3*cos(theta0)-dtheta0^2*l3*sin(theta0)',
+  domega2:'(-T3-k2*theta2-F4*l2*cos(theta2)+F3*l2*sin(theta2)+m2*g*0.5*l2*sin(theta0+theta1))/I2',
+  E3:'dv1x',
+  area: 'base*h/2',
+  c: 'Math.sqrt(a^2+b^2) || base/2',
+  a: 'Math.sqrt(Math.pow(c,2)-Math.pow(b,2))',
+  b: 'sqrt(c**2-a**2)',
+  h: 'area*2/base',
+  base: 'area*2/h'
+})
+
 function setup() {
+/*T = triangleSolver.solve({
+  c: 5,
+  b: 3,
+  area: 50,
+  h: 10
+})*/
+
   myCan = createCanvas(600, 500);
   myCan.position(30, 250);
   background(220);
@@ -177,6 +208,14 @@ function setup() {
     len4Input.input(updateICs);
     len4Label = createDiv('Length 4: ' + len4 + ' m');
     len4Label.position(880, len4Input.y);
+  // Length of Ankle Height
+    len5Input = createInput();
+    len5Input.position(1030, len4Input.y + 30);
+    len5Input.value(len5);
+    len5Input.style('width', '70px');
+    len5Input.input(updateICs);
+    len5Label = createDiv('Length 5: ' + len5 + ' m');
+    len5Label.position(880, len4Input.y + 30);
   // Mass of First Pendulum
   mass1Input = createInput();
   mass1Input.position(len1Input.x, len1Input.y + 30);
@@ -203,7 +242,7 @@ function setup() {
   mass3Label.position(len3Label.x, mass3Input.y);
     // Mass of Forth Pendulum
     mass4Input = createInput();
-    mass4Input.position(len4Input.x, len4Input.y + 30);
+    mass4Input.position(len5Input.x, len5Input.y + 30);
     mass4Input.style('width', '70px');
     mass4Input.value(mass4);
     mass4Input.input(updateICs);
@@ -897,4 +936,24 @@ function triplePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThet
 
 function triplePend_getThetaDoubleDot_3 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
   return 0;
+}
+
+function loadScript( url, callback ) {
+  var script = document.createElement( "script" )
+  script.type = "text/javascript";
+  if(script.readyState) {  // only required for IE <9
+    script.onreadystatechange = function() {
+      if ( script.readyState === "loaded" || script.readyState === "complete" ) {
+        script.onreadystatechange = null;
+        callback();
+      }
+    };
+  } else {  //Others
+    script.onload = function() {
+      callback();
+    };
+  }
+
+  script.src = url;
+  document.getElementsByTagName( "head" )[0].appendChild( script );
 }
