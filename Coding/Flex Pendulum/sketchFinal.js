@@ -21,7 +21,7 @@ var len3 = 0.5;
 var len3Input;
 var len3Label;
 // Length of Forth Pendulum
-var len4 = 1;
+var len4 = 2;
 var len4Input;
 var len4Label;
 // Mass of First Pendulum
@@ -49,19 +49,19 @@ var theta0_2 = 30.0;
 var theta0_2_Input;
 var theta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var theta0_4 = -20.0;
+var theta0_4 = -10.0;
 var theta0_4_Input;
 var theta0_4_Label;
 // Initial Angular Velocity of First Pendulum
-var thetaDot0_1 = 0.0;
+var thetaDot0_1 = -150.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 0.0;
+var thetaDot0_2 = 100.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -100.0;
+var thetaDot0_4 = -50.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Mu - Coefficient of Viscous Damping
@@ -418,8 +418,15 @@ function draw() {
       line(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2) + (1 - footFraction)*len3*100*Math.cos(theta2 - PI/2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2) + (1 - footFraction)*len3*100*Math.sin(theta2 - PI/2));
     }
     if (pendState >= 4){
+      //knee joint
+      ellipse(width/2 + (len1)*100*Math.cos(theta4), height/2 + (len1)*100*Math.sin(theta4), mass1*4, mass1*4);
       //stance leg
       line(width/2, height/2, width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4));
+      //ankle joint
+      ellipse(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), mass2*4, mass2*4);
+      //foot
+      line(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), width/2 + (len4)*100*Math.cos(theta4) - footFraction*len3*100, height/2 + (len4)*100*Math.sin(theta4));
+      line(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), width/2 + (len4)*100*Math.cos(theta4) + (1 - footFraction)*len3*100, height/2 + (len4)*100*Math.sin(theta4));
     }
   }
   //loading interface
@@ -465,6 +472,15 @@ function draw() {
       if (pendState >= 4) {
         drawTheta4 = theta4Array[drawIndex] + PI/2; //theta3Array[drawIndex] + PI/2;
         line(width/2, height/2, width/2 + (len4)*100*Math.cos(2*PI - drawTheta4), height/2 + (len4)*100*Math.sin(2*PI - drawTheta4));
+        //knee joint
+      ellipse(width/2 + (len1)*100*Math.cos(2*PI - drawTheta4), height/2 + (len1)*100*Math.sin(2*PI - drawTheta4), mass1*4, mass1*4);
+      //stance leg
+      line(width/2, height/2, width/2 + (len4)*100*Math.cos(2*PI - drawTheta4), height/2 + (len4)*100*Math.sin(2*PI - drawTheta4));
+      //ankle joint
+      ellipse(width/2 + (len4)*100*Math.cos(2*PI - drawTheta4), height/2 + (len4)*100*Math.sin(2*PI - drawTheta4), mass2*4, mass2*4);
+      //foot
+      line(width/2 + (len4)*100*Math.cos(2*PI - drawTheta4), height/2 + (len4)*100*Math.sin(2*PI - drawTheta4), width/2 + (len4)*100*Math.cos(2*PI - drawTheta4) - footFraction*len3*100, height/2 + (len4)*100*Math.sin(2*PI - drawTheta4));
+      line(width/2 + (len4)*100*Math.cos(2*PI - drawTheta4), height/2 + (len4)*100*Math.sin(2*PI - drawTheta4), width/2 + (len4)*100*Math.cos(2*PI - drawTheta4) + (1 - footFraction)*len3*100, height/2 + (len4)*100*Math.sin(2*PI - drawTheta4));
       }
     }
 
@@ -583,7 +599,7 @@ function start() {
 
   // Print Min/Max of Motion
   //console.log('Theta 1:');
-  findMotionData(theta1Array, 1);
+ /* findMotionData(theta1Array, 1);
   if (pendState == 1) findPeriod(theta1Array);
   if (pendState > 1) {
     //console.log('Theta 2:');
@@ -592,7 +608,7 @@ function start() {
   if (pendState >=4) {
     findMotionData(theta4Array, 3);
   }
-
+*/
   enterHeaders();
 
   drawIndex = 0;
@@ -775,13 +791,20 @@ function calculateTheta(t) {
       timeArray[index] = i;
       theta1Array[index] = theta1;
       theta2Array[index] = theta2;
+      if (theta2Array[index]-theta1Array[index] < 0){
+        theta2Array[index] = theta1Array[index];
+        thetaDot2Array[index] = thetaDot1;
+        thetaDbDot2Array[index] = thetaDoubleDot1;
+      }else{
+        thetaDot2Array[index] = thetaDot2;
+        thetaDbDot2Array[index] = thetaDoubleDot2;
+      }
       theta3Array[index] = theta3;
       thetaDot1Array[index] = thetaDot1;
-      thetaDot2Array[index] = thetaDot2;
       thetaDot3Array[index] = thetaDot3;
       thetaDbDot1Array[index] = thetaDoubleDot1;
-      thetaDbDot2Array[index] = thetaDoubleDot2;
       thetaDbDot3Array[index] = thetaDoubleDot3;
+
       index = index + 1;
     }
     //inverted pendulum
@@ -803,7 +826,8 @@ function calculateTheta(t) {
 }
 
 
-
+/*
+//find maximum data value
 function findMotionData(inputArr, num) {
   // Calculate Min and Max Theta and Find Corresponding Times
   var myMax = -99999;
@@ -840,7 +864,7 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
   var myAvg = myTotal/myDiffs.length;
   // console.log('Estimated Period: ' + round(myAvg*2/1000*100)/100 + ' seconds');
 }
-
+*/
 
 
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
