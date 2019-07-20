@@ -1,6 +1,9 @@
 loadScript('math-solver.js', function() {
   //alert('script ready!'); 
 });
+loadScript('js-solver.js', function() {
+  //alert('script ready!'); 
+});
 // Canvas
 var myCan;
 
@@ -1016,6 +1019,38 @@ function loadScript( url, callback ) {
   script.src = url;
   document.getElementsByTagName( "head" )[0].appendChild( script );
 }
+function solvedoublestance(){
+  LegSolver = new Solver({
+    l1: 'l1',
+    l2: 'l2',
+    l3: 'l3',
+    l4: 'l4',
+    theta0: 'theta0',
+    theta1: 'theta1',
+    theta2: 'theta2',
+    dtheta0: 'dtheta0',
+    dtheta1: 'dtheta1',
+    Radius: 'Radius',
+    Toeangle: 'atan(l4/l3)',
+    theta4: 'acos((l3*sin(theta0) + l4*cos(theta0) + l2*cos(theta0+theta1) + l1*cos(theta0+theta1-theta2) - Radius)/(l2+l1+l4-Radius))',
+    dtheta4: '-((l3^2+l4^2)^0.5*dtheta0*cos(theta0+Toeangle) - l2*(dtheta0+dtheta1)*sin(theta0+theta1) - l1*(dtheta0+dtheta1-dtheta2)*sin(theta0+theta1-theta2))/(l1+l2+l4-Radius)/sin(theta4)',
+    dtheta2: '-(-(l3^2+l4^2)^0.5*dtheta0*sin(theta0+Toeangle) - l2*(dtheta0+dtheta1)*cos(theta0+theta1) - (l1+l2+l4-Radius)*dtheta4*cos(theta4)-Radius*dtheta4)/l1/cos(theta0+theta1-theta2)-dtheta0-dtheta1'
+  })
+  Fsolve = LegSolver.solve({
+    l1: '1',
+    l2: '1',
+    l3: '0.1',
+    l4: '0.3',
+    theta0: '2',
+    theta1: '4',
+    theta2: '5',
+    dtheta0: '10',
+    dtheta1: '20',
+    Radius: '0.2'
+    })   
+    Fsolve2 = LegSolver.solve(Fsolve);
+}
+
 
 function solveleg(theta, dtheta) {
 m1 = mass1;
@@ -1033,7 +1068,8 @@ T3 = 100;
 k1 = 10;
 k2 = 10;
 m = 123;
-  a = [[l3*cos(theta[1]),-l3*sin(theta[1]),0,0,0,0,0,0,0,0,0,0,0,0,I3,0,0,0],
+  a = [
+  [l3*cos(theta[1]),-l3*sin(theta[1]),0,0,0,0,0,0,0,0,0,0,0,0,I3,0,0,0],
   [-sin(theta[0]+theta[1])/m3,-cos(theta[0]+theta[1])/m3,0,0,0,0,1/m3,0,0,0,0,0,0,0,-l3*sin(theta[0])/2,0,0,0],
   [cos(theta[0]+theta[1])/m3,-sin(theta[0]+theta[1])/m3,0,0,0,0,0,-1/m3,0,0,0,0,0,0,l3*cos(theta[0])/2,0,0,0],
   [0,0,0,0,0,0,0,0,1,0,0,0,0,0,l3*sin(theta[0]),0,0,0],
@@ -1051,7 +1087,7 @@ m = 123;
   [0,0,0,0,0,(l1+l2+l4),0,0,0,0,0,0,0,0,0,0,0,1/12*math.pow((l1+l2+l4),2)*(m1+m2+m3)],
   [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,-(l1+l2+l4)*cos(theta[3])],
   [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,(l1+l2+l4)*sin(theta[3])]
-  ];
+  ]
   
   b = [T3-m3*g*l3*cos(theta[0])/2,
   math.pow((dtheta[0]),2)*l3*cos(theta[0])/2,
@@ -1070,8 +1106,29 @@ m = 123;
   -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2]),
   (m1+m2+m3)*g*(l1+l2+l4)*sin(theta[3])/2+m*g*(l1+l2+l4)*sin(theta[3])-k1*(theta[0]+theta[1]-theta[2]),
   -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
-  -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3]),
-];
+  -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
+]
+/*a = [
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+  [1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+  [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+  [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+  [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+  [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
+]*/
+//b = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-return math.usolve(a, b);
+return math.multiply(math.inv(a),b);
 }
