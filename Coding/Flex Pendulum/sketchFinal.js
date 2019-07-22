@@ -140,42 +140,6 @@ var footFraction;
 var footFractionSlider;
 var footFractionLabel;
 
- /*var LegSolver = new Solver({
-  //thetas need to be in radians
- F1: '(-domega0*I3+T3+F2*l3*sin(theta1)-m3*g*0.5*l3*cos(theta0))/l3/cos(theta1)',
-  F2: '-(-domega0*I3+T3-F1*l3*cos(theta1)-m3*g*0.5*l3*cos(theta0))/l3/sin(theta1)',
-  F3: '(domega2*I2+T3+k2*theta2+F4*l2*cos(theta2)-m2*g*0.5*l2*sin(theta0+theta1))/l2/sin(theta2)',
-  F4: '(-T3-k2*theta2+F3*l2*sin(theta2)+m2*g*0.5*l2*sin(theta0+theta1)-domega2*I2)/l2/cos(theta2)',
-  F5: '-(-domega3*I1 + k2*theta2 - k1*(theta0+theta1-theta2) - F6*l1*cos(theta4+theta1+theta0-theta2) + m1*g*0.5*l1*sin(theta1+theta0-theta2) + m*g*l1*sin(theta0+theta1-theta2))/(l1*sin(theta4+theta0+theta1-theta2))',
-  F6: '(k2*theta2 - k1*(theta0+theta1-theta2) + F5*l1*sin(theta4+theta0+theta1-theta2) - domega3*I1 + m1*g*0.5*l1*sin(theta1+theta0-theta2) + m*g*l1*sin(theta0+theta1-theta2))/(l1*cos(theta4+theta1+theta0-theta2))',
-  F7: '(0.5*domega0*l3*sin(theta0)+0.5*dtheta0^2*l3*cos(theta0))*m3+F2*cos(theta0+theta1)+F1*sin(theta0+theta1)',
-  F8: '(0.5*domega0*l3*cos(theta0)-0.5*dtheta0^2*l3*sin(theta0) - g)*m3 - (F2*sin(theta0+theta1)-F1*cos(theta0+theta1))',*/
-  /*F1: 'F1', F2: 'F2', F3: 'F3', F4: 'F4', F5: 'F5', F6: 'F6', F7: 'F7', F8: 'F8',
-  theta0: 'theta0', theta1: 'theta1', theta2: '(-T3-F4*l2*cos(theta2)+F3*l2*sin(theta2)+m2*g*0.5*l2*sin(theta0+theta1)-domega2*I2)/k2', 
-  theta4: 'theta4', dtheta0: 'dtheta0', dtheta1: 'dtheta1', dtheta2: 'dtheta2', dtheta4: 'dtheta4',
-  m:'m', m1: 'm1', m2: 'm2', m3: 'm3', l1: 'l1', l2: 'l2', l3: 'l3', l4: 'l4', I1: 'I1', I2: 'I2', I3: 'I3', g: 'g', k1: 'k1',
-  k2: '(-T3-F4*l2*cos(theta2)+F3*l2*sin(theta2)+m2*g*0.5*l2*sin(theta0+theta1)-domega2*I2)/theta2', 
-  T3: '-k2*theta2+F3*l2*sin(theta2)+m2*g*0.5*l2*sin(theta0+theta1)-domega2*I2-F4*l2*cos(theta2)',
-  domega0: '(-F1*l3*cos(theta1)+T3+F2*l3*sin(theta1)-m3*g*0.5*l3*cos(theta0))/I3',
-  E1:'-0.5*domega0*l3*sin(theta0)-0.5*dtheta0^2*l3*cos(theta0)-(-F7+F2*cos(theta0+theta1)+F1*sin(theta0+theta1))/m3',
-  E2:'0.5*domega0*l3*cos(theta0)-0.5*dtheta0^2*l3*sin(theta0)-((F8+F2*sin(theta0+theta1)-F1*cos(theta0+theta1))/m3-g)',
-  dv1x:'-domega0*l3*sin(theta0)-dtheta0^2*l3*cos(theta0)',
-  dv1y:'domega0*l3*cos(theta0)-dtheta0^2*l3*sin(theta0)',
-  domega2:'(-T3-k2*theta2-F4*l2*cos(theta2)+F3*l2*sin(theta2)+m2*g*0.5*l2*sin(theta0+theta1))/I2',
-  E3:'dv1x - 0.5*domega2*l2*cos(theta0+theta1) + 0.5*(dtheta0+dtheta1)^2*l2*sin(theta0+theta1) - ((F3*sin(theta0+theta1-theta2)+F4*cos(theta0+theta1-theta2)-F1*sin(theta0+theta1)-F2*cos(theta0+theta1))/m2)',
-  E4:'dv1y - 0.5*domega2*l2*sin(theta0+theta1) - 0.5*(dtheta0+dtheta1)^2*l2*cos(theta0+theta1) - ((-F3*cos(theta0+theta1-theta2)+F4*sin(theta0+theta1-theta2)+F1*cos(theta0+theta1)-F2*sin(theta0+theta1))/m2-g)', 
-  dv2x:'dv1x - domega2*l2*cos(theta0+theta1) + (dtheta0+dtheta1)^2*l2*sin(theta0+theta1)',
-  dv2y:'dv1y - domega2*l2*sin(theta0+theta1) - (dtheta0+dtheta1)^2*l2*cos(theta0+theta1)',
-  domega3:'(k2*theta2 - k1*(theta0+theta1-theta2) + F5*l1*sin(theta4+theta0+theta1-theta2) - F6*l1*cos(theta4+theta1+theta0-theta2) + m1*g*0.5*l1*sin(theta1+theta0-theta2) + m*g*l1*sin(theta0+theta1-theta2))/I1',
-  E5:'dv2x - 0.5*domega3*l1*cos(theta0+theta1-theta2) + 0.5*l1*(dtheta1+dtheta0-dtheta2)^2*sin(theta0+theta1-theta2) - (F6*cos(theta4) - F5*sin(theta4) - F3*sin(theta0+theta1-theta2) - F4*cos(theta0+theta1-theta2))/m1',
-  E6:'dv2y - 0.5*domega3*l1*sin(theta0+theta1-theta2) - 0.5*l1*(dtheta1+dtheta0-dtheta2)^2*cos(theta0+theta1-theta2) - ((-F6*sin(theta4) - F5*cos(theta4) + F3*cos(theta0+theta1-theta2) - F4*sin(theta0+theta1-theta2))/m1-g-m*g/m1)',
-  dv3x:'dv2x - domega3*l1*cos(theta0+theta1-theta2) + l1*(dtheta1+dtheta0-dtheta2)^2*sin(theta0+theta1-theta2)',
-  dv3y:'dv2y - domega3*l1*sin(theta0+theta1-theta2) - l1*(dtheta1+dtheta0-dtheta2)^2*cos(theta0+theta1-theta2)',
-  domega4:'(-k1*(theta0+theta1-theta2) - F6*(l1+l2+l4) + m*g*(l1+l2+l4)*sin(theta4) + 0.5*(m1+m2+m3)*g*(l1+l2+l4)*sin(theta4))/(1/12*(m1+m2+m3)*(l1+l2+l4)^2)',
-  E7:'dv3x - (l1+l2+l4)*domega4*cos(theta4) + dtheta4^2*(l1+l2+l4)*sin(theta4)',
-  E8:'dv3y + (l1+l2+l4)*domega4*sin(theta4) + dtheta4^2*(l1+l2+l4)*cos(theta4)'
-})*/
-
 function setup() {
   myCan = createCanvas(600, 500);
   myCan.position(30, 250);
@@ -189,7 +153,7 @@ function setup() {
   pendRadio.position(130, 10);
   pendRadio.style('text-align', 'center');
   pendRadio.value('Double Pendulum with Foot');
-  pendState = 3;
+  pendState = 4;
   pendRadio.changed(switchState);
   // Length of First Pendulum
   len1Input = createInput();
@@ -780,84 +744,7 @@ function calculateTheta(t) {
   thetaDbDot3Array = [];
   thetaDbDot4Array =[];
 
-  if (pendState == 1) {
-    var theta = theta0_1*PI/180.0;
-    var thetaDot = thetaDot0_1*PI/180.0;
-    var thetaDoubleDot;
-    var index = 0;
-    for (var i = 0; i < t; i = i + deltaT) {
-      thetaDoubleDot = singlePend_getThetaDoubleDot(theta, thetaDot);
-      theta = theta + thetaDot * deltaT;
-      thetaDot = thetaDot + thetaDoubleDot * deltaT;
-      timeArray[index] = i;
-      theta1Array[index] = theta;
-      thetaDot1Array[index] = thetaDot;
-      thetaDbDot1Array[index] = thetaDoubleDot;
-      index = index + 1;
-    }
-  }
-  if (pendState == 2) {
-    var theta1 = theta0_1*PI/180.0;
-    var theta2 = theta0_2*PI/180.0;
-    var thetaDot1 = thetaDot0_1*PI/180.0;
-    var thetaDot2 = thetaDot0_2*PI/180.0;
-    // console.log('theta 1: ' + theta1 + ' theta 2: ' + theta2 + ' thetaDot1: ' + thetaDot1 + ' thetaDot2: ' + thetaDot2);
-    var thetaDoubleDot1;
-    var thetaDoubleDot2;
-    var index = 0;
-    for (var i = 0; i < t; i = i + deltaT) {
-      thetaDoubleDot1 = doublePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2);
-      thetaDoubleDot2 = doublePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2);
-      theta1 = theta1 + thetaDot1 * deltaT;
-      theta2 = theta2 + thetaDot2 * deltaT;
-      thetaDot1 = thetaDot1 + thetaDoubleDot1 * deltaT;
-      thetaDot2 = thetaDot2 + thetaDoubleDot2 * deltaT;
-      timeArray[index] = i;
-      theta1Array[index] = theta1;
-      theta2Array[index] = theta2;
-      thetaDot1Array[index] = thetaDot1;
-      thetaDot2Array[index] = thetaDot2;
-      thetaDbDot1Array[index] = thetaDoubleDot1;
-      thetaDbDot2Array[index] = thetaDoubleDot2;
-      index = index + 1;
-    }
-  }
-  if (pendState == 3) {
-    var theta1 = theta0_1*PI/180.0;
-    var theta2 = theta0_2*PI/180.0;
-    var theta3 = theta2 + PI/2;
-    var thetaDot1 = thetaDot0_1*PI/180.0;
-    var thetaDot2 = thetaDot0_2*PI/180.0;
-    var thetaDot3 = 0;
-    var thetaDoubleDot1;
-    var thetaDoubleDot2;
-    var thetaDoubleDot3;
-    var index = 0;
-    for (var i = 0; i < t; i = i + deltaT) {
-      thetaDoubleDot1 = triplePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2);
-      thetaDoubleDot2 = triplePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2);
-      thetaDoubleDot3 = triplePend_getThetaDoubleDot_3(theta1, theta2, thetaDot1, thetaDot2);
-      theta1 = theta1 + thetaDot1 * deltaT;
-      theta2 = theta2 + thetaDot2 * deltaT;
-      // theta3 = theta3 + thetaDot3 * deltaT;
-      theta3 = theta2 + PI/2; // Hard-coded
-      thetaDot1 = thetaDot1 + thetaDoubleDot1 * deltaT;
-      thetaDot2 = thetaDot2 + thetaDoubleDot2 * deltaT;
-      thetaDot3 = thetaDot3 + thetaDoubleDot3 * deltaT;
-      timeArray[index] = i;
-      theta1Array[index] = theta1;
-      theta2Array[index] = theta2;
-      theta3Array[index] = theta3;
-      thetaDot1Array[index] = thetaDot1;
-      thetaDot2Array[index] = thetaDot2;
-      thetaDot3Array[index] = thetaDot3;
-      thetaDbDot1Array[index] = thetaDoubleDot1;
-      thetaDbDot2Array[index] = thetaDoubleDot2;
-      thetaDbDot3Array[index] = thetaDoubleDot3;
-      index = index + 1;
-    }
-  }
-  if (pendState == 4) {
+    if (pendState == 4) {
     //double pendulum
     var theta1 = theta0_1*PI/180.0;
     var theta2 = theta0_2*PI/180.0;
@@ -914,16 +801,10 @@ function calculateTheta(t) {
       thetaDbDot4Array[index] = theta4DoubleDot;
       index = index + 1;
     }
-    //solve leg for double stance K should be for radians
-    /*Fsolve = LegSolver.solve({
-      F1: 100, F2: 101, F3: 102, F4: 103, F5: 104, F6: 105, F7: 106, F8: 107,
-      l1: 100*len1, l2: 100*len2, l3: 100*len3*footFraction, l4: 100*len5,
-      m: 123, m1: mass1, m2: mass2, m3: mass3, T3: 100, I1: 123, I2: 123, I3: 123,
-      theta0: 1, theta1: 2, theta2: 3, theta4: 4, dtheta0: 5, dtheta1: 6, dtheta2: 7, dtheta4: 8,
-      g: 9.8, k1: 10, k2: 10, E1: 0, E2: 0, E3: 0, E4: 0, E5: 0, E6: 0, E7: 0, E8: 0
-      })   
-      Fsolve2 = LegSolver.solve(Fsolve); */
+
   }
+
+  //double stance phase, need to define T
 }
 
 
@@ -1048,7 +929,6 @@ function solvedoublestance(){
     dtheta1: '20',
     Radius: '0.2'
     })   
-    Fsolve2 = LegSolver.solve(Fsolve);
 }
 
 
