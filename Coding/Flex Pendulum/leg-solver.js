@@ -151,6 +151,15 @@ function calculateTheta(t) {
     thetaDbDot2Array = [];
     thetaDbDot3Array = [];
     thetaDbDot4Array =[];
+
+    DStheta0Array = [];
+    DSthetaDot0Array = [];
+    DStheta1Array = [];
+    DSthetaDot1Array = [];
+    DStheta2Array = [];
+    DSthetaDot2Array = [];
+    DStheta4Array = [];
+    DSthetaDot4Array = [];
       //double pendulum
       var theta1 = theta0_1*PI/180.0;
       var theta2 = theta0_2*PI/180.0;
@@ -207,6 +216,74 @@ function calculateTheta(t) {
         thetaDbDot4Array[index] = theta4DoubleDot;
         index = index + 1;
       }
-      
+      T1 = calculateSwingHeel(t/deltaT);
     //double stance phase, need to define T
+    timeArray = timeArray.slice(0,T1/deltaT);
+    theta1Array = theta1Array.slice(0,T1/deltaT);
+    theta2Array = theta2Array.slice(0,T1/deltaT);
+    theta3Array = theta3Array.slice(0,T1/deltaT);
+    theta4Array = theta4Array.slice(0,T1/deltaT);
+    thetaDot1Array = thetaDot1Array.slice(0,T1/deltaT);
+    thetaDot2Array = thetaDot2Array.slice(0,T1/deltaT);
+    thetaDot3Array = thetaDot3Array.slice(0,T1/deltaT);
+    thetaDot4Array = thetaDot4Array.slice(0,T1/deltaT);
+    thetaDbDot1Array = thetaDbDot1Array.slice(0,T1/deltaT);
+    thetaDbDot2Array = thetaDbDot2Array.slice(0,T1/deltaT);
+    thetaDbDot3Array = thetaDbDot3Array.slice(0,T1/deltaT);
+    thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
+    //calculate theta0
+    DStheta0Array[0] = 0;
+    DSthetaDot0Array[0] = thetaDot4Array[T1/deltaT - 1];
+    DStheta1Array[0] = 3/2*PI - theta4Array[T1/deltaT - 1];
+    DSthetaDot1Array[0] = 0;
+    //Doublestance();
+  }
+
+  function calculateSwingHeel(index) {
+           //stance side
+           SwingToe = [];
+           SwingHeel = [];
+           var LandingT = 0;
+           for (var drawIndex = 0; drawIndex < index; drawIndex = drawIndex + 1) {
+           drawTheta4 = theta4Array[drawIndex] + PI/2; //theta3Array[drawIndex] + PI/2;
+           var skneeX = width/2 + (len1)*100*Math.cos(2*PI - drawTheta4);
+        var skneeY = height/2 + (len1)*100*Math.sin(2*PI - drawTheta4);
+         var sankleX = skneeX + (len2)*100*Math.cos(2*PI - drawTheta4);
+         var sankleY = skneeY + (len2)*100*Math.sin(2*PI - drawTheta4);
+         var sfootX = sankleX;
+         var sfootY = sankleY + len5*100;
+         var sheelX = sfootX - footFraction*len3*100;
+         var sheelY = sfootY;
+         var stoeX = sfootX + (1 - footFraction)*len3*100;
+         var stoeY = sfootY;
+         drawTheta1 = theta1Array[drawIndex] + PI/2;
+      //calculated theta2 value (global angle)
+      drawTheta2 = theta2Array[drawIndex] + PI/2;
+      drawTheta3 = drawTheta2 + PI/2; //theta3Array[drawIndex] + PI/2;
+      //knee joint location
+      var jointX = width/2 + (len1*100)*Math.cos(drawTheta1);
+      var jointY = height/2 + (len1*100)*Math.sin(drawTheta1);
+      //ankle joint location
+      var endX = jointX + (len2*100)*Math.cos(drawTheta2);
+      var endY = jointY + (len2*100)*Math.sin(drawTheta2);
+      //center foot location
+      var footX = endX + (len5*100)*Math.cos(drawTheta2);
+      var footY = endY + (len5*100)*Math.sin(drawTheta2);
+      //heel location
+      var heelX = footX + footFraction*len3*100*Math.cos(drawTheta3);
+      var heelY = footY + footFraction*len3*100*Math.sin(drawTheta3);
+      //toe location
+      var toeX = footX + (1 - footFraction)*len3*100*Math.cos(drawTheta3 - PI);
+      var toeY = footY + (1 - footFraction)*len3*100*Math.sin(drawTheta3 - PI);
+      //SwingToe[drawIndex][0] = round((toeX-sheelX)*100)/100;
+      SwingToe[drawIndex] = -round((toeY-sheelY)*100)/100;
+      //SwingHeel[drawIndex][0] = round((heelX-sheelX)*100)/100;
+      SwingHeel[drawIndex] = -round((heelY-sheelY)*100)/100;
+      if((SwingHeel[drawIndex] < 0) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0)){
+      LandingT = drawIndex * deltaT;
+      return LandingT;
+           }
+          
+    }
+        return LandingT;
   }

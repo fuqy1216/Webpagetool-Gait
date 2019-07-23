@@ -149,7 +149,7 @@ function setup() {
   pendRadio.option('Swing-Stance');
   pendRadio.position(130, 10);
   pendRadio.style('text-align', 'center');
-  pendRadio.value('Double Pendulum with Foot');
+  pendRadio.value('Swing-Stance');
   pendState = 4;
   pendRadio.changed(switchState);
   // Length of First Pendulum
@@ -496,6 +496,7 @@ function draw() {
 
       //calculated theta2 value (global angle)
       drawTheta2 = theta2Array[drawIndex] + PI/2;
+      drawTheta3 = drawTheta2 + PI/2; //theta3Array[drawIndex] + PI/2;
       //knee joint location
       var jointX = width/2 + (len1*100)*Math.cos(drawTheta1);
       var jointY = height/2 + (len1*100)*Math.sin(drawTheta1);
@@ -522,7 +523,7 @@ function draw() {
       }
       //calculated theta3 value (global angle)
 
-        drawTheta3 = drawTheta2 + PI/2; //theta3Array[drawIndex] + PI/2;
+        
         //draw the foot
         line(endX, endY, footX, footY);
         line(footX, footY, heelX, heelY);
