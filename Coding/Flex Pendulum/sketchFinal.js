@@ -12,39 +12,39 @@ var pendRadio;
 var pendState; // Number of Pendulums
 
 // Length of First Pendulum
-var len1 = 1.0;
+var len1 = 0.446;
 var len1Input;
 var len1Label;
 // Length of Second Pendulum
-var len2 = 1.0;
+var len2 = .4;
 var len2Input;
 var len2Label;
 // Length of Third Pendulum
-var len3 = 0.5;
+var len3 = 0.15;
 var len3Input;
 var len3Label;
 // Length of Forth Pendulum
-var len4 = 2;
+var len4 = 0.846;
 var len4Input;
 var len4Label;
 // Length of Forth Pendulum
-var len5 = 0.1;
+var len5 = 0.07;
 var len5Input;
 var len5Label;
 // Mass of First Pendulum
-var mass1 = 1.0;
+var mass1 = 9.1;
 var mass1Input;
 var mass1Label
 // Mass of Second Pendulum
-var mass2 = 1.0;
+var mass2 = 3.04;
 var mass2Input;
 var mass2Label;
 // Mass of Third Pendulum
-var mass3 = 0.5;
+var mass3 = 2.4;
 var mass3Input;
 var mass3Label;
 // Mass of Forth Pendulum
-var mass4 = 0.5;
+var mass4 = 12.14;
 var mass4Input;
 var mass4Label;
 // Initial Angle of First Pendulum
@@ -115,6 +115,16 @@ var drawTheta2;
 var drawTheta3;
 var drawTheta4;
 var isPaused;
+
+//for doublestance solver
+var DSItheta0;
+var DSItheta1;
+var DSItheta2;
+var DSItheta4;
+var DSIdtheta0;
+var DSIdtheta1;
+var DSIdtheta2;
+var DSIdtheta4;
 
 // UI DOM elements for Time Togglinng
 var pauseB;
@@ -429,9 +439,11 @@ function draw() {
     //lower leg
     line(width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1), width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2));
     //knee
-    ellipse(width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1), mass1*4, mass1*4);
+   // ellipse(width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1), mass1*4, mass1*4);
+    ellipse(width/2 + len1*100*Math.cos(theta1), height/2 + len1*100*Math.sin(theta1), 4, 4);
     //ankle joint
-    ellipse(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), mass2*4, mass2*4);
+    //ellipse(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), mass2*4, mass2*4);
+    ellipse(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), 4, 4);
     
       //foot link
       line(width/2 + len1*100*Math.cos(theta1) + len2*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + len2*100*Math.sin(theta2), width/2 + len1*100*Math.cos(theta1) + (len2+len5)*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + (len2+len5)*100*Math.sin(theta2));
@@ -439,11 +451,15 @@ function draw() {
       line(width/2 + len1*100*Math.cos(theta1) + (len2+len5)*100*Math.cos(theta2), height/2 + len1*100*Math.sin(theta1) + (len2+len5)*100*Math.sin(theta2), width/2 + len1*100*Math.cos(theta1) + (len2+len5)*100*Math.cos(theta2) + (1 - footFraction)*len3*100*Math.cos(theta2 - PI/2), height/2 + len1*100*Math.sin(theta1) + (len2+len5)*100*Math.sin(theta2) + (1 - footFraction)*len3*100*Math.sin(theta2 - PI/2));
 
       //knee joint
-      ellipse(width/2 + (len1)*100*Math.cos(theta4), height/2 + (len1)*100*Math.sin(theta4), mass1*4, mass1*4);
+     // ellipse(width/2 + (len1)*100*Math.cos(theta4), height/2 + (len1)*100*Math.sin(theta4), mass1*4, mass1*4);
+      ellipse(width/2 + (len1)*100*Math.cos(theta4), height/2 + (len1)*100*Math.sin(theta4), 4, 4);
+
       //stance leg
       line(width/2, height/2, width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4));
       //ankle joint
-      ellipse(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), mass2*4, mass2*4);
+      //ellipse(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), mass2*4, mass2*4);
+      ellipse(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), 4, 4);
+
       //foot
       line(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4), width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4) + len5*100);
       line(width/2 + (len4)*100*Math.cos(theta4), height/2 + (len4)*100*Math.sin(theta4) + len5*100, width/2 + (len4)*100*Math.cos(theta4) - footFraction*len3*100, height/2 + (len4)*100*Math.sin(theta4) + len5*100);
@@ -459,13 +475,15 @@ function draw() {
       //upper leg
       line(width/2, height/2, skneeX, skneeY);
       //knee joint
-    ellipse(skneeX, skneeY, mass1*4, mass1*4);
+      //ellipse(skneeX, skneeY, mass1*4, mass1*4);
+    ellipse(skneeX, skneeY, 4, 4);
     var sankleX = skneeX + (len2)*100*Math.cos(2*PI - drawTheta4);
     var sankleY = skneeY + (len2)*100*Math.sin(2*PI - drawTheta4);
     //lower leg
     line(skneeX, skneeY, sankleX, sankleY);
     //ankle joint
-    ellipse(sankleX, sankleY, mass2*4, mass2*4);
+    //ellipse(sankleX, sankleY, mass2*4, mass2*4);
+    ellipse(sankleX, sankleY, 4, 4);
     //foot
     var sfootX = sankleX;
     var sfootY = sankleY + len5*100;
@@ -492,7 +510,8 @@ function draw() {
     //upper leg
     line(width/2, height/2, width/2 + len1*100*Math.cos(drawTheta1), height/2 + len1*100*Math.sin(drawTheta1));
     //knee
-    ellipse(width/2 + len1*100*Math.cos(drawTheta1), height/2 + len1*100*Math.sin(drawTheta1), mass1*4, mass1*4);
+    //ellipse(width/2 + len1*100*Math.cos(drawTheta1), height/2 + len1*100*Math.sin(drawTheta1), mass1*4, mass1*4);
+    ellipse(width/2 + len1*100*Math.cos(drawTheta1), height/2 + len1*100*Math.sin(drawTheta1), 4, 4);
 
       //calculated theta2 value (global angle)
       drawTheta2 = theta2Array[drawIndex] + PI/2;
@@ -514,7 +533,9 @@ function draw() {
       var toeY = footY + (1 - footFraction)*len3*100*Math.sin(drawTheta3 - PI);
       line(jointX, jointY, jointX + (len2*100)*Math.cos(drawTheta2), jointY + (len2*100)*Math.sin(drawTheta2));
       // console.log(jointX + (len2*100)*Math.cos(drawTheta2 + PI/2) + " " + jointY + (len2*100)*Math.sin(drawTheta2 + PI/2));
-      ellipse(jointX + (len2*100)*Math.cos(drawTheta2), jointY + (len2*100)*Math.sin(drawTheta2), mass2*4, mass2*4);
+      //ellipse(jointX + (len2*100)*Math.cos(drawTheta2), jointY + (len2*100)*Math.sin(drawTheta2), mass2*4, mass2*4);
+      ellipse(jointX + (len2*100)*Math.cos(drawTheta2), jointY + (len2*100)*Math.sin(drawTheta2), 4, 4);
+
       //show the infor when paused
       if (isPaused == 1) {
         jAng2Label.html('\u0398(2) = ' + round((drawTheta2 - PI/2)*180/PI*100)/100 + ' deg');

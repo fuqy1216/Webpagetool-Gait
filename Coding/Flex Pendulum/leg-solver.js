@@ -5,7 +5,7 @@ loadScript('math-solver.js', function() {
     //alert('script ready!'); 
   });
 function solvedoublestance(){
-    LegSolver = new Solver({
+   /* LegSolver = new Solver({
       l1: 'l1',
       l2: 'l2',
       l3: 'l3',
@@ -15,24 +15,40 @@ function solvedoublestance(){
       theta2: 'theta2',
       dtheta0: 'dtheta0',
       dtheta1: 'dtheta1',
-      Radius: 'Radius',
+      Radius: '(-(l1+l2+l4)*cos(theta4)+l1*cos(theta0+theta1-theta2)+l2*cos(theta0+theta1)+l4*cos(theta0)+l3*sin(theta0))/(1-cos(theta4))',
+      //Radius: 'Radius',
       Toeangle: 'atan(l4/l3)',
       theta4: 'acos((l3*sin(theta0) + l4*cos(theta0) + l2*cos(theta0+theta1) + l1*cos(theta0+theta1-theta2) - Radius)/(l2+l1+l4-Radius))',
       dtheta4: '-((l3^2+l4^2)^0.5*dtheta0*cos(theta0+Toeangle) - l2*(dtheta0+dtheta1)*sin(theta0+theta1) - l1*(dtheta0+dtheta1-dtheta2)*sin(theta0+theta1-theta2))/(l1+l2+l4-Radius)/sin(theta4)',
       dtheta2: '-(-(l3^2+l4^2)^0.5*dtheta0*sin(theta0+Toeangle) - l2*(dtheta0+dtheta1)*cos(theta0+theta1) - (l1+l2+l4-Radius)*dtheta4*cos(theta4)-Radius*dtheta4)/l1/cos(theta0+theta1-theta2)-dtheta0-dtheta1'
     })
     Fsolve = LegSolver.solve({
-      l1: '1',
-      l2: '1',
-      l3: '0.1',
-      l4: '0.3',
-      theta0: '2',
-      theta1: '4',
-      theta2: '5',
-      dtheta0: '10',
-      dtheta1: '20',
+      l1: 'len1',
+      l2: 'len2',
+      l3: 'len3',
+      l4: 'len5',
+      theta0: 'DSItheta0',
+      theta1: 'DSItheta1',
+      //theta2: 'DSItheta2',
+      dtheta0: 'DSIdtheta0',
+      dtheta1: 'DSIdtheta1',
       Radius: '0.2'
       })   
+      return Fsolve;*/
+      Radius = 0.2;
+      Toeangle = atan(len5/len3);
+      DSItheta4 = acos((len3*sin(DSItheta0) + len5*cos(DSItheta0) + len2*cos(DSItheta0+DSItheta1) + len1*cos(DSItheta0+DSItheta1-DSItheta2) - Radius)/(len1+len2+len5-Radius));
+      a24 = [
+        [-len1*sin(DSItheta0+DSItheta1-DSItheta2), (len1+len2+len4-Radius)*sin(DSItheta4)],
+        [len1*cos(DSItheta0+DSItheta1-DSItheta2), -(len1+len2+len4-Radius)*cos(DSItheta4)-Radius]
+      ];
+      b24 = [
+          -math.pow((math.pow(len3,2)+math.pow(len4,2)),0.5)*DSIdtheta0*cos(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*sin(DSItheta0+DSItheta1)+len1*(DSIdtheta0+DSIdtheta1)*sin(DSItheta0+DSItheta1-DSItheta2),
+          math.pow((math.pow(len3,2)+math.pow(len4,2)),0.5)*DSIdtheta0*sin(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1)-len1*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1-DSItheta2)
+    ];
+    result24 = math.multiply(math.inv(a24),b24);
+    DSIdtheta2 = result24[0];
+    DSIdtheta4 = result24[1];
   }
   
   
@@ -92,30 +108,9 @@ function solvedoublestance(){
     -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
     -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
   ]
-  /*a = [
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
-  ]*/
-  //b = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-  
   return math.multiply(math.inv(a),b);
   }
+
   function loadScript( url, callback ) {
     var script = document.createElement( "script" )
     script.type = "text/javascript";
@@ -156,8 +151,10 @@ function calculateTheta(t) {
     DSthetaDot0Array = [];
     DStheta1Array = [];
     DSthetaDot1Array = [];
+    //DSthetaDbDot1Array = [];
     DStheta2Array = [];
     DSthetaDot2Array = [];
+    //DSthetaDbDot2Array = [];
     DStheta4Array = [];
     DSthetaDot4Array = [];
       //double pendulum
@@ -233,10 +230,28 @@ function calculateTheta(t) {
     thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
     //calculate theta0
     DStheta0Array[0] = 0;
-    DSthetaDot0Array[0] = thetaDot4Array[T1/deltaT - 1];
-    DStheta1Array[0] = 3/2*PI - theta4Array[T1/deltaT - 1];
+    DSthetaDot0Array[0] = PI - thetaDot4Array[T1/deltaT - 1];
+    DStheta1Array[0] = PI - theta4Array[T1/deltaT - 1];
     DSthetaDot1Array[0] = 0;
-    //Doublestance();
+    //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
+    //DSthetaDot4Array[0] = thetaDot1Array[T1/deltaT - 1];
+    DStheta2Array[0] = 0;
+    DSItheta0 = DStheta0Array[0];
+    DSItheta1 = DStheta1Array[0];
+    DSItheta2 = DStheta2Array[0];
+    DSIdtheta0 = DSthetaDot0Array[0];
+    DSIdtheta1 = DSthetaDot1Array[0];
+    
+    solvedoublestance();
+    //DStheta2Array[0] = initial.theta2;
+    DStheta4Array[0] = DSItheta4;
+    DSthetaDot2Array[0] = DSIdtheta2;
+    DSthetaDot4Array[0] = DSIdtheta4;
+
+    //corrisponding to trigger double stance
+    DStheta = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
+    DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
+    Doublestance(DStheta, DSdtheta);
   }
 
   function calculateSwingHeel(index) {
@@ -286,4 +301,61 @@ function calculateTheta(t) {
           
     }
         return LandingT;
+  }
+
+  function Doublestance(DStheta, DSdtheta){
+      console.log(DStheta);
+      console.log(DSdtheta);
+      forces = solveleg(DStheta, DSdtheta);
+      index = 0;
+      for (var i = 0; i < (time_-T1); i = i + deltaT) {
+        DStheta0 = DStheta[0];
+        DStheta1 = DStheta[1];
+        DStheta2 = DStheta[2];
+        DStheta4 = DStheta[3];
+        DSdtheta0 = DSdtheta[0];
+        DSdtheta1 = DSdtheta[1];
+        DSdtheta2 = DSdtheta[2];
+        DSdtheta4 = DSdtheta[3];
+      DSthetaDbDot0 = (-forces[0]*len3*cos(DStheta1)+T3+forces[1]*len3*sin(DStheta1)-m3*g*0.5*len3*cos(DStheta0))/I3;
+      lowerlegrot = (-T3-k2*DStheta2 - forces[3]*len2*cos(DStheta2) + forces[2]*len2*sin(DStheta2)+m2*g*0.5*len2*sin(DStheta0+DStheta1))/I2;
+      DSthetaDbDot1 = (-DSthetaDbDot0+lowerlegrot);
+      DStheta0 = DStheta0 + DSdtheta0 * deltaT;
+      DStheta1 = DStheta1 + DSdtheta1 * deltaT;
+      DSdtheta0 = DSdtheta0 + DSthetaDbDot0 * deltaT;
+      DSdtheta1 = DSdtheta1 + DSthetaDbDot1 * deltaT;
+      //initialize for solve double stance
+      DSItheta0 = DStheta0;
+      DSItheta1 = DStheta1;
+      DSItheta2 = DStheta2;
+      DSIdtheta0 = DSdtheta0;
+      DSIdtheta1 = DSdtheta1;
+      initial = solvedoublestance();
+      //DStheta2 = initial.theta2;
+      DStheta4 = DSItheta4;
+      DSdtheta2 = DSIdtheta2;
+      DSdtheta4 = DSIdtheta4;
+      DStheta2 = DStheta2 + DSdtheta2 * deltaT;
+      index = index + 1;
+      DStheta0Array[index] = DStheta0;
+      DStheta1Array[index] = DStheta1;
+      DStheta2Array[index] = DStheta2;
+      DStheta4Array[index] = DStheta4;
+      DSthetaDot0Array[index] = DSdtheta0;
+      DSthetaDot1Array[index] = DSdtheta1;
+      DSthetaDot2Array[index] = DSdtheta2;
+      DSthetaDot4Array[index] = DSdtheta4;
+      //update data to solve force
+      DStheta[0] = DStheta0;
+      DStheta[1] = DStheta1;
+      DStheta[2] = DStheta2;
+      DStheta[3] = DStheta4;
+      DSdtheta[0] = DSdtheta0;
+      DSdtheta[1] = DSdtheta1;
+      DSdtheta[2] = DSdtheta2;
+      DSdtheta[3] = DSdtheta4;
+      forces = solveleg(DStheta, DSdtheta);
+      if(forces[7]<0)     return;
+      }
+
   }
