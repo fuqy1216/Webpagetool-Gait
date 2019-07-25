@@ -35,9 +35,11 @@ function solvedoublestance(){
       Radius: '0.2'
       })   
       return Fsolve;*/
+      
       Radius = 0.1;
       Toeangle = atan(len5/len3);
       DSItheta4 = acos((len3*sin(DSItheta0) + len5*cos(DSItheta0) + len2*cos(DSItheta0+DSItheta1) + len1*cos(DSItheta0+DSItheta1-DSItheta2) - Radius)/(len1+len2+len5-Radius));
+      if(isNaN(DSItheta4)) DSItheta4 = 0;
       a24 = [
         [-len1*sin(DSItheta0+DSItheta1-DSItheta2), (len1+len2+len5-Radius)*sin(DSItheta4)],
         [len1*cos(DSItheta0+DSItheta1-DSItheta2), -(len1+len2+len5-Radius)*cos(DSItheta4)-Radius]
@@ -47,7 +49,8 @@ function solvedoublestance(){
           math.pow((math.pow(len3,2)+math.pow(len5,2)),0.5)*DSIdtheta0*sin(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1)-len1*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1-DSItheta2)
     ];
     result24 = math.multiply(math.inv(a24),b24);
-    console.log(b24);
+    //console.log(b24);
+    //console.log(a24);
     DSIdtheta2 = result24[0];
     DSIdtheta4 = result24[1];
   }
@@ -113,6 +116,7 @@ function solvedoublestance(){
     math.inv(a)
   }
   catch(error) {
+    //console.log(a);
     console.log("forces calculation error");
     return 0;
     // expected output: ReferenceError: nonExistentFunction is not defined
@@ -345,6 +349,8 @@ function calculateTheta(t) {
       DSdtheta2 = DSIdtheta2;
       DSdtheta4 = DSIdtheta4;
       DStheta2 = DStheta2 + DSdtheta2 * deltaT;
+      console.log(DStheta2);
+      console.log(DSdtheta2);
       index = index + 1;
       //update data to solve force
       DStheta[0] = DStheta0;
@@ -356,7 +362,7 @@ function calculateTheta(t) {
       DSdtheta[2] = DSdtheta2;
       DSdtheta[3] = DSdtheta4;
       forces = solveleg(DStheta, DSdtheta);
-      console.log(forces);
+      //console.log(forces);
       if (forces == 0)      return;
       if((forces[7]<0)||(DStheta[0] > PI/2))     
       {

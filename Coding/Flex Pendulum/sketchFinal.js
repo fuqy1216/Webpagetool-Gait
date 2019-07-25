@@ -56,7 +56,7 @@ var theta0_2 = 30.0;
 var theta0_2_Input;
 var theta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var theta0_4 = -10.0;
+var theta0_4 = -15.0;
 var theta0_4_Input;
 var theta0_4_Label;
 // Initial Angular Velocity of First Pendulum
@@ -68,7 +68,7 @@ var thetaDot0_2 = 120.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -65.0;
+var thetaDot0_4 = -95.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Mu - Coefficient of Viscous Damping
