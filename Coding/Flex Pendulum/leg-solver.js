@@ -39,14 +39,15 @@ function solvedoublestance(){
       Toeangle = atan(len5/len3);
       DSItheta4 = acos((len3*sin(DSItheta0) + len5*cos(DSItheta0) + len2*cos(DSItheta0+DSItheta1) + len1*cos(DSItheta0+DSItheta1-DSItheta2) - Radius)/(len1+len2+len5-Radius));
       a24 = [
-        [-len1*sin(DSItheta0+DSItheta1-DSItheta2), (len1+len2+len4-Radius)*sin(DSItheta4)],
-        [len1*cos(DSItheta0+DSItheta1-DSItheta2), -(len1+len2+len4-Radius)*cos(DSItheta4)-Radius]
+        [-len1*sin(DSItheta0+DSItheta1-DSItheta2), (len1+len2+len5-Radius)*sin(DSItheta4)],
+        [len1*cos(DSItheta0+DSItheta1-DSItheta2), -(len1+len2+len5-Radius)*cos(DSItheta4)-Radius]
       ];
       b24 = [
-          -math.pow((math.pow(len3,2)+math.pow(len4,2)),0.5)*DSIdtheta0*cos(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*sin(DSItheta0+DSItheta1)+len1*(DSIdtheta0+DSIdtheta1)*sin(DSItheta0+DSItheta1-DSItheta2),
-          math.pow((math.pow(len3,2)+math.pow(len4,2)),0.5)*DSIdtheta0*sin(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1)-len1*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1-DSItheta2)
+          -math.pow((math.pow(len3,2)+math.pow(len5,2)),0.5)*DSIdtheta0*cos(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*sin(DSItheta0+DSItheta1)+len1*(DSIdtheta0+DSIdtheta1)*sin(DSItheta0+DSItheta1-DSItheta2),
+          math.pow((math.pow(len3,2)+math.pow(len5,2)),0.5)*DSIdtheta0*sin(DSItheta0+Toeangle)+len2*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1)-len1*(DSIdtheta0+DSIdtheta1)*cos(DSItheta0+DSItheta1-DSItheta2)
     ];
     result24 = math.multiply(math.inv(a24),b24);
+    console.log(b24);
     DSIdtheta2 = result24[0];
     DSIdtheta4 = result24[1];
   }
@@ -65,9 +66,9 @@ function solvedoublestance(){
   I3 = 1/12*m3*math.pow(l3,2);
   g = 9.8;
   T3 = 100;
-  k1 = 10;
-  k2 = 10;
-  m = 123;
+  k1 = 10*180/PI;
+  k2 = 10*180/PI;
+  m = 42.8;
     a = [
     [l3*cos(theta[1]),-l3*sin(theta[1]),0,0,0,0,0,0,0,0,0,0,0,0,I3,0,0,0],
     [-sin(theta[0]+theta[1])/m3,-cos(theta[0]+theta[1])/m3,0,0,0,0,1/m3,0,0,0,0,0,0,0,-l3*sin(theta[0])/2,0,0,0],
@@ -108,7 +109,16 @@ function solvedoublestance(){
     -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
     -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
   ]
-  return math.multiply(math.inv(a),b);
+  try {
+    math.inv(a)
+  }
+  catch(error) {
+    console.log("forces calculation error");
+    return 0;
+    // expected output: ReferenceError: nonExistentFunction is not defined
+    // Note - error messages will vary depending on browser
+  }
+    return math.multiply(math.inv(a),b);
   }
 
   function loadScript( url, callback ) {
@@ -304,9 +314,8 @@ function calculateTheta(t) {
   }
 
   function Doublestance(DStheta, DSdtheta){
-      console.log(DStheta);
-      console.log(DSdtheta);
       forces = solveleg(DStheta, DSdtheta);
+      if (forces == 0)      return;
       index = 0;
       for (var i = 0; i < (time_-T1); i = i + deltaT) {
         DStheta0 = DStheta[0];
@@ -330,21 +339,13 @@ function calculateTheta(t) {
       DSItheta2 = DStheta2;
       DSIdtheta0 = DSdtheta0;
       DSIdtheta1 = DSdtheta1;
-      initial = solvedoublestance();
+      solvedoublestance();
       //DStheta2 = initial.theta2;
       DStheta4 = DSItheta4;
       DSdtheta2 = DSIdtheta2;
       DSdtheta4 = DSIdtheta4;
       DStheta2 = DStheta2 + DSdtheta2 * deltaT;
       index = index + 1;
-      DStheta0Array[index] = DStheta0;
-      DStheta1Array[index] = DStheta1;
-      DStheta2Array[index] = DStheta2;
-      DStheta4Array[index] = DStheta4;
-      DSthetaDot0Array[index] = DSdtheta0;
-      DSthetaDot1Array[index] = DSdtheta1;
-      DSthetaDot2Array[index] = DSdtheta2;
-      DSthetaDot4Array[index] = DSdtheta4;
       //update data to solve force
       DStheta[0] = DStheta0;
       DStheta[1] = DStheta1;
@@ -355,7 +356,20 @@ function calculateTheta(t) {
       DSdtheta[2] = DSdtheta2;
       DSdtheta[3] = DSdtheta4;
       forces = solveleg(DStheta, DSdtheta);
-      if(forces[7]<0)     return;
+      console.log(forces);
+      if (forces == 0)      return;
+      if((forces[7]<0)||(DStheta[0] > PI/2))     
+      {
+        return;
+      }
+      DStheta0Array[index] = DStheta0;
+      DStheta1Array[index] = DStheta1;
+      DStheta2Array[index] = DStheta2;
+      DStheta4Array[index] = DStheta4;
+      DSthetaDot0Array[index] = DSdtheta0;
+      DSthetaDot1Array[index] = DSdtheta1;
+      DSthetaDot2Array[index] = DSdtheta2;
+      DSthetaDot4Array[index] = DSdtheta4;
       }
 
   }
