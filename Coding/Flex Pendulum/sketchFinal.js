@@ -68,7 +68,7 @@ var thetaDot0_2 = 120.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -50.0;
+var thetaDot0_4 = -65.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Mu - Coefficient of Viscous Damping

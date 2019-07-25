@@ -35,7 +35,7 @@ function solvedoublestance(){
       Radius: '0.2'
       })   
       return Fsolve;*/
-      Radius = 0.2;
+      Radius = 0.1;
       Toeangle = atan(len5/len3);
       DSItheta4 = acos((len3*sin(DSItheta0) + len5*cos(DSItheta0) + len2*cos(DSItheta0+DSItheta1) + len1*cos(DSItheta0+DSItheta1-DSItheta2) - Radius)/(len1+len2+len5-Radius));
       a24 = [
