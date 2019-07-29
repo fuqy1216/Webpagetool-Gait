@@ -349,8 +349,8 @@ function calculateTheta(t) {
       DSdtheta2 = DSIdtheta2;
       DSdtheta4 = DSIdtheta4;
       DStheta2 = DStheta2 + DSdtheta2 * deltaT;
-      console.log(DStheta2);
-      console.log(DSdtheta2);
+      //console.log(DStheta2);
+      //console.log(DSdtheta2);
       index = index + 1;
       //update data to solve force
       DStheta[0] = DStheta0;
