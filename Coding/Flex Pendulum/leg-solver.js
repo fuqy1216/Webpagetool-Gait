@@ -1,7 +1,13 @@
+#!javascript
+//$ node init
 loadScript('math-solver.js', function() {
     //alert('script ready!'); 
   });
   loadScript('js-solver.js', function() {
+    //alert('script ready!'); 
+  });
+  
+  loadScript('Cubic-Spline.js', function() {
     //alert('script ready!'); 
   });
 function solvedoublestance(){
@@ -266,6 +272,8 @@ function calculateTheta(t) {
     DStheta = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
     DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
     Doublestance(DStheta, DSdtheta);
+    //var p = [];
+    DataProcess();
   }
 
   function calculateSwingHeel(index) {
@@ -378,4 +386,15 @@ function calculateTheta(t) {
       DSthetaDot4Array[index] = DSdtheta4;
       }
 
+  }
+  function DataProcess(){
+    var p = [];
+    for (var i = 0; i < DStheta0Array.length; i = i + 1){
+      p.push({
+        x: i * deltaT,
+        y: DStheta0Array[i]
+    });
+    }
+    fun = cubicSplineInterpolation(p);
+    console.log(fun);
   }
