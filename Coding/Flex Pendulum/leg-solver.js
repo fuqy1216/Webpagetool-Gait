@@ -10,6 +10,9 @@ loadScript('math-solver.js', function() {
   loadScript('Cubic-Spline.js', function() {
     //alert('script ready!'); 
   });
+  loadScript('plotly-latest.min.js', function() {
+    //alert('script ready!'); 
+  });
 function solvedoublestance(){
    /* LegSolver = new Solver({
       l1: 'l1',
@@ -273,7 +276,13 @@ function calculateTheta(t) {
     DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
     Doublestance(DStheta, DSdtheta);
     //var p = [];
-    DataProcess();
+    arrayX = [];
+    for (var i = 0; i < DStheta0Array.length; i = i + 1){
+      arrayX[i] = i * deltaT;
+    }
+    arrayY = DStheta0Array;
+    interRatio = 10;
+    mresult = DataProcess(arrayX, arrayY, interRatio);
   }
 
   function calculateSwingHeel(index) {
@@ -387,14 +396,44 @@ function calculateTheta(t) {
       }
 
   }
-  function DataProcess(){
+  function DataProcess(marrayX, marrayY, minterRatio){
     var p = [];
-    for (var i = 0; i < DStheta0Array.length; i = i + 1){
+    var NewarrayY = [];
+    var NewarrayX = [];
+    for (var i = 0; i < marrayX.length * minterRatio; i = i + 1){
+      NewarrayX[i] = i * marrayX[marrayX.length - 1]/minterRatio/(marrayX.length-1);
+    }
+    for (var i = 0; i < marrayY.length; i = i + 1){
       p.push({
-        x: i * deltaT,
-        y: DStheta0Array[i]
+        x: marrayX[i], //i * deltaT,
+        y: marrayY[i]//DStheta0Array[i]
     });
     }
+    //console.log(p);
     fun = cubicSplineInterpolation(p);
-    console.log(fun);
+    for (var i = 0; i < NewarrayX.length; i = i + 1){
+      iter = math.floor((i)/(minterRatio + 0.5));
+      if (iter > 17) iter = 17;
+      //console.log(iter);
+      NewarrayY[i] = fun[iter].a * math.pow(NewarrayX[i],3) + fun[iter].b * math.pow(NewarrayX[i],2) + fun[iter].c * math.pow(NewarrayX[i],1) + fun[iter].d;
+    }
+    //console.log(NewarrayX);
+    //console.log(NewarrayY);
+    var trace1 = {
+      x: marrayX,
+      y: marrayY,
+      type: 'scatter'
+    };
+    
+    var trace2 = {
+      x: NewarrayX,
+      y: NewarrayY,
+      type: 'scatter'
+    };
+    
+    var data = [trace1, trace2];
+    
+    Plotly.newPlot('myDiv', data);
+    return NewarrayY;
+    
   }
