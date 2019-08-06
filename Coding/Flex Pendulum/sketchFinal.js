@@ -7,6 +7,9 @@ var myCan;
 // G
 var g = 9.8;
 
+//For interpolation
+var NewarrayX = [];
+
 // Radio Button to Switch # of Pendulums
 var pendRadio;
 var pendState; // Number of Pendulums
@@ -107,6 +110,14 @@ var thetaDbDot1Array;
 var thetaDbDot2Array;
 var thetaDbDot3Array;
 var thetaDbDot4Array;
+
+//Array for animation
+var intertheta1;
+var intertheta2;
+var intertheta3;
+var intertheta4;
+var intertheta5;
+var intertheta6;
 
 // Animation Indices/Variables
 var drawIndex;
@@ -346,7 +357,7 @@ function setup() {
       return;
     }
     drawIndex = drawIndex - 1000*min;
-    if (drawIndex < 0) drawIndex = drawIndex + theta1Array.length;
+    if (drawIndex < 0) drawIndex = drawIndex + intertheta1.length;
   });
   toggleIncInput = createInput();
   toggleIncInput.position(toggleBacB.x + toggleBacB.width + 5, toggleBacB.y);
@@ -363,7 +374,7 @@ function setup() {
       return;
     }
     drawIndex = drawIndex + 1000*add;
-    if (drawIndex >= theta1Array.length) drawIndex = drawIndex - theta1Array.length;
+    if (drawIndex >= intertheta1.length) drawIndex = drawIndex - intertheta1.length;
   });
 
   // Time Label
@@ -420,6 +431,7 @@ function setup() {
   var recTable = select('#dataTable');
   recTable.position(myCan.x + myCan.width + 10, myCan.y);
 
+
 }
 
 
@@ -475,29 +487,35 @@ function draw() {
   }
   //loading interface
   if (active == 1) {
-      //stance side
-      drawTheta4 = theta4Array[drawIndex] + PI/2; //theta3Array[drawIndex] + PI/2;
-      var skneeX = width/2 + (length1)*100*Math.cos(2*PI - drawTheta4);
-      var skneeY = height/2 + (length1)*100*Math.sin(2*PI - drawTheta4);
+      //All local angle
+      drawTheta1 = intertheta1V[drawIndex]/180*PI;
+      drawTheta2 = intertheta2V[drawIndex]/180*PI;
+      drawTheta3 = -intertheta3V[drawIndex]/180*PI + 1/2*PI;
+      drawTheta4 = -intertheta4V[drawIndex]/180*PI + 1/2*PI;
+      drawTheta5 = intertheta5V[drawIndex]/180*PI;
+      drawTheta6 = intertheta6V[drawIndex]/180*PI;
+      //left side (start with stance)
+      var skneeX = width/2 + (length1)*100*Math.cos(drawTheta3);
+      var skneeY = height/2 + (length1)*100*Math.sin(drawTheta3);
       //upper leg
       line(width/2, height/2, skneeX, skneeY);
       //knee joint
       //ellipse(skneeX, skneeY, mass1*4, mass1*4);
     ellipse(skneeX, skneeY, 4, 4);
-    var sankleX = skneeX + (length2)*100*Math.cos(2*PI - drawTheta4);
-    var sankleY = skneeY + (length2)*100*Math.sin(2*PI - drawTheta4);
+    var sankleX = skneeX + (length2)*100*Math.cos(drawTheta3 + drawTheta2);
+    var sankleY = skneeY + (length2)*100*Math.sin(drawTheta3 + drawTheta2);
     //lower leg
     line(skneeX, skneeY, sankleX, sankleY);
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(sankleX, sankleY, 4, 4);
     //foot
-    var sfootX = sankleX;
-    var sfootY = sankleY + length5*100;
-    var sheelX = sfootX - footFraction*length3*100;
-    var sheelY = sfootY;
-    var stoeX = sfootX + (1 - footFraction)*length3*100;
-    var stoeY = sfootY;
+    var sfootX = sankleX + length5*100 * Math.cos(drawTheta3 + drawTheta2 - drawTheta1);
+    var sfootY = sankleY + length5*100 * Math.sin(drawTheta3 + drawTheta2 - drawTheta1);
+    var sheelX = sfootX - footFraction*length3*100 * Math.sin(drawTheta3 + drawTheta2 - drawTheta1);
+    var sheelY = sfootY + footFraction*length3*100 * Math.cos(drawTheta3 + drawTheta2 - drawTheta1);
+    var stoeX = sfootX + (1 - footFraction)*length3*100 * Math.sin(drawTheta3 + drawTheta2 - drawTheta1);
+    var stoeY = sfootY - (1 - footFraction)*length3*100 * Math.cos(drawTheta3 + drawTheta2 - drawTheta1);
     //line(width/2 + (length4)*100*Math.cos(2*PI - drawTheta4), height/2 + (length4)*100*Math.sin(2*PI - drawTheta4), width/2 + (length4 + length5)*100*Math.cos(2*PI - drawTheta4), height/2 + (length4 + length5)*100*Math.sin(2*PI - drawTheta4));
     line(sankleX, sankleY, sfootX, sfootY);
     line(sfootX, sfootY, sheelX, sheelY);
@@ -511,37 +529,35 @@ function draw() {
       }  
     
     //calculated theta1 value
-    drawTheta1 = theta1Array[drawIndex] + PI/2;
+   // drawTheta1 = theta1Array[drawIndex] + PI/2;
     stroke(0)
     fill(0);
     //upper leg
-    line(width/2, height/2, width/2 + length1*100*Math.cos(drawTheta1), height/2 + length1*100*Math.sin(drawTheta1));
-    //knee
-    //ellipse(width/2 + length1*100*Math.cos(drawTheta1), height/2 + length1*100*Math.sin(drawTheta1), mass1*4, mass1*4);
-    ellipse(width/2 + length1*100*Math.cos(drawTheta1), height/2 + length1*100*Math.sin(drawTheta1), 4, 4);
-
-      //calculated theta2 value (global angle)
-      drawTheta2 = theta2Array[drawIndex] + PI/2;
-      drawTheta3 = drawTheta2 + PI/2; //theta3Array[drawIndex] + PI/2;
-      //knee joint location
-      var jointX = width/2 + (length1*100)*Math.cos(drawTheta1);
-      var jointY = height/2 + (length1*100)*Math.sin(drawTheta1);
-      //ankle joint location
-      var endX = jointX + (length2*100)*Math.cos(drawTheta2);
-      var endY = jointY + (length2*100)*Math.sin(drawTheta2);
-      //center foot location
-      var footX = endX + (length5*100)*Math.cos(drawTheta2);
-      var footY = endY + (length5*100)*Math.sin(drawTheta2);
-      //heel location
-      var heelX = footX + footFraction*length3*100*Math.cos(drawTheta3);
-      var heelY = footY + footFraction*length3*100*Math.sin(drawTheta3);
-      //toe location
-      var toeX = footX + (1 - footFraction)*length3*100*Math.cos(drawTheta3 - PI);
-      var toeY = footY + (1 - footFraction)*length3*100*Math.sin(drawTheta3 - PI);
-      line(jointX, jointY, jointX + (length2*100)*Math.cos(drawTheta2), jointY + (length2*100)*Math.sin(drawTheta2));
-      // console.log(jointX + (length2*100)*Math.cos(drawTheta2 + PI/2) + " " + jointY + (length2*100)*Math.sin(drawTheta2 + PI/2));
-      //ellipse(jointX + (length2*100)*Math.cos(drawTheta2), jointY + (length2*100)*Math.sin(drawTheta2), mass2*4, mass2*4);
-      ellipse(jointX + (length2*100)*Math.cos(drawTheta2), jointY + (length2*100)*Math.sin(drawTheta2), 4, 4);
+    var kneeX = width/2 + (length1)*100*Math.cos(drawTheta4);
+      var kneeY = height/2 + (length1)*100*Math.sin(drawTheta4);
+      //upper leg
+      line(width/2, height/2, kneeX, kneeY);
+      //knee joint
+      //ellipse(skneeX, skneeY, mass1*4, mass1*4);
+    ellipse(kneeX, kneeY, 4, 4);
+    var ankleX = kneeX + (length2)*100*Math.cos(drawTheta4 + drawTheta5);
+    var ankleY = kneeY + (length2)*100*Math.sin(drawTheta4 + drawTheta5);
+    //lower leg
+    line(kneeX, kneeY, ankleX, ankleY);
+    //ankle joint
+    //ellipse(sankleX, sankleY, mass2*4, mass2*4);
+    ellipse(ankleX, ankleY, 4, 4);
+    //foot
+    var footX = ankleX + length5*100 * Math.cos(drawTheta4 + drawTheta5 - drawTheta6);
+    var footY = ankleY + length5*100 * Math.sin(drawTheta4 + drawTheta5 - drawTheta6);
+    var heelX = footX - footFraction*length3*100 * Math.sin(drawTheta4 + drawTheta5 - drawTheta6);
+    var heelY = footY + footFraction*length3*100 * Math.cos(drawTheta4 + drawTheta5 - drawTheta6);
+    var toeX = footX + (1 - footFraction)*length3*100 * Math.sin(drawTheta4 + drawTheta5 - drawTheta6);
+    var toeY = footY - (1 - footFraction)*length3*100 * Math.cos(drawTheta4 + drawTheta5 - drawTheta6);
+    //line(width/2 + (length4)*100*Math.cos(2*PI - drawTheta4), height/2 + (length4)*100*Math.sin(2*PI - drawTheta4), width/2 + (length4 + length5)*100*Math.cos(2*PI - drawTheta4), height/2 + (length4 + length5)*100*Math.sin(2*PI - drawTheta4));
+    line(ankleX, ankleY, footX, footY);
+    line(footX, footY, heelX, heelY);
+    line(footX, footY, toeX, toeY);
 
       //show the infor when paused
       if (isPaused == 1) {
@@ -550,28 +566,22 @@ function draw() {
         jPos21Label.html('Swing Heel: (' + round((heelX-sheelX)*100)/100 + ', ' + -1*round((heelY-sheelY)*100)/100 + ')');
       }
       //calculated theta3 value (global angle)
-
-        
-        //draw the foot
-        line(endX, endY, footX, footY);
-        line(footX, footY, heelX, heelY);
-        line(footX, footY, toeX, toeY);
       
       
     
 
     // Draw Progres Bar
     fill(0, 255, 0);  // Green
-    rect(5, height - 15, (width - 10)*(drawIndex/theta1Array.length), 10);
+    rect(5, height - 15, (width - 10)*(drawIndex/intertheta1.length), 10);
 
     // Advance frame
     if (isPaused == 0) drawIndex = drawIndex + 10;
 
     // Check drawIndex amd loop back to beginning
-    if (drawIndex >= theta1Array.length)  {
+    if (drawIndex >= intertheta1.length)  {
       var myBool = loopC.checked();
       if (myBool) drawIndex = 0;
-      if (!myBool) drawIndex = theta1Array.length - 1;
+      if (!myBool) drawIndex = intertheta1.length - 1;
     }
   }
 }

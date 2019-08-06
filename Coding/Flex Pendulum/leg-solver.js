@@ -77,9 +77,11 @@ function solvedoublestance(){
   I2 = 1/12*m2*math.pow(l2,2);
   I3 = 1/12*m3*math.pow(l3,2);
   g = 9.8;
-  T3 = 100;
-  k1 = 10*180/PI;
-  k2 = 10*180/PI;
+  T3 = 120;
+  k1 = 20*180/PI;
+  k2 = 20*180/PI;
+ // k1 = 10;
+ // k2 = 10;
   m = 42.8;
     a = [
     [l3*cos(theta[1]),-l3*sin(theta[1]),0,0,0,0,0,0,0,0,0,0,0,0,I3,0,0,0],
@@ -280,9 +282,194 @@ function calculateTheta(t) {
     for (var i = 0; i < DStheta0Array.length; i = i + 1){
       arrayX[i] = i * deltaT;
     }
-    arrayY = DStheta0Array;
+    DStheta0Array;
     interRatio = 10;
-    mresult = DataProcess(arrayX, arrayY, interRatio);
+    //interpolation
+    DStheta0ArrayV = DataProcess(arrayX, DStheta0Array, interRatio);
+    DStheta1ArrayV = DataProcess(arrayX, DStheta1Array, interRatio);
+    DStheta2ArrayV = DataProcess(arrayX, DStheta2Array, interRatio);
+    DStheta4ArrayV = DataProcess(arrayX, DStheta4Array, interRatio);
+    //Length for swing+stance
+    length1 = T1/deltaT;
+    (zero1 = []).length = length1;
+    zero1.fill(0);
+    //ankle for swing+stance
+    Maxankle = 15/180*PI;
+    ankleswing = [];
+    for (var i = 0; i < math.floor(length1/2); i = i + 1){
+      ankleswing[i] = DStheta1Array[DStheta1Array.length-1] + (i+1) * (Maxankle - DStheta1Array[DStheta1Array.length-1])/math.floor(length1/2);
+    }   
+    for (var i = math.floor(length1/2); i < length1; i = i + 1){
+      ankleswing[i] = Maxankle + (i + 1 - math.floor(length1/2)) * ( 0 - Maxankle )/(length1 - math.floor(length1/2));
+    }   
+    //Length for Doublestance
+    length2 = DStheta0Array.length * 10 - 9;
+    (zero2 = []).length = length2;
+    zero2.fill(0);
+    interT = [];
+    for (var i = 0; i < 2*(T1/deltaT + DStheta0Array.length * 10 - 9); i = i + 1){
+      interT[i] = i * deltaT;
+    }    
+    //Correct Hip angle
+    for (var i = 0; i < length1; i = i + 1){
+      theta4Array[i] = theta4Array[i] - PI;
+     }
+     for (var i = 0; i < length1; i = i + 1){
+      theta1Array[i] = -theta1Array[i];
+     }
+
+    //Ankle during stnace
+    anklestance = [];
+    for (var i = 0; i < length1; i = i + 1){
+     anklestance[i] = -theta4Array[i];
+    }
+    //later hip during DS
+    latterhip = [];
+    for (var i = 0; i < length2; i = i + 1){
+      latterhip[i] = -(DStheta0ArrayV[i] + DStheta1ArrayV[i] - DStheta2ArrayV[i]);
+     }   
+     //console.log('Begain to Concat');
+    //shrink knee and hip angle during double stance
+    Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
+    Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
+    Ratioankle = ankleswing[0]/DStheta1ArrayV[DStheta1ArrayV.length-1];
+        for (var i = 0; i < length2; i = i + 1){
+          DStheta2ArrayV[i] = DStheta2ArrayV[i] * (1 + (i+1)*(Ratioknee - 1)/length2);
+          latterhip[i] = latterhip[i] * (1 + (i+1)*(Ratiohip - 1)/length2);
+          DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
+         }
+    //left and right ankle dorsi +/plantar -
+    intertheta1 =  anklestance.concat(DStheta1ArrayV, ankleswing, zero2);
+    intertheta6 = ankleswing.concat(zero2, anklestance, DStheta1ArrayV);
+    //console.log(intertheta6);
+    //left and right knee
+    intertheta2 = zero1.concat(DStheta2ArrayV, theta2Array, zero2);
+    intertheta5 = theta2Array.concat(zero2, zero1, DStheta2ArrayV);
+    //correct knee angle
+    for  (var i = 0; i < intertheta2.length; i = i + 1){
+      if (intertheta2[i] < 0)  intertheta2[i] = 0;
+      if (intertheta5[i] < 0)  intertheta5[i] = 0;
+     }   
+    //left and right hip
+    intertheta3 = theta4Array.concat(latterhip, theta1Array, DStheta4ArrayV);
+    intertheta4 = theta1Array.concat(DStheta4ArrayV, theta4Array, latterhip);
+    /*interRatio = 0.1;
+    console.log('Raw');
+    intertheta1V = DataProcess(interT, intertheta1, interRatio);
+    intertheta2V = DataProcess(interT, intertheta2, interRatio);
+    intertheta3V = DataProcess(interT, intertheta3, interRatio);
+    intertheta4V = DataProcess(interT, intertheta4, interRatio);
+    intertheta5V = DataProcess(interT, intertheta5, interRatio);
+    intertheta6V = DataProcess(interT, intertheta6, interRatio);
+    interRatio = 10;
+    NewT = NewarrayX;
+    console.log('Clear');
+    Finaltheta1 = DataProcess(NewT, intertheta1V, interRatio);
+    Finaltheta2 = DataProcess(NewT, intertheta2V, interRatio);
+    Finaltheta3 = DataProcess(NewT, intertheta3V, interRatio);
+    Finaltheta4 = DataProcess(NewT, intertheta4V, interRatio);
+    Finaltheta5 = DataProcess(NewT, intertheta5V, interRatio);
+    Finaltheta6 = DataProcess(NewT, intertheta6V, interRatio);
+    FinalT = NewT;
+    Drawplot(FinalT, Finaltheta1, 'scatter');*/
+    for (var i = 0; i < intertheta1.length; i = i + 1){
+      intertheta1[i] = intertheta1[i] / PI*180;
+      intertheta2[i] = intertheta2[i] / PI*180;
+      intertheta3[i] = intertheta3[i] / PI*180;
+      intertheta4[i] = intertheta4[i] / PI*180;
+      intertheta5[i] = intertheta5[i] / PI*180;
+      intertheta6[i] = intertheta6[i] / PI*180;
+     }
+     interTV = [];
+     intertheta1V = [];
+     intertheta2V = [];
+     intertheta3V = [];
+     intertheta4V = [];
+     intertheta5V = [];
+     intertheta6V = [];
+     interratio = 50;
+     for (var i = 0; i < intertheta1.length; i = i + interratio){
+      interTV[i/interratio] = interT[i];
+      intertheta1V[i/interratio] = intertheta1[i];
+      intertheta2V[i/interratio] = intertheta2[i];
+      intertheta3V[i/interratio] = intertheta3[i];
+      intertheta4V[i/interratio] = intertheta4[i];
+      intertheta5V[i/interratio] = intertheta5[i];
+      intertheta6V[i/interratio] = intertheta6[i];
+     }
+     interRatio = 50;
+     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
+    intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
+    intertheta3V = DataProcess(interTV, intertheta3V, interRatio);
+    intertheta4V = DataProcess(interTV, intertheta4V, interRatio);
+    intertheta5V = DataProcess(interTV, intertheta5V, interRatio);
+    intertheta6V = DataProcess(interTV, intertheta6V, interRatio);
+    NewT = NewarrayX;
+    var trace1 = {
+      x: NewT,
+      y: intertheta1V,
+      name: 'Left Ankle Angle',
+      type: 'scatter',
+  line: {shape: 'spline',dash: 'solid',
+  width: 2}  
+    };
+    
+    var trace2 = {
+      x: NewT,
+      y: intertheta2V,
+      name: 'Left Knee Angle',
+      type: 'scatter',
+  line: {shape: 'spline',dash: 'solid',
+  width: 2}  
+    };
+
+    var trace3 = {
+      x: NewT,
+      y: intertheta3V,
+      name: 'Left Hip Angle',
+      type: 'scatter',
+  line: {shape: 'spline',dash: 'solid',
+  width: 2}   
+    };
+    var trace4 = {
+      x: NewT,
+      y: intertheta6V,
+      name: 'Right Ankle Angle',
+      type: 'scatter',
+  line: {shape: 'spline',dash: 'dashdot',
+  width: 1}   
+    };
+    
+    var trace5 = {
+      x: NewT,
+      y: intertheta5V,
+      name: 'Right Knee Angle',
+      type: 'scatter',
+  line: {shape: 'spline',dash: 'dashdot',
+  width: 1}   
+    };
+
+    var trace6 = {
+      x: NewT,
+      y: intertheta4V,
+      name: 'Right Hip Angle',
+      type: 'scatter',
+  line: {shape: 'spline',dash: 'dashdot',
+  width: 1}      
+    };
+    
+    var data = [trace1, trace2, trace3, trace4, trace5, trace6];
+    
+    var layout = {
+        xaxis: {
+          title: 'Time (Second)'
+        },
+        yaxis: {
+          title: 'Angle (Degree)'
+        }
+      };
+
+    Plotly.newPlot('myDiv', data, layout); 
   }
 
   function calculateSwingHeel(index) {
@@ -397,10 +584,12 @@ function calculateTheta(t) {
 
   }
   function DataProcess(marrayX, marrayY, minterRatio){
+    console.log('Doing interpolation');
     var p = [];
     var NewarrayY = [];
-    var NewarrayX = [];
-    for (var i = 0; i < marrayX.length * minterRatio; i = i + 1){
+    NewarrayX = [];
+    
+    for (var i = 0; i < ((marrayX.length-1) * minterRatio + 1); i = i + 1){
       NewarrayX[i] = i * marrayX[marrayX.length - 1]/minterRatio/(marrayX.length-1);
     }
     for (var i = 0; i < marrayY.length; i = i + 1){
@@ -409,31 +598,38 @@ function calculateTheta(t) {
         y: marrayY[i]//DStheta0Array[i]
     });
     }
-    //console.log(p);
+    var fun = [];
     fun = cubicSplineInterpolation(p);
+    //console.log(fun);
+    //calculate new values
+    //console.log(NewarrayX.length);
     for (var i = 0; i < NewarrayX.length; i = i + 1){
-      iter = math.floor((i)/(minterRatio + 0.5));
-      if (iter > 17) iter = 17;
+      //console.log(i);
+      iter = math.floor((i)/(minterRatio));
       //console.log(iter);
+      if (iter > (math.floor(NewarrayX.length / minterRatio) - 1)) iter = math.floor(NewarrayX.length / minterRatio) - 1;
       NewarrayY[i] = fun[iter].a * math.pow(NewarrayX[i],3) + fun[iter].b * math.pow(NewarrayX[i],2) + fun[iter].c * math.pow(NewarrayX[i],1) + fun[iter].d;
     }
     //console.log(NewarrayX);
     //console.log(NewarrayY);
-    var trace1 = {
-      x: marrayX,
-      y: marrayY,
-      type: 'scatter'
-    };
+    return NewarrayY;
     
+  }
+
+  function Drawplot(Arrayxplot, ArrayYplot, typeplot){
+    var trace1 = {
+      x: Arrayxplot,
+      y: ArrayYplot,
+      type: typeplot
+    };
+    /*
     var trace2 = {
       x: NewarrayX,
       y: NewarrayY,
       type: 'scatter'
     };
+    */
+    var data = [trace1];//, trace2];
     
-    var data = [trace1, trace2];
-    
-    Plotly.newPlot('myDiv', data);
-    return NewarrayY;
-    
+    Plotly.newPlot('myDiv', data);   
   }
