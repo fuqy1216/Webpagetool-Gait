@@ -79,7 +79,7 @@ function solvedoublestance(){
   g = 9.8;
   T3 = 120;
   k1 = 20*180/PI;
-  k2 = 20*180/PI;
+  k2 = -20*180/PI;
  // k1 = 10;
  // k2 = 10;
   m = 42.8;
@@ -317,7 +317,11 @@ function calculateTheta(t) {
      for (var i = 0; i < length1; i = i + 1){
       theta1Array[i] = -theta1Array[i];
      }
-
+     //Correct DSKnee angle
+     for (var i = 0; i < length2; i = i + 1){
+      if (DStheta2ArrayV[i] < 0)
+      DStheta2ArrayV[i] = 0;
+     }
     //Ankle during stnace
     anklestance = [];
     for (var i = 0; i < length1; i = i + 1){
