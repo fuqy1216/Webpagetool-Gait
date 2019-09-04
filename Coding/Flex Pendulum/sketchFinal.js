@@ -91,6 +91,7 @@ var startB;
 var active;
 // Reset Button
 var resetB;
+var loadB;
 // Delta T, minimum time units in second
 var deltaT = 0.001;
 // Loop Checkbox
@@ -334,7 +335,13 @@ function setup() {
   resetB.style('height', '30px');
   resetB.mousePressed(reset);
   resetB.attribute('disabled', '');
-
+ // Load IMU Button
+ LoadB = createButton('Load IMU');
+ LoadB.position(resetB.x + resetB.width + 10, resetB.y);
+ LoadB.style('width', '100px');
+ LoadB.style('height', '30px');
+ LoadB.mousePressed(load);
+ //LoadB.attribute('disabled', '');
   // Loop Checkbox;
   loopC = createCheckbox('Loop', false);
   loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
@@ -678,6 +685,48 @@ function start() {
   k_Input.attribute('disabled', '');
   time_Input.attribute('disabled', '');
   startB.attribute('disabled', '');
+  loadB.attribute('disabled', '');
+  resetB.removeAttribute('disabled');
+  pauseB.removeAttribute('disabled');
+  recB.removeAttribute('disabled');
+
+  calculateTheta(time_);
+
+
+  // Print Min/Max of Motion
+  //console.log('Theta 1:');
+ /* findMotionData(theta1Array, 1);
+  if (pendState == 1) findPeriod(theta1Array);
+  if (pendState > 1) {
+    //console.log('Theta 2:');
+    findMotionData(theta2Array, 2);
+  }
+  if (pendState >=4) {
+    findMotionData(theta4Array, 3);
+  }
+*/
+  enterHeaders();
+
+  drawIndex = 0;
+  active = 1;
+  pause();
+}
+
+function load() {
+  pendRadio.attribute('disabled', '');
+  len1Input.attribute('disabled', '');
+  len2Input.attribute('disabled', '');
+  mass1Input.attribute('disabled', '');
+  mass2Input.attribute('disabled', '');
+  theta0_1_Input.attribute('disabled', '');
+  theta0_2_Input.attribute('disabled', '');
+  thetaDot0_1_Input.attribute('disabled', '');
+  thetaDot0_2_Input.attribute('disabled', '');
+  mu_Input.attribute('disabled', '');
+  k_Input.attribute('disabled', '');
+  time_Input.attribute('disabled', '');
+  startB.attribute('disabled', '');
+  loadB.attribute('disabled', '');
   resetB.removeAttribute('disabled');
   pauseB.removeAttribute('disabled');
   recB.removeAttribute('disabled');
@@ -718,6 +767,7 @@ function reset() {
   k_Input.removeAttribute('disabled');
   time_Input.removeAttribute('disabled');
   startB.removeAttribute('disabled');
+  loadB.removeAttribute('disabled');
   resetB.attribute('disabled', '');
   pauseB.attribute('disabled', '');
   recB.attribute('disabled', '');

@@ -77,9 +77,9 @@ function solvedoublestance(){
   I2 = 1/12*m2*math.pow(l2,2);
   I3 = 1/12*m3*math.pow(l3,2);
   g = 9.8;
-  T3 = 120;
-  k1 = 20*180/PI;
-  k2 = -20*180/PI;
+  T3 = 140;
+  k1 = -20*180/PI;
+  k2 = 20*180/PI;
  // k1 = 10;
  // k2 = 10;
   m = 42.8;
@@ -334,21 +334,42 @@ function calculateTheta(t) {
      }   
      //console.log('Begain to Concat');
     //shrink knee and hip angle during double stance
+    if(0){
     Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
     Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
+    //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
     Ratioankle = ankleswing[0]/DStheta1ArrayV[DStheta1ArrayV.length-1];
         for (var i = 0; i < length2; i = i + 1){
           DStheta2ArrayV[i] = DStheta2ArrayV[i] * (1 + (i+1)*(Ratioknee - 1)/length2);
           latterhip[i] = latterhip[i] * (1 + (i+1)*(Ratiohip - 1)/length2);
+         // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
           DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
          }
-    //left and right ankle dorsi +/plantar -
-    intertheta1 =  anklestance.concat(DStheta1ArrayV, ankleswing, zero2);
-    intertheta6 = ankleswing.concat(zero2, anklestance, DStheta1ArrayV);
+        }
+        Kneezero1 = [];
+        Kneezero2 = [];
+    //knee bending at LTO and LHS
+    for (var i = 0; i < length2; i = i + 1){
+      if(i < length2/6*5){
+        Kneezero2[i] = 0;
+      continue;}
+    Kneezero2[i] = 6*24/(length2)*(i-length2/6*5)/180*PI;
+    }
+    for (var i = 0; i < length1; i = i + 1){
+      Kneezero1[i] = (24 - 6*24/length1*i)/180*PI; 
+      if(Kneezero1[i]< 0)
+      Kneezero1[i] = 0;
+      anklestance[i] = anklestance[i]+Kneezero1[i];
+      }
+//left and right ankle dorsi +/plantar -
+    intertheta1 =  anklestance.concat(DStheta1ArrayV, ankleswing, Kneezero2);
+    intertheta6 = ankleswing.concat(Kneezero2, anklestance, DStheta1ArrayV);
     //console.log(intertheta6);
     //left and right knee
-    intertheta2 = zero1.concat(DStheta2ArrayV, theta2Array, zero2);
-    intertheta5 = theta2Array.concat(zero2, zero1, DStheta2ArrayV);
+
+    intertheta2 = Kneezero1.concat(DStheta2ArrayV, theta2Array, Kneezero2);
+    
+    intertheta5 = theta2Array.concat(Kneezero2, Kneezero1, DStheta2ArrayV);
     //correct knee angle
     for  (var i = 0; i < intertheta2.length; i = i + 1){
       if (intertheta2[i] < 0)  intertheta2[i] = 0;
@@ -357,6 +378,14 @@ function calculateTheta(t) {
     //left and right hip
     intertheta3 = theta4Array.concat(latterhip, theta1Array, DStheta4ArrayV);
     intertheta4 = theta1Array.concat(DStheta4ArrayV, theta4Array, latterhip);
+    /*for (var i = 0; i < intertheta2.length; i = i + 1){
+      if (intertheta2[i] < 0)
+      intertheta2[i] = 0;
+      }
+    for (var i = 0; i < intertheta4.length; i = i + 1){
+      if (intertheta4[i] < 0)
+      intertheta4[i] = 0;
+      }*/
     /*interRatio = 0.1;
     console.log('Raw');
     intertheta1V = DataProcess(interT, intertheta1, interRatio);
@@ -384,6 +413,21 @@ function calculateTheta(t) {
       intertheta5[i] = intertheta5[i] / PI*180;
       intertheta6[i] = intertheta6[i] / PI*180;
      }
+     intertheta13 = intertheta1.concat(intertheta1,intertheta1);
+     intertheta23 = intertheta2.concat(intertheta2,intertheta2);
+     intertheta33 = intertheta3.concat(intertheta3,intertheta3);
+     intertheta43 = intertheta4.concat(intertheta4,intertheta4);
+     intertheta53 = intertheta5.concat(intertheta5,intertheta5);
+     intertheta63 = intertheta6.concat(intertheta6,intertheta6);
+     interTsec = [];
+     interThir = [];
+     //console.log('424');
+    for(var i = 0; i < interT.length; i = i + 1){
+     interTsec[i] = interT[i]+interT[interT.length-1]+deltaT;
+     interThir[i] = interT[i] + 2*(interT[interT.length-1]+deltaT);
+    }
+    //console.log('429');
+     interT3 = interT.concat(interTsec, interThir);
      interTV = [];
      intertheta1V = [];
      intertheta2V = [];
@@ -391,7 +435,7 @@ function calculateTheta(t) {
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 50;
+     interratio = 20;
      for (var i = 0; i < intertheta1.length; i = i + interratio){
       interTV[i/interratio] = interT[i];
       intertheta1V[i/interratio] = intertheta1[i];
@@ -401,14 +445,18 @@ function calculateTheta(t) {
       intertheta5V[i/interratio] = intertheta5[i];
       intertheta6V[i/interratio] = intertheta6[i];
      }
-     interRatio = 50;
+     //console.log('448');
+    interRatio = 20;
      intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
     intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
     intertheta3V = DataProcess(interTV, intertheta3V, interRatio);
     intertheta4V = DataProcess(interTV, intertheta4V, interRatio);
     intertheta5V = DataProcess(interTV, intertheta5V, interRatio);
     intertheta6V = DataProcess(interTV, intertheta6V, interRatio);
-    NewT = NewarrayX;
+    NewT = [];
+    for (var i = 0; i < NewarrayX.length; i = i + 1){
+    NewT[i] = NewarrayX[i] - interT[interT.length -1];
+    }
     var trace1 = {
       x: NewT,
       y: intertheta1V,
@@ -466,7 +514,8 @@ function calculateTheta(t) {
     
     var layout = {
         xaxis: {
-          title: 'Time (Second)'
+          title: 'Time (Second)',
+         // range: [0, interT[interT.length -1]]
         },
         yaxis: {
           title: 'Angle (Degree)'
