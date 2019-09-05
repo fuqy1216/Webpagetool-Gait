@@ -4,9 +4,15 @@ loadScript('leg-solver.js', function() {
 // Canvas
 var myCan;
 
+//IMU data
+var StrikeValue;
+var StrikeIndexRaw = [];
+var StrikeIndex = [];
+var ACC = [];
 // G
 var g = 9.8;
-
+var IMUdata;
+var IMUMatrix = [];
 //For interpolation
 var NewarrayX = [];
 
@@ -147,6 +153,14 @@ var toggleIncInput; // Time Increment
 var drawTimeLabel;
 var annInput;
 var recB;
+
+//STEP INFOS
+var StrideT;
+var LeftStepT;
+var RightStepT;
+var StrideL;
+var LeftStepL;
+var RightStepL;
 
 // Joint Angle // Position Labels
 var jAng1Label;
@@ -336,16 +350,16 @@ function setup() {
   resetB.mousePressed(reset);
   resetB.attribute('disabled', '');
  // Load IMU Button
- LoadB = createButton('Load IMU');
- LoadB.position(resetB.x + resetB.width + 10, resetB.y);
- LoadB.style('width', '100px');
- LoadB.style('height', '30px');
- LoadB.mousePressed(load);
+ loadB = createButton('Load IMU');
+ loadB.position(resetB.x + resetB.width + 10, resetB.y);
+ loadB.style('width', '100px');
+ loadB.style('height', '30px');
+ loadB.mousePressed(load);
  //LoadB.attribute('disabled', '');
   // Loop Checkbox;
   loopC = createCheckbox('Loop', false);
-  loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
-
+  //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
+  loopC.position(loadB.x + loadB.width + 10, loadB.y);
   // Pause Button
   pauseB = createButton('Pause');
   pauseB.position(myCan.x, myCan.y + myCan.height + 10);
@@ -402,10 +416,28 @@ function setup() {
   recB.attribute('disabled', '');
   recB.mousePressed(enterRow);
 
-
+  //gait infor labels
+  StrideT = createDiv();
+  StrideT.position(pauseB.x, pauseB.y + pauseB.height + 10);
+  StrideT.style('width', '140px');
+  LeftStepT = createDiv();
+  LeftStepT.position(StrideT.x + StrideT.width + 5, StrideT.y);
+  LeftStepT.style('width', '140px');
+  RightStepT = createDiv();
+  RightStepT.position(LeftStepT.x + LeftStepT.width + 5, LeftStepT.y);
+  RightStepT.style('width', '140px');
+  StrideL = createDiv();
+  StrideL.position(RightStepT.x + RightStepT.width + 5, RightStepT.y);
+  StrideL.style('width', '140px');
+  LeftStepL = createDiv();
+  LeftStepL.position(StrideL.x + StrideL.width + 5, StrideL.y);
+  LeftStepL.style('width', '140px');
+  RightStepL = createDiv();
+  RightStepL.position(LeftStepL.x + LeftStepL.width + 5, LeftStepL.y);
+  RightStepL.style('width', '140px');
   // Joint Angle // Position Labels
   jAng1Label = createDiv();
-  jAng1Label.position(pauseB.x, pauseB.y + pauseB.height + 10);
+  jAng1Label.position(StrideT.x, StrideT.y + StrideT.height + 10);
   jAng1Label.style('width', '140px');
   jPos1Label = createDiv();
   jPos1Label.position(jAng1Label.x + jAng1Label.width + 5, jAng1Label.y);
@@ -713,45 +745,57 @@ function start() {
 }
 
 function load() {
-  pendRadio.attribute('disabled', '');
-  len1Input.attribute('disabled', '');
-  len2Input.attribute('disabled', '');
-  mass1Input.attribute('disabled', '');
-  mass2Input.attribute('disabled', '');
-  theta0_1_Input.attribute('disabled', '');
-  theta0_2_Input.attribute('disabled', '');
-  thetaDot0_1_Input.attribute('disabled', '');
-  thetaDot0_2_Input.attribute('disabled', '');
-  mu_Input.attribute('disabled', '');
-  k_Input.attribute('disabled', '');
-  time_Input.attribute('disabled', '');
-  startB.attribute('disabled', '');
-  loadB.attribute('disabled', '');
-  resetB.removeAttribute('disabled');
-  pauseB.removeAttribute('disabled');
-  recB.removeAttribute('disabled');
 
-  calculateTheta(time_);
+      var rawFile = new XMLHttpRequest();
+      rawFile.open("GET", "test.txt", false);
+      rawFile.onreadystatechange = function ()
+      {
+          if(rawFile.readyState === 4)
+          {
+              if(rawFile.status === 200 || rawFile.status == 0)
+              {
+                  var allText = rawFile.responseText;
+                  IMUdata = allText.split("\n");
+                  console.log(IMUdata);
+              }
+          }
+      }
+      rawFile.send(null);
+      for(var i = 0; i<IMUdata.length; i = i +1){
+        IMUMatrix[i] = IMUdata[i].split(",");
+        for(var j = 0; j<IMUMatrix[i].length;j = j+1){
+          IMUMatrix[i][j] = parseFloat(IMUMatrix[i][j]);
+        }
+      }
+      //coloumn 1 time stamp; 2-4 acc; 5-7 orientation (5 for lateral axis rotation)
+      
+      for(var i = 0; i<IMUMatrix.length; i = i +1){
+        ACC[i] = pow(pow(IMUMatrix[i][1],2)+pow(IMUMatrix[i][2],2)+pow(IMUMatrix[i][3],2),0.5);//resultant acc
+      }
+      StrikeValue = ACC.filter(isStrike);
+      for(var i = 0; i<StrikeValue.length; i = i +1){
+        if(i == 1)
+        StrikeIndexRaw[i] = ACC.indexOf(StrikeValue[i]);
+        else
+         StrikeIndexRaw[i] = ACC.indexOf(StrikeValue[i],StrikeIndexRaw[i-1]);
+      }
+      //Find strikes that longer than 0.5 sec
+      StrikeIndexnum = 0;
+      for(var i = 0; i<StrikeIndexRaw.length-1; i = i +1){
+        if (IMUMatrix[StrikeIndexRaw[i+1]][0] - IMUMatrix[StrikeIndexRaw[i]][0]>0.5)
+        {
+          StrikeIndex[StrikeIndexnum] = StrikeIndexRaw[i];
+          StrikeIndexnum = StrikeIndexnum + 1;
+        }
+      }
+      alert("Identified Stride Numbers:" + StrikeIndexnum.toString());
+      //use orientation for further phase identification
+} 
 
-
-  // Print Min/Max of Motion
-  //console.log('Theta 1:');
- /* findMotionData(theta1Array, 1);
-  if (pendState == 1) findPeriod(theta1Array);
-  if (pendState > 1) {
-    //console.log('Theta 2:');
-    findMotionData(theta2Array, 2);
-  }
-  if (pendState >=4) {
-    findMotionData(theta4Array, 3);
-  }
-*/
-  enterHeaders();
-
-  drawIndex = 0;
-  active = 1;
-  pause();
+function isStrike(value) {
+  return value >= 15;
 }
+
 
 function reset() {
   pendRadio.removeAttribute('disabled');

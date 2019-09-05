@@ -435,18 +435,18 @@ function calculateTheta(t) {
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 20;
-     for (var i = 0; i < intertheta1.length; i = i + interratio){
-      interTV[i/interratio] = interT[i];
-      intertheta1V[i/interratio] = intertheta1[i];
-      intertheta2V[i/interratio] = intertheta2[i];
-      intertheta3V[i/interratio] = intertheta3[i];
-      intertheta4V[i/interratio] = intertheta4[i];
-      intertheta5V[i/interratio] = intertheta5[i];
-      intertheta6V[i/interratio] = intertheta6[i];
+     interratio = 25;
+     for (var i = 0; i < intertheta13.length; i = i + interratio){
+      interTV[i/interratio] = interT3[i];
+      intertheta1V[i/interratio] = intertheta13[i];
+      intertheta2V[i/interratio] = intertheta23[i];
+      intertheta3V[i/interratio] = intertheta33[i];
+      intertheta4V[i/interratio] = intertheta43[i];
+      intertheta5V[i/interratio] = intertheta53[i];
+      intertheta6V[i/interratio] = intertheta63[i];
      }
      //console.log('448');
-    interRatio = 20;
+    interRatio = 25;
      intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
     intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
     intertheta3V = DataProcess(interTV, intertheta3V, interRatio);
