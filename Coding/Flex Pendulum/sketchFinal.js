@@ -757,7 +757,14 @@ function load() {
                   var allText = rawFile.responseText;
                   IMUdata = allText.split("\n");
                   console.log(IMUdata);
+              }else{
+                alert("Open IMU Data Failed.");
+                return;
               }
+          }
+          else{
+            alert("Open IMU Data Failed.");
+            return;
           }
       }
       rawFile.send(null);
@@ -767,7 +774,7 @@ function load() {
           IMUMatrix[i][j] = parseFloat(IMUMatrix[i][j]);
         }
       }
-      //coloumn 1 time stamp; 2-4 acc; 5-7 orientation (5 for lateral axis rotation)
+      //coloumn 0 time stamp; 1-3 acc; 4-6 orientation (4 for lateral axis rotation)
       
       for(var i = 0; i<IMUMatrix.length; i = i +1){
         ACC[i] = pow(pow(IMUMatrix[i][1],2)+pow(IMUMatrix[i][2],2)+pow(IMUMatrix[i][3],2),0.5);//resultant acc
@@ -788,8 +795,9 @@ function load() {
           StrikeIndexnum = StrikeIndexnum + 1;
         }
       }
-      alert("Identified Stride Numbers:" + StrikeIndexnum.toString());
+      alert("Identified Stride Numbers: " + StrikeIndexnum.toString());
       //use orientation for further phase identification
+
 } 
 
 function isStrike(value) {
