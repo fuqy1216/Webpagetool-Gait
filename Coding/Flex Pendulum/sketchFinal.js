@@ -36,6 +36,7 @@ var len3Label;
 var len4 = 0.846;
 var len4Input;
 var len4Label;
+var DoublePenRefer;
 // Length of Forth Pendulum
 var len5 = 0.07;
 var len5Input;
@@ -68,6 +69,10 @@ var theta0_2_Label;
 var theta0_4 = -15.0;
 var theta0_4_Input;
 var theta0_4_Label;
+// Initial Angle for DS stance leg
+var theta0_5 = 0;
+var theta0_5_Input;
+var theta0_5_Label;
 // Initial Angular Velocity of First Pendulum
 var thetaDot0_1 = -170.0;
 var thetaDot0_1_Input;
@@ -80,12 +85,16 @@ var thetaDot0_2_Label;
 var thetaDot0_4 = -95.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
+// Initial Angular Velocity of DS Stance knee
+var thetaDot0_5 = 0;
+var thetaDot0_5_Input;
+var thetaDot0_5_Label;
 // Mu - Coefficient of Viscous Damping
 var mu_ = 0.1;
 var mu_Input;
 var mu_Label;
 // K - Coefficient of Spring Constant
-var k_ = 10.0;
+var k_ = 0.0;
 var k_Input;
 var k_Label;
 // Time Interval
@@ -219,15 +228,35 @@ function setup() {
     len4Input.style('width', '70px');
     len4Input.input(updateICs);
     len4Label = createDiv('Length 4: ' + len4 + ' m');
-    len4Label.position(880, len4Input.y);
+    len4Label.position(880, len4Input.y);  
+    DoublePenRefer = createDiv('Double Pendulum Reference: https://www.myphysicslab.com/pendulum/double-pendulum-en.html');
+    //DoublePenRefer.href = "https://www.myphysicslab.com/pendulum/double-pendulum-en.html";
+    //DoublePenRefer = document.createElement("LINK");
+    DoublePenRefer.position(1420, len4Input.y);
   // Length of Ankle Height
     len5Input = createInput();
-    len5Input.position(1030, len4Input.y + 30);
+    len5Input.position(1300, len4Input.y);
     len5Input.value(len5);
     len5Input.style('width', '70px');
     len5Input.input(updateICs);
     len5Label = createDiv('Length 5: ' + len5 + ' m');
-    len5Label.position(880, len4Input.y + 30);
+    len5Label.position(1150, len4Input.y);
+    //front stance knee
+    theta0_5_Input = createInput();
+    theta0_5_Input.position(len5Input.x, len5Input.y + 30);
+    theta0_5_Input.style('width', '70px');
+    theta0_5_Input.value(theta0_5);
+    theta0_5_Input.input(updateICs);
+    theta0_5_Label = createDiv('Initial \u0398 5: ' + theta0_5 + ' deg');
+    theta0_5_Label.position(len5Label.x, theta0_5_Input.y);
+    //fron stance knee speed
+    thetaDot0_5_Input = createInput();
+    thetaDot0_5_Input.position(theta0_5_Input.x, theta0_5_Input.y + 30);
+    thetaDot0_5_Input.style('width', '70px');
+    thetaDot0_5_Input.value(thetaDot0_5);
+    thetaDot0_5_Input.input(updateICs);
+    thetaDot0_5_Label = createDiv('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s')
+    thetaDot0_5_Label.position(theta0_5_Label.x, thetaDot0_5_Input.y);
   // Mass of First Pendulum
   mass1Input = createInput();
   mass1Input.position(len1Input.x, len1Input.y + 30);
@@ -254,7 +283,7 @@ function setup() {
   mass3Label.position(len3Label.x, mass3Input.y);
     // Mass of Forth Pendulum
     mass4Input = createInput();
-    mass4Input.position(len5Input.x, len5Input.y + 30);
+    mass4Input.position(len4Input.x, len4Input.y + 30);
     mass4Input.style('width', '70px');
     mass4Input.value(mass4);
     mass4Input.input(updateICs);
@@ -492,6 +521,7 @@ function draw() {
     var theta1 = Number(theta0_1_Input.value())*PI/180.0 + PI/2;
     var theta2 = Number(theta0_2_Input.value())*PI/180.0 + PI/2;
     var theta4 = Number(theta0_4_Input.value())*PI/180.0 + PI/2;
+    var theta5 = Number(theta0_5_Input.value())*PI/180.0 + PI/2;
     //upper leg
     line(width/2, height/2, width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1));
     //lower leg
@@ -513,16 +543,18 @@ function draw() {
       ellipse(width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4), 4, 4);
 
       //stance leg
-      line(width/2, height/2, width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4));
+      line(width/2, height/2, width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4));
+      //stance lowerleg
+      line(width/2 + length1*100*Math.cos(theta4), height/2 + length1*100*Math.sin(theta4), width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta5));
       //ankle joint
       //ellipse(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4), mass2*4, mass2*4);
-      ellipse(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4), 4, 4);
+      ellipse(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta5), 4, 4);
 
       //foot
-      line(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4), width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4) + length5*100);
-      line(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4) + length5*100, width/2 + (length4)*100*Math.cos(theta4) - footFraction*length3*100, height/2 + (length4)*100*Math.sin(theta4) + length5*100);
-      line(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4) + length5*100, width/2 + (length4)*100*Math.cos(theta4) + (1 - footFraction)*length3*100, height/2 + (length4)*100*Math.sin(theta4) + length5*100);
-    
+      line(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta5));
+      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta5) + footFraction*length3*100*Math.cos(theta5 + PI/2), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta5) + footFraction*length3*100*Math.sin(theta5 + PI/2));
+      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta5) + (1 - footFraction)*length3*100*Math.cos(theta5 - PI/2), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta5) + (1 - footFraction)*length3*100*Math.sin(theta5 - PI/2));
+
   }
   //loading interface
   if (active == 1) {
@@ -634,6 +666,7 @@ function updateICs() {
   len3Label.html('Length 3: ' + len3 + ' m');
   len4 = Number(len4Input.value());
   len4Label.html('Length 4: ' + len4 + ' m');
+  DoublePenRefer.html('Double Pendulum Reference: https://www.myphysicslab.com/pendulum/double-pendulum-en.html');
   len5 = Number(len5Input.value());
   len5Label.html('Length 5: ' + len5 + ' m');
   mass1 = Number(mass1Input.value());
@@ -650,12 +683,16 @@ function updateICs() {
   theta0_2_Label.html('Initial \u0398 2: ' + theta0_2 + ' deg');
   theta0_4 = Number(theta0_4_Input.value());
   theta0_4_Label.html('Initial \u0398 4: ' + theta0_4 + ' deg');
+  theta0_5 = Number(theta0_5_Input.value());
+  theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg');
   thetaDot0_1 = Number(thetaDot0_1_Input.value());
   thetaDot0_1_Label.html('Initial \u0398\u0027 1: ' + thetaDot0_1 + ' deg/s');
   thetaDot0_2 = Number(thetaDot0_2_Input.value());
   thetaDot0_2_Label.html('Initial \u0398\u0027 2: ' + thetaDot0_2 + ' deg/s');
   thetaDot0_4 = Number(thetaDot0_4_Input.value());
   thetaDot0_4_Label.html('Initial \u0398\u0027 4: ' + thetaDot0_4 + ' deg/s');
+  thetaDot0_5 = Number(thetaDot0_5_Input.value());
+  thetaDot0_5_Label.html('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s');
   mu_ = Number(mu_Input.value());
   mu_Label.html('Mu: ' + mu_);
   k_ = Number(k_Input.value());
@@ -756,7 +793,7 @@ function load() {
               {
                   var allText = rawFile.responseText;
                   IMUdata = allText.split("\n");
-                  console.log(IMUdata);
+                  //console.log(IMUdata);
               }else{
                 alert("Open IMU Data Failed.");
                 return;
@@ -909,7 +946,7 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
   return -1 * mu_ * myThetaDot - (g/len1) * Math.sin(myTheta);
 }
-
+//https://www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
   var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2 + myThetaDot1*myThetaDot1*Math.cos(myTheta1 - myTheta2)));
   var den = len1*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
@@ -923,14 +960,19 @@ function doublePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThet
 }
 
 function triplePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2 + myThetaDot1*myThetaDot1*Math.cos(myTheta1 - myTheta2)));
-  var den = len1*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den;
+  var len1E = len1/3;
+  var len2E = len2/3;
+  var len2CE = pow(len1*len1 + len2*len2/4 - len1*len2/2*cos(myTheta1+myTheta2),0.5);
+  var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2E + myThetaDot1*myThetaDot1*len1E*Math.cos(myTheta1 - myTheta2)));
+  var den = len1E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
+  return num / den - k_*180/PI*myTheta1/(len1E*len1E*mass1 + len2E*len2E*mass2 + mass2*len2CE*len2CE);
 }
 
 function triplePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var num = 2*Math.sin(myTheta1 - myTheta2)*(myThetaDot1*myThetaDot1*len1*(mass1 + mass2) + g*(mass1 + mass2)*Math.cos(myTheta1) + myThetaDot2*myThetaDot2*len2*mass2*Math.cos(myTheta1 - myTheta2));
-  var den = len2*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
+  var len1E = len1/3;
+  var len2E = len2/3
+  var num = 2*Math.sin(myTheta1 - myTheta2)*(myThetaDot1*myThetaDot1*len1E*(mass1 + mass2) + g*(mass1 + mass2)*Math.cos(myTheta1) + myThetaDot2*myThetaDot2*len2E*mass2*Math.cos(myTheta1 - myTheta2));
+  var den = len2E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
   return num / den;
 }
 

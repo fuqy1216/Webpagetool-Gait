@@ -186,6 +186,7 @@ function calculateTheta(t) {
       var theta1 = theta0_1*PI/180.0;
       var theta2 = theta0_2*PI/180.0;
       var theta3 = theta2 + PI/2;
+      var theta5 = theta0_5*PI/180;
       var thetaDot1 = thetaDot0_1*PI/180.0;
       var thetaDot2 = thetaDot0_2*PI/180.0;
       var thetaDot3 = 0;
@@ -353,10 +354,10 @@ function calculateTheta(t) {
       if(i < length2/6*5){
         Kneezero2[i] = 0;
       continue;}
-    Kneezero2[i] = 6*24/(length2)*(i-length2/6*5)/180*PI;
+    Kneezero2[i] = 6*theta5/(length2)*(i-length2/6*5);
     }
     for (var i = 0; i < length1; i = i + 1){
-      Kneezero1[i] = (24 - 6*24/length1*i)/180*PI; 
+      Kneezero1[i] = (theta5 - 6*theta5/length1*i); 
       if(Kneezero1[i]< 0)
       Kneezero1[i] = 0;
       anklestance[i] = anklestance[i]+Kneezero1[i];
