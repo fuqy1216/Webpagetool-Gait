@@ -351,13 +351,13 @@ function calculateTheta(t) {
         Kneezero2 = [];
     //knee bending at LTO and LHS
     for (var i = 0; i < length2; i = i + 1){
-      if(i < length2/6*5){
+      if(i < length2/5*4){
         Kneezero2[i] = 0;
       continue;}
-    Kneezero2[i] = 6*theta5/(length2)*(i-length2/6*5);
+    Kneezero2[i] = 5*theta5/(length2)*(i-length2/5*4);
     }
     for (var i = 0; i < length1; i = i + 1){
-      Kneezero1[i] = (theta5 - 6*theta5/length1*i); 
+      Kneezero1[i] = (theta5 - 4*theta5/length1*i); 
       if(Kneezero1[i]< 0)
       Kneezero1[i] = 0;
       anklestance[i] = anklestance[i]+Kneezero1[i];
@@ -436,7 +436,7 @@ function calculateTheta(t) {
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 50;
+     interratio = 1;
      for (var i = 0; i < intertheta13.length; i = i + interratio){
       interTV[i/interratio] = interT3[i];
       intertheta1V[i/interratio] = intertheta13[i];
@@ -447,7 +447,7 @@ function calculateTheta(t) {
       intertheta6V[i/interratio] = intertheta63[i];
      }
      //console.log('448');
-    interRatio = 50;
+    interRatio = 1;
      intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
     intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
     intertheta3V = DataProcess(interTV, intertheta3V, interRatio);
