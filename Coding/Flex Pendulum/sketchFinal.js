@@ -82,7 +82,7 @@ var thetaDot0_2 = 120.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -95.0;
+var thetaDot0_4 = -130.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Initial Angular Velocity of DS Stance knee
@@ -594,8 +594,8 @@ function draw() {
       //show the angle and joint location
       if (isPaused == 1) {
         jAng1Label.html('\u0398(1) = ' + round((drawTheta1 - PI/2)*180/PI*100)/100 + ' deg');
-        jPos1Label.html('Stance Toe: (' + round((stoeX-sheelX)*100)/100 + ', ' + -1*round((stoeY-sheelY)*100)/100 + ')');
-        jPos11Label.html('Stance Heel: (' + round((sheelX-sheelX)*100)/100 + ', ' + -1*round((sheelY-sheelY)*100)/100 + ')');
+        jPos1Label.html('Left (Green) Toe: (' + round((stoeX-sheelX)*100)/100 + ', ' + -1*round((stoeY-sheelY)*100)/100 + ')');
+        jPos11Label.html('Left (Green) Heel: (' + round((sheelX-sheelX)*100)/100 + ', ' + -1*round((sheelY-sheelY)*100)/100 + ')');
         drawTimeLabel.html('Time: ' + drawIndex/1000 + ' seconds');
       }  
     
@@ -633,8 +633,8 @@ function draw() {
       //show the infor when paused
       if (isPaused == 1) {
         jAng2Label.html('\u0398(2) = ' + round((drawTheta2 - PI/2)*180/PI*100)/100 + ' deg');
-        jPos2Label.html('Swing Toe: (' + round((toeX-sheelX)*100)/100 + ', ' + -1*round((toeY-sheelY)*100)/100 + ')');
-        jPos21Label.html('Swing Heel: (' + round((heelX-sheelX)*100)/100 + ', ' + -1*round((heelY-sheelY)*100)/100 + ')');
+        jPos2Label.html('Right (Black) Toe: (' + round((toeX-sheelX)*100)/100 + ', ' + -1*round((toeY-sheelY)*100)/100 + ')');
+        jPos21Label.html('Right (Black) Heel: (' + round((heelX-sheelX)*100)/100 + ', ' + -1*round((heelY-sheelY)*100)/100 + ')');
       }
       //calculated theta3 value (global angle)
       
@@ -646,7 +646,7 @@ function draw() {
     rect(5, height - 15, (width - 10)*(drawIndex/intertheta1.length), 10);
 
     // Advance frame
-    if (isPaused == 0) drawIndex = drawIndex + 10;
+    if (isPaused == 0) drawIndex = drawIndex + 5;
 
     // Check drawIndex amd loop back to beginning
     if (drawIndex >= intertheta1.length)  {

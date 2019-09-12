@@ -304,7 +304,7 @@ function calculateTheta(t) {
       ankleswing[i] = Maxankle + (i + 1 - math.floor(length1/2)) * ( 0 - Maxankle )/(length1 - math.floor(length1/2));
     }   
     //Length for Doublestance
-    length2 = DStheta0Array.length * 10 - 9;
+    length2 = DStheta0Array.length * interRatio - (interRatio-1);
     (zero2 = []).length = length2;
     zero2.fill(0);
     interT = [];
@@ -436,7 +436,7 @@ function calculateTheta(t) {
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 1;
+     interratio = 50;
      for (var i = 0; i < intertheta13.length; i = i + interratio){
       interTV[i/interratio] = interT3[i];
       intertheta1V[i/interratio] = intertheta13[i];
@@ -447,18 +447,27 @@ function calculateTheta(t) {
       intertheta6V[i/interratio] = intertheta63[i];
      }
      //console.log('448');
-    interRatio = 1;
-     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
+     NewT = [];
+    interRatio = 50;
+    if(1){
+    intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
     intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
     intertheta3V = DataProcess(interTV, intertheta3V, interRatio);
     intertheta4V = DataProcess(interTV, intertheta4V, interRatio);
     intertheta5V = DataProcess(interTV, intertheta5V, interRatio);
     intertheta6V = DataProcess(interTV, intertheta6V, interRatio);
-    NewT = [];
+    NewT = NewarrayX;
+    }
+    else{
+    NewT = interTV;
+    }
+    for (var i = 0; i < NewT.length; i = i + 1){
+    NewT[i] = NewT[i]*2;
+    }
     /*for (var i = 0; i < NewarrayX.length; i = i + 1){
     NewT[i] = NewarrayX[i] - interT[interT.length -1];
     }*/
-    NewT = NewarrayX;
+    
     var trace1 = {
       x: NewT,
       y: intertheta1V,
@@ -517,7 +526,7 @@ function calculateTheta(t) {
     var layout = {
         xaxis: {
           title: 'Time (Second)',
-         // range: [0, interT[interT.length -1]]
+          range: [0, 4*interT[interT.length -1]]
         },
         yaxis: {
           title: 'Angle (Degree)'
@@ -567,7 +576,7 @@ function calculateTheta(t) {
       SwingToe[drawIndex] = -round((toeY-sheelY)*100)/100;
       //SwingHeel[drawIndex][0] = round((heelX-sheelX)*100)/100;
       SwingHeel[drawIndex] = -round((heelY-sheelY)*100)/100;
-      if((SwingHeel[drawIndex] < 0) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0)){
+      if((SwingHeel[drawIndex] < -1) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0)){
       LandingT = drawIndex * deltaT;
       return LandingT;
            }
