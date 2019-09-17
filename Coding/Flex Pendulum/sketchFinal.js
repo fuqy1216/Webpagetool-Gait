@@ -1,6 +1,9 @@
 loadScript('leg-solver.js', function() {
   //alert('script ready!'); 
 });
+loadScript('leg-solver-AFO.js', function() {
+  //alert('script ready!'); 
+});
 // Canvas
 var myCan;
 
@@ -90,7 +93,7 @@ var thetaDot0_5 = 0;
 var thetaDot0_5_Input;
 var thetaDot0_5_Label;
 // Mu - Coefficient of Viscous Damping
-var mu_ = 0.1;
+var mu_ = 0.0;
 var mu_Input;
 var mu_Label;
 // K - Coefficient of Spring Constant
@@ -344,7 +347,7 @@ function setup() {
   mu_Input.value(mu_);
   mu_Input.input(updateICs);
   mu_Input.attribute('disabled', '');
-  mu_Label = createDiv('Mu: ' + mu_);
+  mu_Label = createDiv('KAFO: ' + mu_ + ' Nm/deg');
   mu_Label.position(thetaDot0_1_Label.x, mu_Input.y);
   // K
   k_Input = createInput();
@@ -353,7 +356,7 @@ function setup() {
   k_Input.value(k_);
   k_Input.input(updateICs);
   k_Input.attribute('disabled', '');
-  k_Label = createDiv('K: ' + k_);
+  k_Label = createDiv('Khip: ' + k_ + ' Nm/deg');
   k_Label.position(thetaDot0_2_Label.x, k_Input.y);
   // Time
   time_Input = createInput();
@@ -759,8 +762,11 @@ function start() {
   pauseB.removeAttribute('disabled');
   recB.removeAttribute('disabled');
 
+  if(mu_ == 0){
   calculateTheta(time_);
-
+  }else{
+  calculateThetaAFO(time_);   
+  }
 
   // Print Min/Max of Motion
   //console.log('Theta 1:');
@@ -784,7 +790,7 @@ function start() {
 function load() {
 
       var rawFile = new XMLHttpRequest();
-      rawFile.open("GET", "test.txt", false);
+      rawFile.open("GET", "IMUDATA.TXT", false);
       rawFile.onreadystatechange = function ()
       {
           if(rawFile.readyState === 4)
@@ -943,8 +949,11 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 */
 
 
+function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
+  return -1 * mu_*180/PI() * myTheta - (g/len1) * Math.sin(myTheta);
+}
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
-  return -1 * mu_ * myThetaDot - (g/len1) * Math.sin(myTheta);
+  return  - (g/len1) * Math.sin(myTheta);
 }
 //https://www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
