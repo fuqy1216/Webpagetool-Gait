@@ -1,4 +1,4 @@
-#!javascript
+//#!javascript
 //$ node init
 loadScript('math-solver.js', function() {
     //alert('script ready!'); 

@@ -1,4 +1,4 @@
-#!javascript
+//#!javascript
 //$ node init
 loadScript('math-solver.js', function() {
     //alert('script ready!'); 
@@ -455,7 +455,7 @@ timeArray = [];
        var theta4DoubleDotSEC;
        var indexSEC = 0;
        for (var i = 0; i < t; i = i + deltaT) {
-         theta4DoubleDotSEC = singlePendAFO_getThetaDoubleDot(theta4SEC, theta4DotSEC);
+         theta4DoubleDotSEC = singlePend_getThetaDoubleDot(theta4SEC, theta4DotSEC);
          theta4SEC = theta4SEC + theta4DotSEC * deltaT;
          theta4DotSEC = theta4DotSEC + theta4DoubleDotSEC * deltaT;
          //timeArray[index] = i;

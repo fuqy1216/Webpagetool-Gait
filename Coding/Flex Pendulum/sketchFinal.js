@@ -346,7 +346,6 @@ function setup() {
   mu_Input.style('width', '70px');
   mu_Input.value(mu_);
   mu_Input.input(updateICs);
-  mu_Input.attribute('disabled', '');
   mu_Label = createDiv('KAFO: ' + mu_ + ' Nm/deg');
   mu_Label.position(thetaDot0_1_Label.x, mu_Input.y);
   // K
@@ -355,7 +354,6 @@ function setup() {
   k_Input.style('width', '70px');
   k_Input.value(k_);
   k_Input.input(updateICs);
-  k_Input.attribute('disabled', '');
   k_Label = createDiv('Khip: ' + k_ + ' Nm/deg');
   k_Label.position(thetaDot0_2_Label.x, k_Input.y);
   // Time
@@ -726,12 +724,15 @@ function switchState() {
     pendState = 2;
   }
   if (pendRadio.value() == 'Double Pendulum with Foot') {
-    mu_Input.attribute('disabled', '');
+    mu_Input.removeAttribute('disabled');
+    k_Input.removeAttribute('disabled');
     len3Input.removeAttribute('disabled');
     mass3Input.removeAttribute('disabled');
     pendState = 3;
   }
   if (pendRadio.value() == 'Swing-Stance') {
+    mu_Input.removeAttribute('disabled');
+    k_Input.removeAttribute('disabled');
     /*mu_Input.removeAttribute('disabled');
     len2Input.attribute('disabled', '');
     mass2Input.attribute('disabled', '');
@@ -950,7 +951,7 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 
 
 function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
-  return -1 * mu_*180/PI() * myTheta - (g/len1) * Math.sin(myTheta);
+  return -1 * mu_*180/PI * myTheta - (g/len1) * Math.sin(myTheta);
 }
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
   return  - (g/len1) * Math.sin(myTheta);
