@@ -387,7 +387,7 @@ function setup() {
  loadB.mousePressed(load);
  //LoadB.attribute('disabled', '');
   // Loop Checkbox;
-  loopC = createCheckbox('Loop', false);
+  loopC = createCheckbox('Loop', true);
   //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
   loopC.position(loadB.x + loadB.width + 10, loadB.y);
   // Pause Button

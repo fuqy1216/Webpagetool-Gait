@@ -526,7 +526,7 @@ function calculateTheta(t) {
     var layout = {
         xaxis: {
           title: 'Time (Second)',
-          range: [0, 2*interT[interT.length -1]]
+          range: [0, interT[interT.length -1]]
         },
         yaxis: {
           title: 'Angle (Degree)'
