@@ -6,7 +6,7 @@ loadScript('leg-solver-AFO.js', function() {
 });
 // Canvas
 var myCan;
-
+var T1stswing;
 //IMU data
 var StrikeValue;
 var StrikeIndexRaw = [];
@@ -527,6 +527,7 @@ function draw() {
     line(width/2, height/2, width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1));
     //lower leg
     line(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2));
+
     //knee
    // ellipse(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), mass1*4, mass1*4);
     ellipse(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), 4, 4);
@@ -547,6 +548,10 @@ function draw() {
      line(width/2, height/2, width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4));
      //stance lowerleg
      line(width/2 + length1*100*Math.cos(theta4), height/2 + length1*100*Math.sin(theta4), width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
+     if((mu_ > 0)||(mu_ < 0))
+     {
+      line(width/2 - 2 + length1*100*Math.cos(theta4), height/2 + length1*100*Math.sin(theta4), width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
+    }
      //ankle joint
      //ellipse(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4), mass2*4, mass2*4);
      ellipse(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), 4, 4);
@@ -555,7 +560,12 @@ function draw() {
      line(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
-
+     if((mu_ > 0)||(mu_ < 0))
+     {
+      line(width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 - 2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
+      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
+      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
+     }
   }
   //loading interface
   if (active == 1) {
@@ -571,6 +581,7 @@ function draw() {
       var skneeY = height/2 + (length1)*100*Math.sin(drawTheta3);
       //upper leg
       line(width/2, height/2, skneeX, skneeY);
+      
       //knee joint
       //ellipse(skneeX, skneeY, mass1*4, mass1*4);
     ellipse(skneeX, skneeY, 4, 4);
@@ -578,6 +589,7 @@ function draw() {
     var sankleY = skneeY + (length2)*100*Math.sin(drawTheta3 + drawTheta2);
     //lower leg
     line(skneeX, skneeY, sankleX, sankleY);
+
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(sankleX, sankleY, 4, 4);
@@ -616,6 +628,10 @@ function draw() {
     var ankleY = kneeY + (length2)*100*Math.sin(drawTheta4 + drawTheta5);
     //lower leg
     line(kneeX, kneeY, ankleX, ankleY);
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(kneeX - 2, kneeY, ankleX - 2, ankleY);
+    }
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(ankleX, ankleY, 4, 4);
@@ -630,7 +646,12 @@ function draw() {
     line(ankleX, ankleY, footX, footY);
     line(footX, footY, heelX, heelY);
     line(footX, footY, toeX, toeY);
-
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(ankleX - 2, ankleY, footX - 2, footY);
+      line(footX, footY - 1, heelX, heelY - 1);
+      line(footX, footY - 1, toeX, toeY - 1);
+    }
       //show the infor when paused
       if (isPaused == 1) {
         jAng2Label.html('\u0398(2) = ' + round((drawTheta2 - PI/2)*180/PI*100)/100 + ' deg');
@@ -695,9 +716,9 @@ function updateICs() {
   thetaDot0_5 = Number(thetaDot0_5_Input.value());
   thetaDot0_5_Label.html('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s');
   mu_ = Number(mu_Input.value());
-  mu_Label.html('Mu: ' + mu_);
+  mu_Label.html('KAFO: ' + mu_ + ' Nm/deg');
   k_ = Number(k_Input.value());
-  k_Label.html('K: ' + k_);
+  k_Label.html('Khip: ' + k_ + ' Nm/deg');
   time_ = Number(time_Input.value());
   time_Label.html('Time: ' + time_ + ' sec(s)');
 }
@@ -951,10 +972,11 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 
 
 function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
-  return -1 * mu_*180/PI * myTheta - (g/len1) * Math.sin(myTheta);
+  return -1 * mu_*180/PI * myTheta*3/pow(len1+len2,2)/(mass1+mass2) - (g/(len1+len2) * Math.sin(myTheta));
+  //return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
-  return  - (g/len1) * Math.sin(myTheta);
+  return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 //https://www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {

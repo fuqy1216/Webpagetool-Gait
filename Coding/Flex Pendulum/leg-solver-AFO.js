@@ -133,6 +133,7 @@ function solvedoublestance(){
     // expected output: ReferenceError: nonExistentFunction is not defined
     // Note - error messages will vary depending on browser
   }
+  console.log("forces calculation success!");
     return math.multiply(math.inv(a),b);
   }
 
@@ -240,6 +241,8 @@ function calculateThetaAFO(t) {
         index = index + 1;
       }
       T1 = calculateSwingHeel(t/deltaT);
+      console.log(T1);
+      T1stswing = T1;
     //double stance phase, need to define T
     timeArray = timeArray.slice(0,T1/deltaT);
     theta1Array = theta1Array.slice(0,T1/deltaT);
@@ -403,10 +406,10 @@ timeArray = [];
     DSthetaDot1Array = [];
     //DSthetaDbDot1Array = [];
     DStheta2Array = [];
-    DSthetaDot2Array = [];
+    //DSthetaDot2Array = [];
     //DSthetaDbDot2Array = [];
     DStheta4Array = [];
-    DSthetaDot4Array = [];
+    //DSthetaDot4Array = [];
        //double pendulum Left Second
        var theta1SEC = intertheta3[intertheta3.length-1];
        var theta2SEC = intertheta2[intertheta2.length-1];
@@ -419,6 +422,16 @@ timeArray = [];
        var thetaDoubleDot2SEC;
        var thetaDoubleDot3SEC;
        var indexSEC = 0;
+       console.log('2nd calculateThetaAFO: swing initial hip angle' + theta1SEC/PI*180);
+       console.log('2nd calculateThetaAFO: swing initial knee angle' + theta2SEC/PI*180);
+       console.log('2nd calculateThetaAFO: swing initial hip angular velocity' + thetaDot1SEC/PI*180);
+       console.log('2nd calculateThetaAFO: swing initial knee angular velocity' + thetaDot2SEC/PI*180);
+       if(abs(thetaDot1SEC/PI*180)>300){
+       thetaDot1SEC = -170/180*PI;
+       }
+       if(abs(thetaDot2SEC/PI*180)>300){
+       thetaDot2SEC = 120/180*PI;
+       }
        for (var i = 0; i < t; i = i + deltaT) {
          thetaDoubleDot1SEC = triplePend_getThetaDoubleDot_1(theta1SEC, theta2SEC, thetaDot1SEC, thetaDot2SEC);
          thetaDoubleDot2SEC = triplePend_getThetaDoubleDot_2(theta1SEC, theta2SEC, thetaDot1SEC, thetaDot2SEC);
@@ -451,7 +464,7 @@ timeArray = [];
         }
        //inverted pendulum
        var theta4SEC =  PI - intertheta4[intertheta4.length-1];
-       var theta4DotSEC = DSthetaDot4Array[DSthetaDot4Array.length-1];;
+       var theta4DotSEC = DSthetaDot4Array[DSthetaDot4Array.length-1];
        var theta4DoubleDotSEC;
        var indexSEC = 0;
        for (var i = 0; i < t; i = i + deltaT) {
@@ -465,6 +478,11 @@ timeArray = [];
          indexSEC = indexSEC + 1;
        }
        T1 = calculateSwingHeel(t/deltaT);
+       console.log(T1);
+       if(T1 == 0)
+       {
+         T1 = T1stswing;
+       }
      //double stance phase, need to define T
      timeArray = timeArray.slice(0,T1/deltaT);
      theta1Array = theta1Array.slice(0,T1/deltaT);
@@ -532,10 +550,7 @@ timeArray = [];
      length4 = DStheta0Array.length * interRatio - (interRatio-1);
      (zero2 = []).length = length4;
      zero2.fill(0);
-     interT = [];
-     for (var i = 0; i < 2*(T1/deltaT + DStheta0Array.length * 10 - 9); i = i + 1){
-       interT[i] = i * deltaT;
-     }    
+
      //Correct Hip angle
      for (var i = 0; i < length3; i = i + 1){
        theta4Array[i] = theta4Array[i] - PI;
@@ -653,6 +668,10 @@ timeArray = [];
      intertheta63 = intertheta6.concat(intertheta6,intertheta6);
      interTsec = [];
      interThir = [];
+     interT = [];
+     for (var i = 0; i < intertheta13.length; i = i + 1){
+       interT[i] = i * deltaT;
+     }    
      //console.log('424');
     for(var i = 0; i < interT.length; i = i + 1){
      interTsec[i] = interT[i]+interT[interT.length-1]+deltaT;
@@ -807,7 +826,7 @@ timeArray = [];
       SwingToe[drawIndex] = -round((toeY-sheelY)*100)/100;
       //SwingHeel[drawIndex][0] = round((heelX-sheelX)*100)/100;
       SwingHeel[drawIndex] = -round((heelY-sheelY)*100)/100;
-      if((SwingHeel[drawIndex] < -1) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0)){
+      if((SwingHeel[drawIndex] < -2) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0)){
       LandingT = drawIndex * deltaT;
       return LandingT;
            }
@@ -862,9 +881,13 @@ timeArray = [];
       DSdtheta[3] = DSdtheta4;
       forces = solveleg(DStheta, DSdtheta);
       //console.log(forces);
-      if (forces == 0)      return;
+      if (forces == 0)      
+      {
+        console.log('Doublestance: forces all zero');
+        return;}
       if((forces[7]<0)||(DStheta[0] > PI/2))     
       {
+        console.log('Doublestance: solve success');
         return;
       }
       DStheta0Array[index] = DStheta0;

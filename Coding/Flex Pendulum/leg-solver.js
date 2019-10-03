@@ -133,6 +133,7 @@ function solvedoublestance(){
     // expected output: ReferenceError: nonExistentFunction is not defined
     // Note - error messages will vary depending on browser
   }
+  console.log("forces calculation success!");
     return math.multiply(math.inv(a),b);
   }
 
@@ -240,6 +241,7 @@ function calculateTheta(t) {
         index = index + 1;
       }
       T1 = calculateSwingHeel(t/deltaT);
+      console.log(T1);
     //double stance phase, need to define T
     timeArray = timeArray.slice(0,T1/deltaT);
     theta1Array = theta1Array.slice(0,T1/deltaT);
@@ -526,7 +528,7 @@ function calculateTheta(t) {
     var layout = {
         xaxis: {
           title: 'Time (Second)',
-          range: [0, interT[interT.length -1]]
+          range: [0, 2*interT[interT.length -1]]
         },
         yaxis: {
           title: 'Angle (Degree)'
@@ -631,9 +633,13 @@ function calculateTheta(t) {
       DSdtheta[3] = DSdtheta4;
       forces = solveleg(DStheta, DSdtheta);
       //console.log(forces);
-      if (forces == 0)      return;
+      if (forces == 0)      
+      {
+        console.log('Doublestance: forces all zero');
+        return;}
       if((forces[7]<0)||(DStheta[0] > PI/2))     
       {
+        console.log('Doublestance: solve success');
         return;
       }
       DStheta0Array[index] = DStheta0;
