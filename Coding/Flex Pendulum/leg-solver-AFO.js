@@ -172,7 +172,7 @@ function calculateThetaAFO(t) {
     thetaDbDot2Array = [];
     thetaDbDot3Array = [];
     thetaDbDot4Array =[];
-
+    ENDT2 = 0;
     DStheta0Array = [];
     DSthetaDot0Array = [];
     DStheta1Array = [];
@@ -259,7 +259,7 @@ function calculateThetaAFO(t) {
     thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
     //calculate theta0
     DStheta0Array[0] = 0;
-    DSthetaDot0Array[0] = PI - thetaDot4Array[T1/deltaT - 1];
+    DSthetaDot0Array[0] = thetaDot4Array[T1/deltaT - 1];
     DStheta1Array[0] = PI - theta4Array[T1/deltaT - 1];
     DSthetaDot1Array[0] = 0;
     //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
@@ -293,6 +293,19 @@ function calculateThetaAFO(t) {
     DStheta1ArrayV = DataProcess(arrayX, DStheta1Array, interRatio);
     DStheta2ArrayV = DataProcess(arrayX, DStheta2Array, interRatio);
     DStheta4ArrayV = DataProcess(arrayX, DStheta4Array, interRatio);
+    for(var i = 0; i < DStheta0ArrayV.length; i = i + 1){
+     if(DStheta2ArrayV[i] > theta0_2/180*PI)
+     {
+       ENDT2 = i;
+       break;
+     }
+     ENDT2 = DStheta0ArrayV.length;
+    }
+    DStheta0ArrayV = DStheta0ArrayV.slice(0,ENDT2);
+    DStheta1ArrayV = DStheta1ArrayV.slice(0,ENDT2);
+    DStheta2ArrayV = DStheta2ArrayV.slice(0,ENDT2);
+    DStheta4ArrayV = DStheta4ArrayV.slice(0,ENDT2);   
+    console.log('Finish interpolation');
     //Length for swing+stance
     length1 = T1/deltaT;
     (zero1 = []).length = length1;
@@ -307,7 +320,8 @@ function calculateThetaAFO(t) {
       ankleswing[i] = Maxankle + (i + 1 - math.floor(length1/2)) * ( 0 - Maxankle )/(length1 - math.floor(length1/2));
     }   
     //Length for Doublestance
-    length2 = DStheta0Array.length * interRatio - (interRatio-1);
+    //length2 = DStheta0Array.length * interRatio - (interRatio-1);
+    length2 = DStheta0ArrayV.length;
     (zero2 = []).length = length2;
     zero2.fill(0);
     interT = [];
@@ -372,7 +386,7 @@ intertheta6 = ankleswing.concat(Kneezero2);
 //left and right knee
 
 intertheta2 = Kneezero1.concat(DStheta2ArrayV);
-
+//console.log('DStheta2ArrayV-1st'+ DStheta2ArrayV);
 intertheta5 = theta2Array.concat(Kneezero2);
 //correct knee angle
 for  (var i = 0; i < intertheta2.length; i = i + 1){
@@ -392,7 +406,7 @@ timeArray = [];
     theta3Array = [];
     theta4Array = [];
     thetaDot1Array = [];
-    thetaDot2Array = [];
+    thetaDot2Array = []; 
     thetaDot3Array = [];
     thetaDot4Array = [];
     thetaDbDot1Array = [];
@@ -400,18 +414,11 @@ timeArray = [];
     thetaDbDot3Array = [];
     thetaDbDot4Array =[];
 
-    DStheta0Array = [];
-    DSthetaDot0Array = [];
-    DStheta1Array = [];
-    DSthetaDot1Array = [];
-    //DSthetaDbDot1Array = [];
-    DStheta2Array = [];
-    //DSthetaDot2Array = [];
-    //DSthetaDbDot2Array = [];
-    DStheta4Array = [];
-    //DSthetaDot4Array = [];
+    
+    
+
        //double pendulum Left Second
-       var theta1SEC = intertheta3[intertheta3.length-1];
+       var theta1SEC = -intertheta3[intertheta3.length-1];
        var theta2SEC = intertheta2[intertheta2.length-1];
        var theta3SEC = theta2SEC + PI/2;
        var theta5SEC= intertheta5[intertheta5.length-1];
@@ -427,11 +434,16 @@ timeArray = [];
        console.log('2nd calculateThetaAFO: swing initial hip angular velocity' + thetaDot1SEC/PI*180);
        console.log('2nd calculateThetaAFO: swing initial knee angular velocity' + thetaDot2SEC/PI*180);
        if(abs(thetaDot1SEC/PI*180)>300){
-       thetaDot1SEC = -170/180*PI;
+       thetaDot1SEC = thetaDot0_1/180*PI;
        }
        if(abs(thetaDot2SEC/PI*180)>300){
-       thetaDot2SEC = 120/180*PI;
+       thetaDot2SEC = thetaDot0_2/180*PI;
        }
+       console.log('2nd calculateThetaAFO: corrected swing initial hip angle' + theta1SEC/PI*180);
+       console.log('2nd calculateThetaAFO: corrected swing initial knee angle' + theta2SEC/PI*180);
+       console.log('2nd calculateThetaAFO: corrected swing initial hip angular velocity' + thetaDot1SEC/PI*180);
+       console.log('2nd calculateThetaAFO: corrected swing initial knee angular velocity' + thetaDot2SEC/PI*180);
+       
        for (var i = 0; i < t; i = i + deltaT) {
          thetaDoubleDot1SEC = triplePend_getThetaDoubleDot_1(theta1SEC, theta2SEC, thetaDot1SEC, thetaDot2SEC);
          thetaDoubleDot2SEC = triplePend_getThetaDoubleDot_2(theta1SEC, theta2SEC, thetaDot1SEC, thetaDot2SEC);
@@ -463,10 +475,24 @@ timeArray = [];
           indexSEC = indexSEC + 1;
         }
        //inverted pendulum
-       var theta4SEC =  PI - intertheta4[intertheta4.length-1];
+       var theta4SEC =   intertheta4[intertheta4.length-1];
        var theta4DotSEC = DSthetaDot4Array[DSthetaDot4Array.length-1];
        var theta4DoubleDotSEC;
        var indexSEC = 0;
+       console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
+       console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
+       if(abs(theta4DotSEC/PI*180)>300){
+        theta4DotSEC = thetaDot0_4/180*PI;
+        }
+        //if(theta4SEC > 0)
+        //theta4SEC = -theta4SEC;
+        console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
+        console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
+        //if( abs(180 - theta4SEC/PI*180) > 0)
+        //{
+        //  theta4SEC = PI + (PI - theta4SEC);
+        //}
+        console.log('theta4SEC' + theta4SEC);
        for (var i = 0; i < t; i = i + deltaT) {
          theta4DoubleDotSEC = singlePend_getThetaDoubleDot(theta4SEC, theta4DotSEC);
          theta4SEC = theta4SEC + theta4DotSEC * deltaT;
@@ -483,6 +509,27 @@ timeArray = [];
        {
          T1 = T1stswing;
        }
+       length3 = T1/deltaT;
+       (zero1 = []).length = length3;
+       zero1.fill(0);
+       ankleswing = [];
+       for (var i = 0; i < math.floor(length3/2); i = i + 1){
+         ankleswing[i] = DStheta1Array[DStheta1Array.length-1] + (i+1) * (Maxankle - DStheta1Array[DStheta1Array.length-1])/math.floor(length3/2);
+       }   
+       for (var i = math.floor(length3/2); i < length3; i = i + 1){
+         ankleswing[i] = Maxankle + (i + 1 - math.floor(length3/2)) * ( 0 - Maxankle )/(length3 - math.floor(length3/2));
+       } 
+       DStheta0Array = [];
+    DSthetaDot0Array = [];
+    DStheta1Array = [];
+    DSthetaDot1Array = [];
+    //DSthetaDbDot1Array = [];
+    DStheta2Array = [];
+    //DSthetaDot2Array = [];
+    //DSthetaDbDot2Array = [];
+    DStheta4Array = [];
+    //DSthetaDot4Array = [];
+    //second half
      //double stance phase, need to define T
      timeArray = timeArray.slice(0,T1/deltaT);
      theta1Array = theta1Array.slice(0,T1/deltaT);
@@ -499,8 +546,8 @@ timeArray = [];
      thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
      //calculate theta0
      DStheta0Array[0] = 0;
-     DSthetaDot0Array[0] = PI - thetaDot4Array[T1/deltaT - 1];
-     DStheta1Array[0] = PI - theta4Array[T1/deltaT - 1];
+     DSthetaDot0Array[0] = thetaDot4Array[T1/deltaT - 1];
+     DStheta1Array[0] = theta4Array[T1/deltaT - 1];
      DSthetaDot1Array[0] = 0;
      //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
      //DSthetaDot4Array[0] = thetaDot1Array[T1/deltaT - 1];
@@ -529,31 +576,30 @@ timeArray = [];
      DStheta0Array;
      interRatio = 10;
      //interpolation
+     if(DStheta0Array.length == 1){
+      DStheta0ArrayV = DStheta0Array;
+      DStheta1ArrayV = DStheta1Array;
+      DStheta2ArrayV = DStheta2Array;
+      DStheta4ArrayV = DStheta4Array;
+     }
+     else{
      DStheta0ArrayV = DataProcess(arrayX, DStheta0Array, interRatio);
      DStheta1ArrayV = DataProcess(arrayX, DStheta1Array, interRatio);
      DStheta2ArrayV = DataProcess(arrayX, DStheta2Array, interRatio);
      DStheta4ArrayV = DataProcess(arrayX, DStheta4Array, interRatio);
+     }
      //Length for swing+stance
-     length3 = T1/deltaT;
-     (zero1 = []).length = length3;
-     zero1.fill(0);
+    
      //ankle for swing+stance
-     Maxankle = 15/180*PI;
-     ankleswing = [];
-     for (var i = 0; i < math.floor(length3/2); i = i + 1){
-       ankleswing[i] = DStheta1Array[DStheta1Array.length-1] + (i+1) * (Maxankle - DStheta1Array[DStheta1Array.length-1])/math.floor(length3/2);
-     }   
-     for (var i = math.floor(length3/2); i < length3; i = i + 1){
-       ankleswing[i] = Maxankle + (i + 1 - math.floor(length3/2)) * ( 0 - Maxankle )/(length3 - math.floor(length3/2));
-     }   
+      
      //Length for Doublestance
      length4 = DStheta0Array.length * interRatio - (interRatio-1);
      (zero2 = []).length = length4;
      zero2.fill(0);
-
+     console.log(length1 + ',' + length2 + ',' + length3 + ',' + length4);
      //Correct Hip angle
      for (var i = 0; i < length3; i = i + 1){
-       theta4Array[i] = theta4Array[i] - PI;
+       theta4Array[i] = theta4Array[i];
       }
       for (var i = 0; i < length3; i = i + 1){
        theta1Array[i] = -theta1Array[i];
@@ -826,7 +872,7 @@ timeArray = [];
       SwingToe[drawIndex] = -round((toeY-sheelY)*100)/100;
       //SwingHeel[drawIndex][0] = round((heelX-sheelX)*100)/100;
       SwingHeel[drawIndex] = -round((heelY-sheelY)*100)/100;
-      if((SwingHeel[drawIndex] < -2) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0)){
+      if((drawIndex>10)&&((SwingHeel[drawIndex] < -2) &&(SwingHeel[drawIndex] < SwingHeel[drawIndex-1]) &&(drawIndex > 0))){
       LandingT = drawIndex * deltaT;
       return LandingT;
            }
@@ -881,10 +927,23 @@ timeArray = [];
       DSdtheta[3] = DSdtheta4;
       forces = solveleg(DStheta, DSdtheta);
       //console.log(forces);
+      console.log(forces[7]);
       if (forces == 0)      
       {
         console.log('Doublestance: forces all zero');
         return;}
+        /*if((DStheta[2]>theta0_2/180*PI))
+        {DStheta0Array[index] = DStheta0;
+          DStheta1Array[index] = DStheta1;
+          DStheta2Array[index] = DStheta2;
+          DStheta4Array[index] = DStheta4;
+          DSthetaDot0Array[index] = DSdtheta0;
+          DSthetaDot1Array[index] = DSdtheta1;
+          DSthetaDot2Array[index] = DSdtheta2;
+          DSthetaDot4Array[index] = DSdtheta4;
+          console.log('knee exceed limit');
+          return;
+        }*/
       if((forces[7]<0)||(DStheta[0] > PI/2))     
       {
         console.log('Doublestance: solve success');
@@ -902,7 +961,7 @@ timeArray = [];
 
   }
   function DataProcess(marrayX, marrayY, minterRatio){
-    console.log('Doing interpolation');
+    //console.log('Doing interpolation');
     var p = [];
     var NewarrayY = [];
     NewarrayX = [];

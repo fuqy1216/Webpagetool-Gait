@@ -129,7 +129,7 @@ var thetaDbDot1Array;
 var thetaDbDot2Array;
 var thetaDbDot3Array;
 var thetaDbDot4Array;
-
+var  Maxankle = 15/180*PI;
 //Array for animation
 var intertheta1;
 var intertheta2;
