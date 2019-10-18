@@ -78,7 +78,7 @@ function solvedoublestance(){
   I3 = 1/12*m3*math.pow(l3,2);
   g = 9.8;
   T3 = 140;
-  k1 = -20*180/PI;
+  k1 = 20*180/PI;
   k2 = 20*180/PI;
  // k1 = 10;
  // k2 = 10;
@@ -325,7 +325,7 @@ function calculateThetaAFO(t) {
     (zero2 = []).length = length2;
     zero2.fill(0);
     interT = [];
-    for (var i = 0; i < 2*(T1/deltaT + DStheta0Array.length * 10 - 9); i = i + 1){
+    for (var i = 0; i < 2*(T1/deltaT + DStheta0Array.length *  interRatio - ( interRatio - 1)); i = i + 1){
       interT[i] = i * deltaT;
     }    
     //Correct Hip angle
@@ -422,7 +422,7 @@ timeArray = [];
        var theta2SEC = intertheta2[intertheta2.length-1];
        var theta3SEC = theta2SEC + PI/2;
        var theta5SEC= intertheta5[intertheta5.length-1];
-       var thetaDot1SEC = (latterhip[latterhip.length-1] - latterhip[latterhip.length-2])/deltaT*1000;
+       var thetaDot1SEC = (latterhip[latterhip.length-1] - latterhip[latterhip.length-2])/deltaT;
        var thetaDot2SEC = DSthetaDot2Array[DSthetaDot2Array.length-1]; //same as the other leg
        var thetaDot3SEC = 0;
        var thetaDoubleDot1SEC;
@@ -505,11 +505,11 @@ timeArray = [];
        }
        T1 = calculateSwingHeel(t/deltaT);
        console.log(T1);
-       if(T1 == 0)
+       if(T1 < 50)
        {
-         T1 = T1stswing;
+         T1 = (T1stswing+T1)/2;
        }
-       length3 = T1/deltaT;
+       length3 = math.floor(T1/deltaT);
        (zero1 = []).length = length3;
        zero1.fill(0);
        ankleswing = [];
@@ -531,23 +531,23 @@ timeArray = [];
     //DSthetaDot4Array = [];
     //second half
      //double stance phase, need to define T
-     timeArray = timeArray.slice(0,T1/deltaT);
-     theta1Array = theta1Array.slice(0,T1/deltaT);
-     theta2Array = theta2Array.slice(0,T1/deltaT);
-     theta3Array = theta3Array.slice(0,T1/deltaT);
-     theta4Array = theta4Array.slice(0,T1/deltaT);
-     thetaDot1Array = thetaDot1Array.slice(0,T1/deltaT);
-     thetaDot2Array = thetaDot2Array.slice(0,T1/deltaT);
-     thetaDot3Array = thetaDot3Array.slice(0,T1/deltaT);
-     thetaDot4Array = thetaDot4Array.slice(0,T1/deltaT);
-     thetaDbDot1Array = thetaDbDot1Array.slice(0,T1/deltaT);
-     thetaDbDot2Array = thetaDbDot2Array.slice(0,T1/deltaT);
-     thetaDbDot3Array = thetaDbDot3Array.slice(0,T1/deltaT);
-     thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
+     timeArray = timeArray.slice(0,length3);
+     theta1Array = theta1Array.slice(0,length3);
+     theta2Array = theta2Array.slice(0,length3);
+     theta3Array = theta3Array.slice(0,length3);
+     theta4Array = theta4Array.slice(0,length3);
+     thetaDot1Array = thetaDot1Array.slice(0,length3);
+     thetaDot2Array = thetaDot2Array.slice(0,length3);
+     thetaDot3Array = thetaDot3Array.slice(0,length3);
+     thetaDot4Array = thetaDot4Array.slice(0,length3);
+     thetaDbDot1Array = thetaDbDot1Array.slice(0,length3);
+     thetaDbDot2Array = thetaDbDot2Array.slice(0,length3);
+     thetaDbDot3Array = thetaDbDot3Array.slice(0,length3);
+     thetaDbDot4Array = thetaDbDot4Array.slice(0,length3);
      //calculate theta0
      DStheta0Array[0] = 0;
-     DSthetaDot0Array[0] = thetaDot4Array[T1/deltaT - 1];
-     DStheta1Array[0] = theta4Array[T1/deltaT - 1];
+     DSthetaDot0Array[0] = thetaDot4Array[length3 - 1];
+     DStheta1Array[0] = theta4Array[length3 - 1];
      DSthetaDot1Array[0] = 0;
      //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
      //DSthetaDot4Array[0] = thetaDot1Array[T1/deltaT - 1];
@@ -617,7 +617,7 @@ timeArray = [];
      //later hip during DS
      latterhip = [];
      for (var i = 0; i < length4; i = i + 1){
-       latterhip[i] = -(DStheta0ArrayV[i] + DStheta1ArrayV[i] - DStheta2ArrayV[i]);
+       latterhip[i] = (DStheta0ArrayV[i] + DStheta1ArrayV[i] - DStheta2ArrayV[i]);
       }   
      //console.log('Begain to Concat');
     //shrink knee and hip angle during double stance
@@ -732,7 +732,7 @@ timeArray = [];
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 50;
+     interratio = 1;
      for (var i = 0; i < intertheta13.length; i = i + interratio){
       interTV[i/interratio] = interT3[i];
       intertheta1V[i/interratio] = intertheta13[i];
@@ -745,7 +745,7 @@ timeArray = [];
      //console.log('448');
      NewT = [];
     interRatio = 50;
-    if(1){
+    if(0){
     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
     intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
     intertheta3V = DataProcess(interTV, intertheta3V, interRatio);

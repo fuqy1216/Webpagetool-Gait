@@ -81,11 +81,11 @@ var thetaDot0_1 = -170.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 120.0;
+var thetaDot0_2 = 400.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -130.0;
+var thetaDot0_4 = -70.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Initial Angular Velocity of DS Stance knee
@@ -407,7 +407,7 @@ function setup() {
       alert("Invalid Time Step");
       return;
     }
-    drawIndex = drawIndex - 1000*min;
+    drawIndex = drawIndex - 1000*min/2;
     if (drawIndex < 0) drawIndex = drawIndex + intertheta1.length;
   });
   toggleIncInput = createInput();
@@ -424,7 +424,7 @@ function setup() {
       alert("Invalid Time Step");
       return;
     }
-    drawIndex = drawIndex + 1000*add;
+    drawIndex = drawIndex + 1000*add/2;
     if (drawIndex >= intertheta1.length) drawIndex = drawIndex - intertheta1.length;
   });
 
@@ -609,7 +609,7 @@ function draw() {
         jAng1Label.html('\u0398(1) = ' + round((drawTheta1 - PI/2)*180/PI*100)/100 + ' deg');
         jPos1Label.html('Left (Green) Toe: (' + round((stoeX-sheelX)*100)/100 + ', ' + -1*round((stoeY-sheelY)*100)/100 + ')');
         jPos11Label.html('Left (Green) Heel: (' + round((sheelX-sheelX)*100)/100 + ', ' + -1*round((sheelY-sheelY)*100)/100 + ')');
-        drawTimeLabel.html('Time: ' + drawIndex/1000 + ' seconds');
+        drawTimeLabel.html('Time: ' + drawIndex/500 + ' seconds');
       }  
     
     //calculated theta1 value
