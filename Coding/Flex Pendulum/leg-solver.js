@@ -339,21 +339,10 @@ function calculateTheta(t) {
       latterhip[i] = -(DStheta0ArrayV[i] + DStheta1ArrayV[i] - DStheta2ArrayV[i]);
      }   
      //console.log('Begain to Concat');
-    //shrink knee and hip angle during double stance
-    if(0){
-    Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
-    Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
-    //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
-    Ratioankle = ankleswing[0]/DStheta1ArrayV[DStheta1ArrayV.length-1];
-        for (var i = 0; i < length2; i = i + 1){
-          DStheta2ArrayV[i] = DStheta2ArrayV[i] * (1 + (i+1)*(Ratioknee - 1)/length2);
-          latterhip[i] = latterhip[i] * (1 + (i+1)*(Ratiohip - 1)/length2);
-         // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
-          DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
-         }
-        }
+    
         Kneezero1 = [];
         Kneezero2 = [];
+        Anklezero2 = [];
     //knee bending at LTO and LHS
     for (var i = 0; i < length2; i = i + 1){
       if(i < length2/5*4){
@@ -367,9 +356,51 @@ function calculateTheta(t) {
       Kneezero1[i] = 0;
       anklestance[i] = anklestance[i]+Kneezero1[i];
       }
+         //shrink knee and hip angle during double stance
+         for (var i = 0; i < length2; i = i + 1){
+         latterhip[i] = latterhip[i]/10;
+         DStheta4ArrayV[i] = DStheta4ArrayV[i]/10;
+         }
+    if(0){
+      Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
+      Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
+      //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
+      Ratioankle = ankleswing[0]/DStheta1ArrayV[DStheta1ArrayV.length-1];
+          for (var i = 0; i < length2; i = i + 1){
+            DStheta2ArrayV[i] = DStheta2ArrayV[i] * (1 + (i+1)*(Ratioknee - 1)/length2);
+            latterhip[i] = latterhip[i] * (1 + (i+1)*(Ratiohip - 1)/length2);
+           // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
+            DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
+           }
+          }
+          if(1){
+            elevatehip = theta4Array[theta4Array.length-1] - latterhip[0];
+            diffknee = theta2Array[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
+            diffhip = theta1Array[0]-latterhip[latterhip.length-1]-elevatehip;
+            //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
+            diffankle = ankleswing[0]-DStheta1ArrayV[DStheta1ArrayV.length-1];
+
+                for (var i = 0; i < length2; i = i + 1){
+                  DStheta2ArrayV[i] = DStheta2ArrayV[i] + diffknee * ((pow(i,2)+2*i+1)/pow(length2,2));
+                  latterhip[i] = latterhip[i] + elevatehip + diffhip * ((pow(i,2)+2*i+1)/pow(length2,2));
+                 // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
+                  DStheta1ArrayV[i] = DStheta1ArrayV[i] + diffankle * ((pow(i,2)+2*i+1)/pow(length2,2));
+                 }
+                 elevatehip = theta1Array[theta1Array.length-1] - DStheta4ArrayV[0];
+                 //diffknee = Kneezero1[0]-Kneezero2[Kneezero2.length-1];
+                 diffhip = theta4Array[0]-DStheta4ArrayV[DStheta4ArrayV.length-1]-elevatehip;
+                 //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
+                 diffankle = anklestance[0]-Kneezero2[Kneezero2.length-1];
+                 for (var i = 0; i < length2; i = i + 1){
+                  //Kneezero2[i] = Kneezero2[i] + diffknee * ((pow(i,2)+2*i+1)/pow(length2,2));
+                  DStheta4ArrayV[i] = DStheta4ArrayV[i] + elevatehip + diffhip * ((pow(i,2)+2*i+1)/pow(length2,2));
+                 // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
+                 Anklezero2[i] = Kneezero2[i] + diffankle * ((pow(i,2)+2*i+1)/pow(length2,2));
+                 }
+                }
 //left and right ankle dorsi +/plantar -
-    intertheta1 =  anklestance.concat(DStheta1ArrayV, ankleswing, Kneezero2);
-    intertheta6 = ankleswing.concat(Kneezero2, anklestance, DStheta1ArrayV);
+    intertheta1 =  anklestance.concat(DStheta1ArrayV, ankleswing, Anklezero2);
+    intertheta6 = ankleswing.concat(Anklezero2, anklestance, DStheta1ArrayV);
     //console.log(intertheta6);
     //left and right knee
 

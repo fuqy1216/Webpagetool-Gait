@@ -671,16 +671,16 @@ function draw() {
     fill(0, 255, 0);
     stroke(0,155,0);
     // Green
-    //rect(5, height - 15, (width - 10)*(drawIndex/intertheta1.length), 10);
+    rect(5, height - 15, (width - 10)*(3*drawIndex/intertheta1V.length), 10);
 
     // Advance frame
     if (isPaused == 0) drawIndex = drawIndex + 1;
 
     // Check drawIndex amd loop back to beginning
-    if (drawIndex >= intertheta1.length)  {
+    if (drawIndex >= intertheta1V.length/3)  {
       var myBool = loopC.checked();
       if (myBool) drawIndex = 0;
-      if (!myBool) drawIndex = intertheta1.length - 1;
+      if (!myBool) drawIndex = intertheta1V.length/3 - 1;
     }
   }
 }
