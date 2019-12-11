@@ -196,8 +196,8 @@ function calculateTheta(t) {
       var thetaDoubleDot3;
       var index = 0;
       for (var i = 0; i < t; i = i + deltaT) {
-        thetaDoubleDot1 = triplePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2);
-        thetaDoubleDot2 = triplePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2);
+        thetaDoubleDot1 = doublePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2);
+        thetaDoubleDot2 = doublePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2, thetaDoubleDot1);
         thetaDoubleDot3 = triplePend_getThetaDoubleDot_3(theta1, theta2, thetaDot1, thetaDot2);
         theta1 = theta1 + thetaDot1 * deltaT;
         theta2 = theta2 + thetaDot2 * deltaT;
@@ -438,7 +438,7 @@ function calculateTheta(t) {
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 50;
+     interratio = 1;
      for (var i = 0; i < intertheta13.length; i = i + interratio){
       interTV[i/interratio] = interT3[i];
       intertheta1V[i/interratio] = intertheta13[i];
@@ -450,8 +450,8 @@ function calculateTheta(t) {
      }
      //console.log('448');
      NewT = [];
-    interRatio = 50;
-    if(1){
+    interRatio = 1;
+    if(0){
     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
     intertheta2V = DataProcess(interTV, intertheta2V, interRatio);
     intertheta3V = DataProcess(interTV, intertheta3V, interRatio);

@@ -13,17 +13,110 @@ function startTable(aMax, tMax, aMin, tMin, n) {
 
 function enterHeaders() {
   var myTable = document.getElementById('dataTable');
-  var myRow = myTable.insertRow(-1);
-  var myCell = myRow.insertCell(0);
-  myCell.innerHTML = "Time (s)";
-  myCell = myRow.insertCell(1);
-  myCell.innerHTML = "\u03981 (deg)";
-  myCell = myRow.insertCell(2);
-  myCell.innerHTML = "\u03982 (deg)";
-  myCell = myRow.insertCell(3);
-  myCell.innerHTML = "\u03983 (deg)";
-  myCell = myRow.insertCell(4);
-  myCell.innerHTML = "Comment";
+  myTable.style.borderStyle = "solid";
+  var myRow = myTable.insertRow(0);
+  var myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Phase Order";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Left Side (Green)";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Duration";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Right Side";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Duration";
+  myRow.setAttribute("align", "center");
+  myRow.style.fontWeight = "900";
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "1";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Single Stance";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Swing";
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "-";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Heel Strike";
+  myCell.style.fontStyle = "italic";
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "2";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Double Stance (Latter)";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Double Stance (Front)";
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "-";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Toe-off";
+  myCell.style.fontStyle = "italic";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "3";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Swing";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Single Stance";
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "-";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Heel Strike";
+  myCell.style.fontStyle = "italic";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "4";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Double Stance (Front)";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Double Stance (Latter)";
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "-";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Toe-off";
+  myCell.style.fontStyle = "italic";
+  myRow.setAttribute("align", "center");
+
+  myRow = myTable.insertRow(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "1";
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Single Stance";
+  myCell = myRow.insertCell(-1);
+  myCell = myRow.insertCell(-1);
+  myCell.innerHTML = "Swing";
+  myRow.setAttribute("align", "center");
 }
 
 function clearTable() {

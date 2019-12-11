@@ -196,8 +196,8 @@ function calculateThetaAFO(t) {
       var thetaDoubleDot3;
       var index = 0;
       for (var i = 0; i < t; i = i + deltaT) {
-        thetaDoubleDot1 = triplePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2);
-        thetaDoubleDot2 = triplePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2);
+        thetaDoubleDot1 = doublePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2);
+        thetaDoubleDot2 = doublePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2, thetaDoubleDot1);
         thetaDoubleDot3 = triplePend_getThetaDoubleDot_3(theta1, theta2, thetaDot1, thetaDot2);
         theta1 = theta1 + thetaDot1 * deltaT;
         theta2 = theta2 + thetaDot2 * deltaT;

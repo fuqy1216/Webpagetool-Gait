@@ -81,11 +81,11 @@ var thetaDot0_1 = -170.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 400.0;
+var thetaDot0_2 = 120.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -70.0;
+var thetaDot0_4 = -130.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Initial Angular Velocity of DS Stance knee
@@ -96,10 +96,14 @@ var thetaDot0_5_Label;
 var mu_ = 0.0;
 var mu_Input;
 var mu_Label;
-// K - Coefficient of Spring Constant
-var k_ = 0.0;
+// K - Coefficient of Spring Constant hip swing
+var k_1 = 0.0;
 var k_Input;
 var k_Label;
+// K - Coefficient of Spring Constant knee swing
+var k_2 = 0.0;
+var k2_Input;
+var k2_Label;
 // Time Interval
 var time_ = 10.0;
 var time_Input;
@@ -352,9 +356,9 @@ function setup() {
   k_Input = createInput();
   k_Input.position(thetaDot0_2_Input.x, thetaDot0_2_Input.y + 30);
   k_Input.style('width', '70px');
-  k_Input.value(k_);
+  k_Input.value(k_1);
   k_Input.input(updateICs);
-  k_Label = createDiv('Khip: ' + k_ + ' Nm/deg');
+  k_Label = createDiv('Khip: ' + k_1 + ' Nm/deg');
   k_Label.position(thetaDot0_2_Label.x, k_Input.y);
   // Time
   time_Input = createInput();
@@ -500,7 +504,7 @@ function setup() {
   var recTable = select('#dataTable');
   recTable.position(myCan.x + myCan.width + 10, myCan.y);
 
-
+  enterHeaders();
 }
 
 
@@ -516,6 +520,7 @@ function draw() {
   //pre-load interface
   if (active == 0) {
     fill(0);
+    stroke(0);
     //hip joint
     ellipse(width/2, height/2, 5, 5);
     //two angles
@@ -534,12 +539,13 @@ function draw() {
     //ankle joint
     //ellipse(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta2), mass2*4, mass2*4);
     ellipse(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), 4, 4);
-    
+
       //foot link
       line(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2));
       line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + footFraction*length3*100*Math.cos(theta1 + theta2 + PI/2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + footFraction*length3*100*Math.sin(theta1 + theta2 + PI/2));
       line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + (1 - footFraction)*length3*100*Math.cos(theta1 + theta2 - PI/2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + (1 - footFraction)*length3*100*Math.sin(theta1 + theta2 - PI/2));
-
+      fill(0,255,0);
+      stroke(0,155,0);
       //knee joint
      // ellipse(width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4), mass1*4, mass1*4);
      ellipse(width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4), 4, 4);
@@ -566,6 +572,7 @@ function draw() {
       line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
       line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
      }
+
   }
   //loading interface
   if (active == 1) {
@@ -614,7 +621,7 @@ function draw() {
     
     //calculated theta1 value
    // drawTheta1 = theta1Array[drawIndex] + PI/2;
-    stroke(0)
+    stroke(0);
     fill(0);
     //upper leg
     var kneeX = width/2 + (length1)*100*Math.cos(drawTheta4);
@@ -660,12 +667,11 @@ function draw() {
       }
       //calculated theta3 value (global angle)
       
-      
-    
-
     // Draw Progres Bar
-    fill(0, 255, 0);  // Green
-    rect(5, height - 15, (width - 10)*(drawIndex/intertheta1.length), 10);
+    fill(0, 255, 0);
+    stroke(0,155,0);
+    // Green
+    //rect(5, height - 15, (width - 10)*(drawIndex/intertheta1.length), 10);
 
     // Advance frame
     if (isPaused == 0) drawIndex = drawIndex + 5;
@@ -717,8 +723,8 @@ function updateICs() {
   thetaDot0_5_Label.html('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s');
   mu_ = Number(mu_Input.value());
   mu_Label.html('KAFO: ' + mu_ + ' Nm/deg');
-  k_ = Number(k_Input.value());
-  k_Label.html('Khip: ' + k_ + ' Nm/deg');
+  k_1 = Number(k_Input.value());
+  k_Label.html('Khip: ' + k_1 + ' Nm/deg');
   time_ = Number(time_Input.value());
   time_Label.html('Time: ' + time_ + ' sec(s)');
 }
@@ -802,7 +808,6 @@ function start() {
     findMotionData(theta4Array, 3);
   }
 */
-  enterHeaders();
 
   drawIndex = 0;
   active = 1;
@@ -980,15 +985,15 @@ function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
 }
 //https://www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2 + myThetaDot1*myThetaDot1*Math.cos(myTheta1 - myTheta2)));
-  var den = len1*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den;
+  var num = 9*len1*Math.cos(myTheta1-myTheta2)*(mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)-mass2*len2*g*Math.sin(myTheta2)-2*k_2)+6*len2*(mass2*len1*len2*pow(myThetaDot2,2)*Math.sin(myTheta1-myTheta2)+mass1*len1*g*Math.sin(myTheta1)+2*mass2*len1*g*Math.sin(myTheta1)+2*k_1);
+  var den = 4*mass1*pow(len1,2)*len2 + 12*mass2*pow(len1,2)*len2 - 9 * mass2*pow(len1,2)*len2*pow(Math.cos(myTheta1-myTheta2),2);
+  return -num / den;
 }
 
-function doublePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var num = 2*Math.sin(myTheta1 - myTheta2)*(myThetaDot1*myThetaDot1*len1*(mass1 + mass2) + g*(mass1 + mass2)*Math.cos(myTheta1) + myThetaDot2*myThetaDot2*len2*mass2*Math.cos(myTheta1 - myTheta2));
-  var den = len2*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den;
+function doublePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2, myThetaDDot1) {
+  var num = 3*mass2*len1*len2*myThetaDDot1*Math.cos(myTheta1-myTheta2)-3*mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)+3*mass2*len2*g*Math.sin(myTheta2)+6*k_2;
+  var den = 2*mass2*pow(len2,2);
+  return -num / den;
 }
 
 function triplePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
@@ -997,7 +1002,7 @@ function triplePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myTheta
   var len2CE = pow(len1*len1 + len2*len2/4 - len1*len2/2*cos(myTheta1+myTheta2),0.5);
   var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2E + myThetaDot1*myThetaDot1*len1E*Math.cos(myTheta1 - myTheta2)));
   var den = len1E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den - k_*180/PI*myTheta1/(len1E*len1E*mass1 + len2E*len2E*mass2 + mass2*len2CE*len2CE);
+  return num / den - k_1*180/PI*myTheta1/(len1E*len1E*mass1 + len2E*len2E*mass2 + mass2*len2CE*len2CE);
 }
 
 function triplePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
