@@ -190,7 +190,7 @@ var footFractionSlider;
 var footFractionLabel;
 
 function setup() {
-  myCan = createCanvas(600, 500);
+  myCan = createCanvas(1000, 500);
   myCan.position(30, 250);
   background(220);
   // Radio Button for # of Pendulums
@@ -236,7 +236,7 @@ function setup() {
     len4Input.input(updateICs);
     len4Label = createDiv('Length 4: ' + len4 + ' m');
     len4Label.position(880, len4Input.y);  
-    DoublePenRefer = createDiv('Double Pendulum Reference: https://www.myphysicslab.com/pendulum/double-pendulum-en.html');
+    DoublePenRefer = createDiv('Double Pendulum Reference: http://scienceworld.wolfram.com/physics/DoublePendulum.html');
     //DoublePenRefer.href = "https://www.myphysicslab.com/pendulum/double-pendulum-en.html";
     //DoublePenRefer = document.createElement("LINK");
     DoublePenRefer.position(1420, len4Input.y);
@@ -509,7 +509,7 @@ function setup() {
 
 
 function draw() {
-  Ratio = 2;
+  Ratio = 3;
   var length1 = len1 * Ratio;
   var length2 = len2 * Ratio;
   var length3 = len3 * Ratio;
@@ -522,55 +522,55 @@ function draw() {
     fill(0);
     stroke(0);
     //hip joint
-    ellipse(width/2, height/2, 5, 5);
+    ellipse(width/2, height/4, 5, 5);
     //two angles
     var theta1 = Number(theta0_1_Input.value())*PI/180.0 + PI/2;
     var theta2 = Number(theta0_2_Input.value())*PI/180.0;
     var theta4 = Number(theta0_4_Input.value())*PI/180.0 + PI/2;
     var theta5 = Number(theta0_5_Input.value())*PI/180.0;
     //upper leg
-    line(width/2, height/2, width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1));
+    line(width/2, height/4, width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1));
     //lower leg
-    line(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2));
+    line(width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1), width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2));
 
     //knee
    // ellipse(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), mass1*4, mass1*4);
-    ellipse(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), 4, 4);
+    ellipse(width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1), 4, 4);
     //ankle joint
     //ellipse(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta2), mass2*4, mass2*4);
-    ellipse(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), 4, 4);
+    ellipse(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), 4, 4);
 
       //foot link
-      line(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2));
-      line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + footFraction*length3*100*Math.cos(theta1 + theta2 + PI/2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + footFraction*length3*100*Math.sin(theta1 + theta2 + PI/2));
-      line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + (1 - footFraction)*length3*100*Math.cos(theta1 + theta2 - PI/2), height/2 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + (1 - footFraction)*length3*100*Math.sin(theta1 + theta2 - PI/2));
+      line(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2));
+      line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + footFraction*length3*100*Math.cos(theta1 + theta2 + PI/2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + footFraction*length3*100*Math.sin(theta1 + theta2 + PI/2));
+      line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + (1 - footFraction)*length3*100*Math.cos(theta1 + theta2 - PI/2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + (1 - footFraction)*length3*100*Math.sin(theta1 + theta2 - PI/2));
       fill(0,255,0);
       stroke(0,155,0);
       //knee joint
      // ellipse(width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4), mass1*4, mass1*4);
-     ellipse(width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4), 4, 4);
+     ellipse(width/2 + (length1)*100*Math.cos(theta4), height/4 + (length1)*100*Math.sin(theta4), 4, 4);
 
      //stance leg
-     line(width/2, height/2, width/2 + (length1)*100*Math.cos(theta4), height/2 + (length1)*100*Math.sin(theta4));
+     line(width/2, height/4, width/2 + (length1)*100*Math.cos(theta4), height/4 + (length1)*100*Math.sin(theta4));
      //stance lowerleg
-     line(width/2 + length1*100*Math.cos(theta4), height/2 + length1*100*Math.sin(theta4), width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
+     line(width/2 + length1*100*Math.cos(theta4), height/4 + length1*100*Math.sin(theta4), width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
      if((mu_ > 0)||(mu_ < 0))
      {
-      line(width/2 - 2 + length1*100*Math.cos(theta4), height/2 + length1*100*Math.sin(theta4), width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
+      line(width/2 - 2 + length1*100*Math.cos(theta4), height/4 + length1*100*Math.sin(theta4), width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
     }
      //ankle joint
      //ellipse(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4), mass2*4, mass2*4);
-     ellipse(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), 4, 4);
+     ellipse(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), 4, 4);
 
      //foot
-     line(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
-     line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
-     line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
+     line(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
+     line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
+     line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
      if((mu_ > 0)||(mu_ < 0))
      {
-      line(width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 - 2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
-      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
-      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/2 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
+      line(width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 - 2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
+      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
+      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
      }
 
   }
@@ -585,9 +585,9 @@ function draw() {
       drawTheta6 = intertheta6V[drawIndex]/180*PI;
       //left side (start with stance)
       var skneeX = width/2 + (length1)*100*Math.cos(drawTheta3);
-      var skneeY = height/2 + (length1)*100*Math.sin(drawTheta3);
+      var skneeY = height/4 + (length1)*100*Math.sin(drawTheta3);
       //upper leg
-      line(width/2, height/2, skneeX, skneeY);
+      line(width/2, height/4, skneeX, skneeY);
       
       //knee joint
       //ellipse(skneeX, skneeY, mass1*4, mass1*4);
@@ -625,9 +625,9 @@ function draw() {
     fill(0);
     //upper leg
     var kneeX = width/2 + (length1)*100*Math.cos(drawTheta4);
-      var kneeY = height/2 + (length1)*100*Math.sin(drawTheta4);
+      var kneeY = height/4 + (length1)*100*Math.sin(drawTheta4);
       //upper leg
-      line(width/2, height/2, kneeX, kneeY);
+      line(width/2, height/4, kneeX, kneeY);
       //knee joint
       //ellipse(skneeX, skneeY, mass1*4, mass1*4);
     ellipse(kneeX, kneeY, 4, 4);
@@ -905,7 +905,7 @@ function reset() {
   drawTimeLabel.html('');
 
   clearTable();
-
+  enterHeaders();
   active = 0;
   isPaused = 0;
 }
