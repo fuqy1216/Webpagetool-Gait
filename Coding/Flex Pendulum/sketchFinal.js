@@ -411,7 +411,7 @@ function setup() {
       alert("Invalid Time Step");
       return;
     }
-    drawIndex = drawIndex - 1000*min/2;
+    drawIndex = drawIndex - 1000*min/10;
     if (drawIndex < 0) drawIndex = drawIndex + intertheta1.length;
   });
   toggleIncInput = createInput();
@@ -428,7 +428,7 @@ function setup() {
       alert("Invalid Time Step");
       return;
     }
-    drawIndex = drawIndex + 1000*add/2;
+    drawIndex = drawIndex + 1000*add/10;
     if (drawIndex >= intertheta1.length) drawIndex = drawIndex - intertheta1.length;
   });
 
@@ -596,7 +596,10 @@ function draw() {
     var sankleY = skneeY + (length2)*100*Math.sin(drawTheta3 + drawTheta2);
     //lower leg
     line(skneeX, skneeY, sankleX, sankleY);
-
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(skneeX - 2, skneeY, sankleX - 2, sankleY);
+    }
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(sankleX, sankleY, 4, 4);
@@ -611,12 +614,18 @@ function draw() {
     line(sankleX, sankleY, sfootX, sfootY);
     line(sfootX, sfootY, sheelX, sheelY);
     line(sfootX, sfootY, stoeX, stoeY);
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(sankleX - 2, sankleY, sfootX - 2, sfootY);
+      line(sfootX, sfootY - 1, sheelX, sheelY - 1);
+      line(sfootX, sfootY - 1, stoeX, stoeY - 1);
+    }
       //show the angle and joint location
       if (isPaused == 1) {
         jAng1Label.html('\u0398(1) = ' + round((drawTheta1 - PI/2)*180/PI*100)/100 + ' deg');
         jPos1Label.html('Left (Green) Toe: (' + round((stoeX-sheelX)*100)/100 + ', ' + -1*round((stoeY-sheelY)*100)/100 + ')');
         jPos11Label.html('Left (Green) Heel: (' + round((sheelX-sheelX)*100)/100 + ', ' + -1*round((sheelY-sheelY)*100)/100 + ')');
-        drawTimeLabel.html('Time: ' + drawIndex/500 + ' seconds');
+        drawTimeLabel.html('Time: ' + drawIndex/100 + ' seconds');
       }  
     
     //calculated theta1 value
@@ -635,10 +644,6 @@ function draw() {
     var ankleY = kneeY + (length2)*100*Math.sin(drawTheta4 + drawTheta5);
     //lower leg
     line(kneeX, kneeY, ankleX, ankleY);
-    if((mu_ > 0)||(mu_ < 0))
-    {
-      line(kneeX - 2, kneeY, ankleX - 2, ankleY);
-    }
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(ankleX, ankleY, 4, 4);
@@ -653,12 +658,7 @@ function draw() {
     line(ankleX, ankleY, footX, footY);
     line(footX, footY, heelX, heelY);
     line(footX, footY, toeX, toeY);
-    if((mu_ > 0)||(mu_ < 0))
-    {
-      line(ankleX - 2, ankleY, footX - 2, footY);
-      line(footX, footY - 1, heelX, heelY - 1);
-      line(footX, footY - 1, toeX, toeY - 1);
-    }
+
       //show the infor when paused
       if (isPaused == 1) {
         jAng2Label.html('\u0398(2) = ' + round((drawTheta2 - PI/2)*180/PI*100)/100 + ' deg');
@@ -674,7 +674,7 @@ function draw() {
     //rect(5, height - 15, (width - 10)*(drawIndex/intertheta1.length), 10);
 
     // Advance frame
-    if (isPaused == 0) drawIndex = drawIndex + 5;
+    if (isPaused == 0) drawIndex = drawIndex + 1;
 
     // Check drawIndex amd loop back to beginning
     if (drawIndex >= intertheta1.length)  {

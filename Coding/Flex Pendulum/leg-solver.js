@@ -13,6 +13,9 @@ loadScript('math-solver.js', function() {
   loadScript('plotly-latest.min.js', function() {
     //alert('script ready!'); 
   });
+/*   loadScript('smooth.js', function() {
+    //alert('script ready!'); 
+  }); */
 function solvedoublestance(){
    /* LegSolver = new Solver({
       l1: 'l1',
@@ -438,7 +441,7 @@ function calculateTheta(t) {
      intertheta4V = [];
      intertheta5V = [];
      intertheta6V = [];
-     interratio = 1;
+     interratio = 5;
      for (var i = 0; i < intertheta13.length; i = i + interratio){
       interTV[i/interratio] = interT3[i];
       intertheta1V[i/interratio] = intertheta13[i];
@@ -450,6 +453,35 @@ function calculateTheta(t) {
      }
      //console.log('448');
      NewT = [];
+    /*  Ratio = 2;
+     Smooth.METHOD_CUBIC = 'cubic';
+     var s = Smooth(intertheta1V);
+     console.log('Doing interpolation 1/6');
+     for (var i = 0; i < intertheta1V.length*Ratio; i = i + 1){
+      intertheta1V[i] = s(i/Ratio);
+      }
+      console.log('Finishing interpolation 1/6');
+     var s = Smooth(intertheta2V);
+     for (var i = 0; i < intertheta1V.length*Ratio; i = i + 1){
+      intertheta2V[i] = s(i/Ratio);
+      }
+     var s = Smooth(intertheta3V);
+     for (var i = 0; i < intertheta1V.length*Ratio; i = i + 1){
+      intertheta3V[i] = s(i/Ratio);
+      }
+     var s = Smooth(intertheta4V);
+     for (var i = 0; i < intertheta1V.length*Ratio; i = i + 1){
+      intertheta4V[i] = s(i/Ratio);
+      }
+     var s = Smooth(intertheta5V);
+     for (var i = 0; i < intertheta1V.length*Ratio; i = i + 1){
+      intertheta5V[i] = s(i/Ratio);
+      }
+     var s = Smooth(intertheta6V);
+     for (var i = 0; i < intertheta1V.length*Ratio; i = i + 1){
+     intertheta6V[i] = s(i/Ratio);
+     } */
+    
     interRatio = 1;
     if(0){
     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
@@ -469,7 +501,6 @@ function calculateTheta(t) {
     /*for (var i = 0; i < NewarrayX.length; i = i + 1){
     NewT[i] = NewarrayX[i] - interT[interT.length -1];
     }*/
-    
     var trace1 = {
       x: NewT,
       y: intertheta1V,
@@ -653,6 +684,7 @@ function calculateTheta(t) {
       }
 
   }
+
   function DataProcess(marrayX, marrayY, minterRatio){
     console.log('Doing interpolation');
     var p = [];
