@@ -284,17 +284,32 @@ function calculateTheta(t) {
     DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
     Doublestance(DStheta, DSdtheta);
     //var p = [];
+
+    DStheta0Array;
+    //for trim purpose
+    DSthetainit = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
+    DStheta0ArrayM = [];
+    DStheta1ArrayM = [];
+    DStheta2ArrayM = [];
+    DStheta4ArrayM = [];
+    DStheta0ArrayM = DStheta0Array.slice(1);
+    DStheta1ArrayM = DStheta1Array.slice(1);
+    DStheta2ArrayM = DStheta2Array.slice(1);
+    DStheta4ArrayM = DStheta4Array.slice(1);
     arrayX = [];
-    for (var i = 0; i < DStheta0Array.length; i = i + 1){
+    for (var i = 0; i < DStheta0ArrayM.length; i = i + 1){
       arrayX[i] = i * deltaT;
     }
-    DStheta0Array;
-    interRatio = 10;
+    interRatio = 20;
     //interpolation
-    DStheta0ArrayV = DataProcess(arrayX, DStheta0Array, interRatio);
-    DStheta1ArrayV = DataProcess(arrayX, DStheta1Array, interRatio);
-    DStheta2ArrayV = DataProcess(arrayX, DStheta2Array, interRatio);
-    DStheta4ArrayV = DataProcess(arrayX, DStheta4Array, interRatio);
+    DStheta0ArrayV = DataProcess(arrayX, DStheta0ArrayM, interRatio);
+    DStheta1ArrayV = DataProcess(arrayX, DStheta1ArrayM, interRatio);
+    DStheta2ArrayV = DataProcess(arrayX, DStheta2ArrayM, interRatio);
+    DStheta4ArrayV = DataProcess(arrayX, DStheta4ArrayM, interRatio);
+    DStheta0ArrayV = [DSthetainit[0]].concat(DStheta0ArrayV);
+    DStheta1ArrayV = [DSthetainit[1]].concat(DStheta1ArrayV);
+    DStheta2ArrayV = [DSthetainit[2]].concat(DStheta2ArrayV);
+    DStheta4ArrayV = [DSthetainit[3]].concat(DStheta4ArrayV);
     //Length for swing+stance
     length1 = T1/deltaT;
     (zero1 = []).length = length1;
@@ -309,11 +324,11 @@ function calculateTheta(t) {
       ankleswing[i] = Maxankle + (i + 1 - math.floor(length1/2)) * ( 0 - Maxankle )/(length1 - math.floor(length1/2));
     }   
     //Length for Doublestance
-    length2 = DStheta0Array.length * interRatio - (interRatio-1);
+    length2 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
     (zero2 = []).length = length2;
     zero2.fill(0);
     interT = [];
-    for (var i = 0; i < 2*(T1/deltaT + DStheta0Array.length * 10 - 9); i = i + 1){
+    for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){
       interT[i] = i * deltaT;
     }    
     //Correct Hip angle
@@ -357,10 +372,6 @@ function calculateTheta(t) {
       anklestance[i] = anklestance[i]+Kneezero1[i];
       }
          //shrink knee and hip angle during double stance
-         for (var i = 0; i < length2; i = i + 1){
-         latterhip[i] = latterhip[i]/10;
-         DStheta4ArrayV[i] = DStheta4ArrayV[i]/10;
-         }
     if(0){
       Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
       Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
@@ -373,7 +384,11 @@ function calculateTheta(t) {
             DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
            }
           }
-          if(1){
+      if(1){
+            for (var i = 0; i < length2; i = i + 1){
+              latterhip[i] = latterhip[i]/5;
+              DStheta4ArrayV[i] = DStheta4ArrayV[i]/5;
+              }
             elevatehip = theta4Array[theta4Array.length-1] - latterhip[0];
             diffknee = theta2Array[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
             diffhip = theta1Array[0]-latterhip[latterhip.length-1]-elevatehip;
@@ -381,10 +396,18 @@ function calculateTheta(t) {
             diffankle = ankleswing[0]-DStheta1ArrayV[DStheta1ArrayV.length-1];
 
                 for (var i = 0; i < length2; i = i + 1){
+                  //adjust based on polynomial with order of 2
+                  /*
                   DStheta2ArrayV[i] = DStheta2ArrayV[i] + diffknee * ((pow(i,2)+2*i+1)/pow(length2,2));
                   latterhip[i] = latterhip[i] + elevatehip + diffhip * ((pow(i,2)+2*i+1)/pow(length2,2));
                  // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
                   DStheta1ArrayV[i] = DStheta1ArrayV[i] + diffankle * ((pow(i,2)+2*i+1)/pow(length2,2));
+                  */
+                 //adjust based on linear correction
+                  DStheta2ArrayV[i] = DStheta2ArrayV[i] + diffknee * ((i+1)/length2);
+                  latterhip[i] = latterhip[i] + elevatehip + diffhip * ((i+1)/length2);
+                 // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
+                  DStheta1ArrayV[i] = DStheta1ArrayV[i] + diffankle * ((i+1)/length2);
                  }
                  elevatehip = theta1Array[theta1Array.length-1] - DStheta4ArrayV[0];
                  //diffknee = Kneezero1[0]-Kneezero2[Kneezero2.length-1];
@@ -392,10 +415,18 @@ function calculateTheta(t) {
                  //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
                  diffankle = anklestance[0]-Kneezero2[Kneezero2.length-1];
                  for (var i = 0; i < length2; i = i + 1){
-                  //Kneezero2[i] = Kneezero2[i] + diffknee * ((pow(i,2)+2*i+1)/pow(length2,2));
+                   //adjust based on polynomial with order of 2
+                  /*
+                   //Kneezero2[i] = Kneezero2[i] + diffknee * ((pow(i,2)+2*i+1)/pow(length2,2));
                   DStheta4ArrayV[i] = DStheta4ArrayV[i] + elevatehip + diffhip * ((pow(i,2)+2*i+1)/pow(length2,2));
                  // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
                  Anklezero2[i] = Kneezero2[i] + diffankle * ((pow(i,2)+2*i+1)/pow(length2,2));
+                  */
+                   //adjust based on polynomial with linear
+                  //Kneezero2[i] = Kneezero2[i] + diffknee * ((pow(i,2)+2*i+1)/pow(length2,2));
+                  DStheta4ArrayV[i] = DStheta4ArrayV[i] + elevatehip + diffhip * ((i+1)/length2);
+                 // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
+                 Anklezero2[i] = Kneezero2[i] + diffankle *  ((i+1)/length2);
                  }
                 }
 //left and right ankle dorsi +/plantar -

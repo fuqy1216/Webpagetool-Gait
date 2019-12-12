@@ -77,11 +77,11 @@ var theta0_5 = 0;
 var theta0_5_Input;
 var theta0_5_Label;
 // Initial Angular Velocity of First Pendulum
-var thetaDot0_1 = -170.0;
+var thetaDot0_1 = -250.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 120.0;
+var thetaDot0_2 = 500.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
@@ -97,11 +97,11 @@ var mu_ = 0.0;
 var mu_Input;
 var mu_Label;
 // K - Coefficient of Spring Constant hip swing
-var k_1 = 0.0;
+var k_1 = 5.0;
 var k_Input;
 var k_Label;
 // K - Coefficient of Spring Constant knee swing
-var k_2 = 0.0;
+var k_2 = 8.0;
 var k2_Input;
 var k2_Label;
 // Time Interval
@@ -191,7 +191,7 @@ var footFractionLabel;
 
 function setup() {
   myCan = createCanvas(1000, 500);
-  myCan.position(30, 250);
+  myCan.position(30, 280);
   background(220);
   // Radio Button for # of Pendulums
   pendRadio = createRadio();
@@ -358,8 +358,16 @@ function setup() {
   k_Input.style('width', '70px');
   k_Input.value(k_1);
   k_Input.input(updateICs);
-  k_Label = createDiv('Khip: ' + k_1 + ' Nm/deg');
+  k_Label = createDiv('KhipSW: ' + k_1 + ' Nm/deg');
   k_Label.position(thetaDot0_2_Label.x, k_Input.y);
+  //kknee
+  k2_Input = createInput();
+  k2_Input.position(k_Input.x, k_Input.y + 30);
+  k2_Input.style('width', '70px');
+  k2_Input.value(k_2);
+  k2_Input.input(updateICs);
+  k2_Label = createDiv('KkneeSW: ' + k_2 + ' Nm/deg');
+  k2_Label.position(thetaDot0_2_Label.x, k2_Input.y);
   // Time
   time_Input = createInput();
   time_Input.position(mu_Input.x, mu_Input.y + 30);
@@ -370,7 +378,7 @@ function setup() {
   time_Label.position(mu_Label.x, time_Input.y);
   // Start Button
   startB = createButton('Load');
-  startB.position(k_Label.x, k_Label.y + 30);
+  startB.position(k2_Label.x, k2_Label.y + 30);
   startB.style('width', '100px');
   startB.style('height', '30px');
   startB.mousePressed(start);
@@ -724,7 +732,9 @@ function updateICs() {
   mu_ = Number(mu_Input.value());
   mu_Label.html('KAFO: ' + mu_ + ' Nm/deg');
   k_1 = Number(k_Input.value());
-  k_Label.html('Khip: ' + k_1 + ' Nm/deg');
+  k_Label.html('KhipSW: ' + k_1 + ' Nm/deg');
+  k_2 = Number(k2_Input.value());
+  k2_Label.html('KkneeSW: ' + k_2 + ' Nm/deg');
   time_ = Number(time_Input.value());
   time_Label.html('Time: ' + time_ + ' sec(s)');
 }
@@ -753,6 +763,7 @@ function switchState() {
   if (pendRadio.value() == 'Double Pendulum with Foot') {
     mu_Input.removeAttribute('disabled');
     k_Input.removeAttribute('disabled');
+    k2_Input.removeAttribute('disabled');
     len3Input.removeAttribute('disabled');
     mass3Input.removeAttribute('disabled');
     pendState = 3;
@@ -760,6 +771,7 @@ function switchState() {
   if (pendRadio.value() == 'Swing-Stance') {
     mu_Input.removeAttribute('disabled');
     k_Input.removeAttribute('disabled');
+    k2_Input.removeAttribute('disabled');
     /*mu_Input.removeAttribute('disabled');
     len2Input.attribute('disabled', '');
     mass2Input.attribute('disabled', '');
@@ -783,6 +795,7 @@ function start() {
   thetaDot0_2_Input.attribute('disabled', '');
   mu_Input.attribute('disabled', '');
   k_Input.attribute('disabled', '');
+  k2_Input.attribute('disabled', '');
   time_Input.attribute('disabled', '');
   startB.attribute('disabled', '');
   loadB.attribute('disabled', '');
@@ -887,6 +900,7 @@ function reset() {
   thetaDot0_2_Input.removeAttribute('disabled');
   mu_Input.removeAttribute('disabled');
   k_Input.removeAttribute('disabled');
+  k2_Input.removeAttribute('disabled');
   time_Input.removeAttribute('disabled');
   startB.removeAttribute('disabled');
   loadB.removeAttribute('disabled');
@@ -983,7 +997,7 @@ function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
   return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
-//https://www.myphysicslab.com/pendulum/double-pendulum-en.html
+//www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
   var num = 9*len1*Math.cos(myTheta1-myTheta2)*(mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)-mass2*len2*g*Math.sin(myTheta2)-2*k_2)+6*len2*(mass2*len1*len2*pow(myThetaDot2,2)*Math.sin(myTheta1-myTheta2)+mass1*len1*g*Math.sin(myTheta1)+2*mass2*len1*g*Math.sin(myTheta1)+2*k_1);
   var den = 4*mass1*pow(len1,2)*len2 + 12*mass2*pow(len1,2)*len2 - 9 * mass2*pow(len1,2)*len2*pow(Math.cos(myTheta1-myTheta2),2);
