@@ -85,7 +85,7 @@ var thetaDot0_2 = 500.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -130.0;
+var thetaDot0_4 = -150.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Initial Angular Velocity of DS Stance knee
@@ -690,6 +690,37 @@ function draw() {
       if (myBool) drawIndex = 0;
       if (!myBool) drawIndex = intertheta1V.length/3 - 1;
     }
+    var rownum;
+    T1 = anklestance.length;
+    T2 = DStheta1ArrayV.length;
+    T3 = ankleswing.length;
+    T4 = Anklezero2.length;
+/*     console.log('drawIndex:' + drawIndex);
+    console.log('length1:' + T1);
+    console.log('length2:' + T2); */
+    if(drawIndex == 0)
+    rownum = 0;
+    else if(drawIndex < round(T1 * 0.2))
+    rownum = 1;
+    else if(drawIndex == round(T1 * 0.2))
+    rownum = 2;
+    else if((drawIndex > round(T1 * 0.2))&&(drawIndex < round((T1+T2) * 0.2)))
+    rownum = 3;
+    else if(drawIndex == round((T1+T2) * 0.2))
+    rownum = 4;
+    else if((drawIndex < round((T1 * 2 + T2) * 0.2))&&(drawIndex > round((T1+T2) * 0.2)))
+    rownum = 5;
+    else if(drawIndex == round((T1 * 2 + T2) * 0.2))
+    rownum = 6;
+    else if((drawIndex > round((T1 * 2 + T2) * 0.2))&&(drawIndex< round((T1+T2) * 0.4)))
+    rownum = 7;
+    else if(drawIndex == round((T1+T2) * 0.4))
+    rownum = 8;
+    else
+    rownum = -1;
+
+    //console.log('rownum:' + rownum);
+    UpdateRow(rownum,T1,T2,T3,T4);
   }
 }
 

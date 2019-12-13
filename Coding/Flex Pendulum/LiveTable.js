@@ -20,11 +20,10 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Left Side (Green)";
   myCell = myRow.insertCell(-1);
-  myCell.innerHTML = "Duration";
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Right Side";
   myCell = myRow.insertCell(-1);
-  myCell.innerHTML = "Duration";
+  myCell.innerHTML = "Duration (s)";
   myRow.setAttribute("align", "center");
   myRow.style.fontWeight = "900";
 
@@ -36,6 +35,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Swing";
+  myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
 
   myRow = myTable.insertRow(-1);
@@ -45,6 +45,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Heel Strike";
+  myCell = myRow.insertCell(-1);
   myCell.style.fontStyle = "italic";
   myRow.setAttribute("align", "center");
 
@@ -56,6 +57,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Double Stance (Front)";
+  myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
 
   myRow = myTable.insertRow(-1);
@@ -64,6 +66,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Toe-off";
   myCell.style.fontStyle = "italic";
+  myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
@@ -76,6 +79,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Single Stance";
+  myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
 
   myRow = myTable.insertRow(-1);
@@ -84,6 +88,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Heel Strike";
   myCell.style.fontStyle = "italic";
+  myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
@@ -96,6 +101,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Double Stance (Latter)";
+  myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
 
   myRow = myTable.insertRow(-1);
@@ -105,9 +111,10 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Toe-off";
+  myCell = myRow.insertCell(-1);
   myCell.style.fontStyle = "italic";
   myRow.setAttribute("align", "center");
-
+/* 
   myRow = myTable.insertRow(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "1";
@@ -116,7 +123,7 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Swing";
-  myRow.setAttribute("align", "center");
+  myRow.setAttribute("align", "center"); */
 }
 
 function clearTable() {
@@ -124,7 +131,24 @@ function clearTable() {
   myTable.innerHTML = "";
 }
 
-
+function UpdateRow(rownum,T1,T2,T3,T4) {
+  var myTable = document.getElementById('dataTable');
+  //myTable.style.backgroundColor = "white";
+  //myTable.setAttribute("bgcolor","#FF0000");
+  myTable.rows[1].cells[4].innerHTML = round(T1 * 0.2)/100;
+  myTable.rows[3].cells[4].innerHTML = round(T2 * 0.2)/100;
+  myTable.rows[5].cells[4].innerHTML = round(T3 * 0.2)/100;
+  myTable.rows[7].cells[4].innerHTML = round(T4 * 0.2)/100;
+  if(rownum == 0)
+  {myTable.rows[8].style.backgroundColor = "yellow";
+  myTable.rows[7].style.backgroundColor = "white";}
+  else if(rownum == 1)
+  {myTable.rows[rownum].style.backgroundColor = "yellow";
+  myTable.rows[8].style.backgroundColor = "white";}
+  else
+  {myTable.rows[rownum].style.backgroundColor = "yellow";
+  myTable.rows[rownum-1].style.backgroundColor = "white";}
+}
 function enterRow() {
   var myTable = document.getElementById('dataTable');
   var myRow = myTable.insertRow(-1);

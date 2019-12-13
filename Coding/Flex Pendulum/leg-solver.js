@@ -300,7 +300,7 @@ function calculateTheta(t) {
     for (var i = 0; i < DStheta0ArrayM.length; i = i + 1){
       arrayX[i] = i * deltaT;
     }
-    interRatio = 20;
+    interRatio = 10;
     //interpolation
     DStheta0ArrayV = DataProcess(arrayX, DStheta0ArrayM, interRatio);
     DStheta1ArrayV = DataProcess(arrayX, DStheta1ArrayM, interRatio);
