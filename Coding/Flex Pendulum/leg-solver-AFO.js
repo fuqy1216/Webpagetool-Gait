@@ -339,8 +339,6 @@ function calculateThetaAFO(t) {
     //Length for Doublestance
     //length2 = DStheta0Array.length * interRatio - (interRatio-1);
     length2 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
-    (zero2 = []).length = length2;
-    zero2.fill(0);
     interT = [];
     for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){
       interT[i] = i * deltaT;
@@ -546,7 +544,7 @@ timeArray = [];
        var indexSEC = 0;
        console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
        console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
-       if(abs(theta4DotSEC/PI*180)>300){
+       if(abs(theta4DotSEC/PI*180)>1.5*thetaDot0_4/180*PI){
         theta4DotSEC = thetaDot0_4/180*PI;
         }
         //if(theta4SEC > 0)
@@ -657,6 +655,7 @@ timeArray = [];
       DStheta1ArrayV = DStheta1Array;
       DStheta2ArrayV = DStheta2Array;
       DStheta4ArrayV = DStheta4Array;
+      length4 = DStheta0Array.length * interRatio - (interRatio-1);
      }
      else{
       DStheta0ArrayV = DataProcess(arrayX, DStheta0ArrayM, interRatio);
@@ -667,16 +666,19 @@ timeArray = [];
       DStheta1ArrayV = [DSthetainit[1]].concat(DStheta1ArrayV);
       DStheta2ArrayV = [DSthetainit[2]].concat(DStheta2ArrayV);
       DStheta4ArrayV = [DSthetainit[3]].concat(DStheta4ArrayV);
+      length4 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
      }
      //Length for swing+stance
     
      //ankle for swing+stance
       
      //Length for Doublestance
-     length4 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
-     (zero2 = []).length = length4;
-     zero2.fill(0);
+
      console.log(length1 + ',' + length2 + ',' + length3 + ',' + length4);
+     T1 = length1;
+     T2 = length2;
+     T3 = length3;
+     T4 = length4;
 /*      interT = [];
      for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){
       interT[i] = i * deltaT;

@@ -118,6 +118,7 @@ var loadB;
 var deltaT = 0.001;
 // Loop Checkbox
 var loopC;
+var Optimize;
 
 // Arrays for Calculations
 var timeArray;
@@ -399,9 +400,12 @@ function setup() {
  loadB.mousePressed(load);
  //LoadB.attribute('disabled', '');
   // Loop Checkbox;
-  loopC = createCheckbox('Loop', true);
+  loopC = createCheckbox('Loop Animation', true);
   //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
   loopC.position(loadB.x + loadB.width + 10, loadB.y);
+  Optimize = createCheckbox('Search Feasible Gait', true);
+  //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
+  Optimize.position(loopC.x + 170, loopC.y);
   // Pause Button
   pauseB = createButton('Pause');
   pauseB.position(myCan.x, myCan.y + myCan.height + 10);
@@ -691,10 +695,12 @@ function draw() {
       if (!myBool) drawIndex = intertheta1V.length/3 - 1;
     }
     var rownum;
+    if(mu_ == 0){
     T1 = anklestance.length;
     T2 = DStheta1ArrayV.length;
     T3 = ankleswing.length;
     T4 = Anklezero2.length;
+    }
 /*     console.log('drawIndex:' + drawIndex);
     console.log('length1:' + T1);
     console.log('length2:' + T2); */
@@ -708,13 +714,13 @@ function draw() {
     rownum = 3;
     else if(drawIndex == round((T1+T2) * 0.2))
     rownum = 4;
-    else if((drawIndex < round((T1 * 2 + T2) * 0.2))&&(drawIndex > round((T1+T2) * 0.2)))
+    else if((drawIndex < round((T1 + T3 + T2) * 0.2))&&(drawIndex > round((T1+T2) * 0.2)))
     rownum = 5;
-    else if(drawIndex == round((T1 * 2 + T2) * 0.2))
+    else if(drawIndex == round((T1 + T3 + T2) * 0.2))
     rownum = 6;
-    else if((drawIndex > round((T1 * 2 + T2) * 0.2))&&(drawIndex< round((T1+T2) * 0.4)))
+    else if((drawIndex > round((T1 + T3 + T2) * 0.2))&&(drawIndex< round((T1+T2+T3+T4) * 0.2)))
     rownum = 7;
-    else if(drawIndex == round((T1+T2) * 0.4))
+    else if(drawIndex == round((T1+T2+T3+T4) * 0.2))
     rownum = 8;
     else
     rownum = -1;
@@ -833,12 +839,56 @@ function start() {
   resetB.removeAttribute('disabled');
   pauseB.removeAttribute('disabled');
   recB.removeAttribute('disabled');
+//add loop to search for optimal solution
+//Errorvec = [theta1, theta2, theta4, dtheta1, dtheta2, dtheta4]
+var Errorvec = 100;
+var Refervec = [];
+if(Optimize.checked())
+{ 
+  for(theta0_4 = -30; theta0_4<-10; theta0_4 = theta0_4 + 10)
+  {
+    for(theta0_1 = 0; theta0_1<-theta0_4; theta0_1 = theta0_1 + 10)
+    {
+      theta0_2 = round(180/PI*acos(((len1+len2+len5)*cos(-theta0_4/180*PI)+len3*footFraction*sin(-theta0_4/180*PI)-len3*(1-footFraction)*sin(1.5*theta0_1/180*PI)-len1*cos(theta0_1/180*PI))/(len2+len5)))-theta0_1;
+        for(thetaDot0_1 = -500; thetaDot0_1<-50; thetaDot0_1 = thetaDot0_1 + 50)
+        {
+          for(thetaDot0_2 = 100; thetaDot0_2<1000; thetaDot0_2 = thetaDot0_2 + 100)
+          {
+            for(thetaDot0_4 = max(-500,thetaDot0_1-250); thetaDot0_4<min(-50,theta0_1+250); thetaDot0_4 = thetaDot0_4 + 50)
+            {
+              theta0_1_Input.value(theta0_1);
+              theta0_2_Input.value(theta0_2);
+              theta0_4_Input.value(theta0_4);
+              thetaDot0_1_Input.value(thetaDot0_1);
+              thetaDot0_2_Input.value(thetaDot0_2);
+              thetaDot0_4_Input.value(thetaDot0_4);
+              try{
+                setTimeout(calculateTheta(time_),3000);
+              }catch(err)
+              {
+                console.error(err);
+                continue;
+              }
+              res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+              if(res <= Errorvec)
+              {
+              Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
+              Errorvec = res;
+              }
+            }
+          }
+        }
+    }
+  }
 
+}
+else{
   if(mu_ == 0){
   calculateTheta(time_);
   }else{
   calculateThetaAFO(time_);   
   }
+}
 
   // Print Min/Max of Motion
   //console.log('Theta 1:');

@@ -145,7 +145,7 @@ function UpdateRow(rownum,T1,T2,T3,T4) {
   else if(rownum == 1)
   {myTable.rows[rownum].style.backgroundColor = "yellow";
   myTable.rows[8].style.backgroundColor = "white";}
-  else
+  else if(rownum > 1)
   {myTable.rows[rownum].style.backgroundColor = "yellow";
   myTable.rows[rownum-1].style.backgroundColor = "white";}
 }
