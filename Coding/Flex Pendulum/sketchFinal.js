@@ -117,9 +117,10 @@ var loadB;
 // Delta T, minimum time units in second
 var deltaT = 0.001;
 // Loop Checkbox
+var iteration;
 var loopC;
 var Optimize;
-
+var Optimizestep;
 // Arrays for Calculations
 var timeArray;
 var theta1Array;
@@ -403,9 +404,10 @@ function setup() {
   loopC = createCheckbox('Loop Animation', true);
   //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
   loopC.position(loadB.x + loadB.width + 10, loadB.y);
-  Optimize = createCheckbox('Search Feasible Gait', true);
-  //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
+  Optimize = createCheckbox('Search Feasible Gait (Enumeration, debugging)', false);
   Optimize.position(loopC.x + 170, loopC.y);
+  Optimizestep = createCheckbox('Search Feasible Gait (Gradient-based Search)', true);
+  Optimizestep.position(Optimize.x, Optimize.y-30);
   // Pause Button
   pauseB = createButton('Pause');
   pauseB.position(myCan.x, myCan.y + myCan.height + 10);
@@ -843,25 +845,29 @@ function start() {
 //Errorvec = [theta1, theta2, theta4, dtheta1, dtheta2, dtheta4]
 var Errorvec = 100;
 var Refervec = [];
+if(Optimizestep.checked())
+{ 
+  alert("This optimization process may take up to several minutes. Please wait.");
+  var StartT = Date.now();
+  iteration = 0;
+  Stepsearch(Errorvec, Refervec);
+  var EndT = Date.now();
+  var Time = EndT-StartT;
+  alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec");
+}
 if(Optimize.checked())
 { 
   for(theta0_4 = -30; theta0_4<-10; theta0_4 = theta0_4 + 10)
   {
     for(theta0_1 = 0; theta0_1<-theta0_4; theta0_1 = theta0_1 + 10)
     {
-      theta0_2 = round(180/PI*acos(((len1+len2+len5)*cos(-theta0_4/180*PI)+len3*footFraction*sin(-theta0_4/180*PI)-len3*(1-footFraction)*sin(1.5*theta0_1/180*PI)-len1*cos(theta0_1/180*PI))/(len2+len5)))-theta0_1;
         for(thetaDot0_1 = -500; thetaDot0_1<-50; thetaDot0_1 = thetaDot0_1 + 50)
         {
           for(thetaDot0_2 = 100; thetaDot0_2<1000; thetaDot0_2 = thetaDot0_2 + 100)
           {
             for(thetaDot0_4 = max(-500,thetaDot0_1-250); thetaDot0_4<min(-50,theta0_1+250); thetaDot0_4 = thetaDot0_4 + 50)
             {
-              theta0_1_Input.value(theta0_1);
-              theta0_2_Input.value(theta0_2);
-              theta0_4_Input.value(theta0_4);
-              thetaDot0_1_Input.value(thetaDot0_1);
-              thetaDot0_2_Input.value(thetaDot0_2);
-              thetaDot0_4_Input.value(thetaDot0_4);
+              Updateinit();
               try{
                 setTimeout(calculateTheta(time_),3000);
               }catch(err)
@@ -1130,4 +1136,198 @@ function loadScript( url, callback ) {
 
   script.src = url;
   document.getElementsByTagName( "head" )[0].appendChild( script );
+}
+
+function Stepsearch(Errorvec, Refervec){
+  var anglesteplength = 2;
+  var speedsteplength = 50;
+  var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
+  calculateTheta(time_);
+  res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+  if(res <= Errorvec)
+  {
+  Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
+  Errorvec = res;
+  }
+  //theta0_1
+  theta0_1 = theta0_1 + anglesteplength;
+  Updateinit();
+  try{
+  calculateTheta(time_);
+  errorlist[0] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+  }
+  catch(err)
+  {
+    console.error(err);
+    errorlist[0] = 999;
+  }
+  theta0_1 = theta0_1 - 2*anglesteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[1] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[1] = 999;
+    }
+  theta0_1 = theta0_1 + anglesteplength;
+  //theta0_4
+  theta0_4 = theta0_4 + anglesteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[2] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[2] = 999;
+    }
+  theta0_4 = theta0_4 - 2*anglesteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[3] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[3] = 999;
+    }
+  theta0_4 = theta0_4 + anglesteplength;
+  //thetaDot0_1
+  thetaDot0_1 = thetaDot0_1 + speedsteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[4] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[4] = 999;
+    }
+  thetaDot0_1 = thetaDot0_1 - 2*speedsteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[5] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[5] = 999;
+    }
+  thetaDot0_1= thetaDot0_1 + speedsteplength;
+  //thetaDot0_2
+  thetaDot0_2 = thetaDot0_2 + speedsteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[6] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[6] = 999;
+    }
+  thetaDot0_2 = thetaDot0_2 - 2*speedsteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[7] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[7] = 999;
+    }
+  thetaDot0_2= thetaDot0_2 + speedsteplength;
+  //thetaDot0_4
+  thetaDot0_4 = thetaDot0_4 + speedsteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[8] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[8] = 999;
+    }
+  thetaDot0_4 = thetaDot0_4 - 2*speedsteplength;
+  Updateinit();
+  try{
+    calculateTheta(time_);
+    errorlist[9] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[9] = 999;
+    }
+  thetaDot0_4= thetaDot0_4 + speedsteplength;  
+  Updateinit();
+  if(min(errorlist) > Errorvec)
+  {
+    return;
+  }
+  else{
+    var index = errorlist.indexOf(min(errorlist));
+    if( index == 0)
+    {
+      theta0_1 = theta0_1 + anglesteplength;
+    }
+    else if(index == 1)
+    {
+      theta0_1 = theta0_1 - anglesteplength;
+    }
+    else if( index == 2)
+    {
+      theta0_4 = theta0_4 + anglesteplength;
+    }
+    else if(index == 3)
+    {
+      theta0_4 = theta0_4 - anglesteplength;
+    }
+    else if( index == 4)
+    {
+      thetaDot0_1 = thetaDot0_1 + speedsteplength;
+    }
+    else if(index == 5)
+    {
+      thetaDot0_1 = thetaDot0_1 - speedsteplength;
+    }
+    else if( index == 6)
+    {
+      thetaDot0_2 = thetaDot0_2 + speedsteplength;
+    }
+    else if(index == 7)
+    {
+      thetaDot0_2 = thetaDot0_2 - speedsteplength;
+    }
+    else if( index == 8)
+    {
+      thetaDot0_4 = thetaDot0_4 + speedsteplength;
+    }
+    else if(index == 9)
+    {
+      thetaDot0_4 = thetaDot0_4 - speedsteplength;
+    }
+    Updateinit();
+    iteration = iteration + 1;
+    setTimeout(Stepsearch(Errorvec, Refervec), 100);
+  }
+}
+
+function Updateinit(){
+  theta0_2 = round(180/PI*acos(((len1+len2+len5)*cos(-theta0_4/180*PI)+len3*footFraction*sin(-theta0_4/180*PI)-0.1-len3*(1-footFraction)*sin(1.5*theta0_1/180*PI)-len1*cos(theta0_1/180*PI))/(len2+len5)))-theta0_1;
+  theta0_1_Input.value(theta0_1);
+  theta0_2_Input.value(theta0_2);
+  theta0_4_Input.value(theta0_4);
+  thetaDot0_1_Input.value(thetaDot0_1);
+  thetaDot0_2_Input.value(thetaDot0_2);
+  thetaDot0_4_Input.value(thetaDot0_4);
 }
