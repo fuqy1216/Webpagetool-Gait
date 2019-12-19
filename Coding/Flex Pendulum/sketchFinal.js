@@ -117,6 +117,8 @@ var loadB;
 // Delta T, minimum time units in second
 var deltaT = 0.001;
 // Loop Checkbox
+var Refervec;
+var Errorvec;
 var iteration;
 var loopC;
 var Optimize;
@@ -843,17 +845,22 @@ function start() {
   recB.removeAttribute('disabled');
 //add loop to search for optimal solution
 //Errorvec = [theta1, theta2, theta4, dtheta1, dtheta2, dtheta4]
-var Errorvec = 100;
-var Refervec = [];
+
+Refervec = [];
+Errorvec = 999;
 if(Optimizestep.checked())
 { 
   alert("This optimization process may take up to several minutes. Please wait.");
   var StartT = Date.now();
   iteration = 0;
-  Stepsearch(Errorvec, Refervec);
+  Stepsearch();
+  if((Errorvec == 999)||(CheckNaN()))
+  alert("No feaible solution, please try other initial input.");
+  else{
   var EndT = Date.now();
   var Time = EndT-StartT;
   alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec");
+  }
 }
 if(Optimize.checked())
 { 
@@ -1138,22 +1145,33 @@ function loadScript( url, callback ) {
   document.getElementsByTagName( "head" )[0].appendChild( script );
 }
 
-function Stepsearch(Errorvec, Refervec){
+function Stepsearch(){
   var anglesteplength = 2;
   var speedsteplength = 50;
   var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
-  calculateTheta(time_);
+  try{
+  calculateTheta(time_);  
   res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+  }
+  catch(err)
+    {
+      console.error(err);
+      res = 999;
+    }
   if(res <= Errorvec)
   {
   Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
   Errorvec = res;
+  //alert("New error is: "+Errorvec);
   }
   //theta0_1
   theta0_1 = theta0_1 + anglesteplength;
   Updateinit();
   try{
   calculateTheta(time_);
+  if(CheckNaN())
+  errorlist[0] = 999;
+  else
   errorlist[0] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
   }
   catch(err)
@@ -1165,6 +1183,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[1] = 999;
+    else
     errorlist[1] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1178,6 +1199,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[2] = 999;
+    else
     errorlist[2] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1189,6 +1213,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[3] = 999;
+    else
     errorlist[3] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1202,6 +1229,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[4] = 999;
+    else
     errorlist[4] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1213,6 +1243,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[5] = 999;
+    else
     errorlist[5] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1226,6 +1259,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[6] = 999;
+    else
     errorlist[6] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1237,6 +1273,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[7] = 999;
+    else
     errorlist[7] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1250,6 +1289,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[8] = 999;
+    else
     errorlist[8] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1261,6 +1303,9 @@ function Stepsearch(Errorvec, Refervec){
   Updateinit();
   try{
     calculateTheta(time_);
+    if(CheckNaN())
+    errorlist[9] = 999;
+    else
     errorlist[9] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
     }
     catch(err)
@@ -1270,7 +1315,7 @@ function Stepsearch(Errorvec, Refervec){
     }
   thetaDot0_4= thetaDot0_4 + speedsteplength;  
   Updateinit();
-  if(min(errorlist) > Errorvec)
+  if(min(errorlist) >= Errorvec)
   {
     return;
   }
@@ -1318,7 +1363,7 @@ function Stepsearch(Errorvec, Refervec){
     }
     Updateinit();
     iteration = iteration + 1;
-    setTimeout(Stepsearch(Errorvec, Refervec), 100);
+    Stepsearch();
   }
 }
 
@@ -1330,4 +1375,25 @@ function Updateinit(){
   thetaDot0_1_Input.value(thetaDot0_1);
   thetaDot0_2_Input.value(thetaDot0_2);
   thetaDot0_4_Input.value(thetaDot0_4);
+}
+
+function CheckNaN(){
+  if((ifnan(intertheta1V))||(ifnan(intertheta2V))||(ifnan(intertheta3V))||(ifnan(intertheta4V))||(ifnan(intertheta5V))||(ifnan(intertheta6V)))
+  {
+    return true;
+  }
+  else 
+  return false;
+}
+
+function ifnan(vector){
+for(i=0;i<vector.length;i++)
+{
+  if(Number.isNaN(vector[i]))
+  {
+    alert("index: "+i);
+  return true;
+  }
+}
+return false;
 }

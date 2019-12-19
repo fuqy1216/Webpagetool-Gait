@@ -397,7 +397,7 @@ function calculateThetaAFO(t) {
              DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
             }
            }
-           if(1){
+           if(0){
             for (var i = 0; i < length2; i = i + 1){
               latterhip[i] = latterhip[i]/5;
               DStheta4ArrayV[i] = DStheta4ArrayV[i]/5;
@@ -679,7 +679,7 @@ timeArray = [];
      T2 = length2;
      T3 = length3;
      T4 = length4;
-/*      interT = [];
+     /*      interT = [];
      for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){
       interT[i] = i * deltaT;
     }     */
@@ -736,6 +736,11 @@ timeArray = [];
           }
          }
          if(1){
+                   //hip1 start with stance
+                   Realdiffhip1 = theta1Array[0] - latterhip[latterhip.length-1];
+                   //hip2 start with swing
+                   Realdiffhip2 = theta4Array[0] - DStheta4ArrayV[DStheta4ArrayV.length-1];
+                   Realdiffknee = theta2Array[0] - DStheta2ArrayV[DStheta2ArrayV.length-1];
           for (var i = 0; i < length4; i = i + 1){
             latterhip[i] = latterhip[i]/5;
             DStheta4ArrayV[i] = DStheta4ArrayV[i]/5;
