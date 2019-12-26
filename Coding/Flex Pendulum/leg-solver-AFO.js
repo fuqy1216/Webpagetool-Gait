@@ -259,7 +259,7 @@ function calculateThetaAFO(t) {
     thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
     //calculate theta0
     DStheta0Array[0] = 0;
-    DSthetaDot0Array[0] = thetaDot4Array[T1/deltaT - 1];
+    DSthetaDot0Array[0] = PI - thetaDot4Array[T1/deltaT - 1];
     DStheta1Array[0] = PI - theta4Array[T1/deltaT - 1];
     DSthetaDot1Array[0] = 0;
     //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
@@ -442,6 +442,11 @@ function calculateThetaAFO(t) {
                  Anklezero2[i] = Kneezero2[i] + diffankle *  ((i+1)/length2);  
                   }
                  }
+
+                  diffankle = anklestance[0]-Kneezero2[Kneezero2.length-1];
+                  for (var i = 0; i < length2; i = i + 1){
+                 Anklezero2[i] = Kneezero2[i] + diffankle *  ((i+1)/length2);  
+                  }
 //left and right ankle dorsi +/plantar -
 intertheta1 =  anklestance.concat(DStheta1ArrayV);
 intertheta6 = ankleswing.concat(Anklezero2);
@@ -459,9 +464,6 @@ for  (var i = 0; i < intertheta2.length; i = i + 1){
 //left and right hip
 intertheta3 = theta4Array.concat(latterhip);
 intertheta4 = theta1Array.concat(DStheta4ArrayV);
-
-
-
 
 timeArray = [];
     theta1Array = [];
@@ -481,6 +483,7 @@ timeArray = [];
     
 
        //double pendulum Left Second
+       var Tolerance = 1.5;
        var theta1SEC = -intertheta3[intertheta3.length-1];
        var theta2SEC = intertheta2[intertheta2.length-1];
        var theta3SEC = theta2SEC + PI/2;
@@ -496,12 +499,18 @@ timeArray = [];
        console.log('2nd calculateThetaAFO: swing initial knee angle' + theta2SEC/PI*180);
        console.log('2nd calculateThetaAFO: swing initial hip angular velocity' + thetaDot1SEC/PI*180);
        console.log('2nd calculateThetaAFO: swing initial knee angular velocity' + thetaDot2SEC/PI*180);
-       if(abs(thetaDot1SEC/PI*180)>300){
+       if(abs(thetaDot1SEC/PI*180)>Tolerance*abs(thetaDot0_1)){
        thetaDot1SEC = thetaDot0_1/180*PI;
        }
-       if(abs(thetaDot2SEC/PI*180)>300){
+       if(abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2)){
        thetaDot2SEC = thetaDot0_2/180*PI;
        }
+       if(abs(theta1SEC/PI*180)>Tolerance*abs(theta0_1)){
+        theta1SEC = theta0_1/180*PI;
+        }
+        if(abs(theta2SEC/PI*180)>Tolerance*abs(theta0_2)){
+        theta2SEC = theta0_2/180*PI;
+        }
        console.log('2nd calculateThetaAFO: corrected swing initial hip angle' + theta1SEC/PI*180);
        console.log('2nd calculateThetaAFO: corrected swing initial knee angle' + theta2SEC/PI*180);
        console.log('2nd calculateThetaAFO: corrected swing initial hip angular velocity' + thetaDot1SEC/PI*180);
@@ -544,8 +553,11 @@ timeArray = [];
        var indexSEC = 0;
        console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
        console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
-       if(abs(theta4DotSEC/PI*180)>1.5*thetaDot0_4/180*PI){
+       if(abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4)){
         theta4DotSEC = thetaDot0_4/180*PI;
+        }
+        if(abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4)){
+          theta4SEC = theta0_4/180*PI;
         }
         //if(theta4SEC > 0)
         //theta4SEC = -theta4SEC;
@@ -789,13 +801,13 @@ timeArray = [];
 
 
 
-
+    //alert("Length for 6: "+intertheta6.length+"\n Length for 1" + intertheta1.length);
 //left and right ankle dorsi +/plantar -
     intertheta1 =  intertheta1.concat(ankleswing, Anklezero2);
     intertheta6 = intertheta6.concat(anklestance, DStheta1ArrayV);
     //console.log(intertheta6);
     //left and right knee
-
+    //alert("Length for 6: "+intertheta6.length+"\n Last element" + intertheta6[intertheta6.length-1]);
     intertheta2 = intertheta2.concat(theta2Array, Kneezero2);
     
     intertheta5 = intertheta5.concat(Kneezero1, DStheta2ArrayV);
@@ -842,14 +854,15 @@ timeArray = [];
       intertheta5[i] = intertheta5[i] / PI*180;
       intertheta6[i] = intertheta6[i] / PI*180;
      }
+     //alert("Length for 6: "+intertheta6.length+"\n Last element" + intertheta6[intertheta6.length-1]);
      intertheta13 = intertheta1.concat(intertheta1,intertheta1);
      intertheta23 = intertheta2.concat(intertheta2,intertheta2);
      intertheta33 = intertheta3.concat(intertheta3,intertheta3);
      intertheta43 = intertheta4.concat(intertheta4,intertheta4);
      intertheta53 = intertheta5.concat(intertheta5,intertheta5);
      intertheta63 = intertheta6.concat(intertheta6,intertheta6);
-     interTsec = [];
-     interThir = [];
+     var interTsec = [];
+     var interThir = [];
      interT = [];
      for (var i = 0; i < intertheta13.length; i = i + 1){
        interT[i] = i * deltaT;

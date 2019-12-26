@@ -1150,7 +1150,11 @@ function Stepsearch(){
   var speedsteplength = 50;
   var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
   try{
-  calculateTheta(time_);  
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }  
   res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
   }
   catch(err)
@@ -1168,7 +1172,11 @@ function Stepsearch(){
   theta0_1 = theta0_1 + anglesteplength;
   Updateinit();
   try{
-  calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
   if(CheckNaN())
   errorlist[0] = 999;
   else
@@ -1182,7 +1190,11 @@ function Stepsearch(){
   theta0_1 = theta0_1 - 2*anglesteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[1] = 999;
     else
@@ -1198,7 +1210,11 @@ function Stepsearch(){
   theta0_4 = theta0_4 + anglesteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[2] = 999;
     else
@@ -1212,7 +1228,11 @@ function Stepsearch(){
   theta0_4 = theta0_4 - 2*anglesteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[3] = 999;
     else
@@ -1228,7 +1248,11 @@ function Stepsearch(){
   thetaDot0_1 = thetaDot0_1 + speedsteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[4] = 999;
     else
@@ -1242,7 +1266,11 @@ function Stepsearch(){
   thetaDot0_1 = thetaDot0_1 - 2*speedsteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[5] = 999;
     else
@@ -1258,7 +1286,11 @@ function Stepsearch(){
   thetaDot0_2 = thetaDot0_2 + speedsteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[6] = 999;
     else
@@ -1272,7 +1304,11 @@ function Stepsearch(){
   thetaDot0_2 = thetaDot0_2 - 2*speedsteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[7] = 999;
     else
@@ -1288,7 +1324,11 @@ function Stepsearch(){
   thetaDot0_4 = thetaDot0_4 + speedsteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[8] = 999;
     else
@@ -1302,7 +1342,11 @@ function Stepsearch(){
   thetaDot0_4 = thetaDot0_4 - 2*speedsteplength;
   Updateinit();
   try{
-    calculateTheta(time_);
+    if(mu_ == 0){
+      calculateTheta(time_);
+      }else{
+      calculateThetaAFO(time_);   
+      }
     if(CheckNaN())
     errorlist[9] = 999;
     else
@@ -1391,7 +1435,7 @@ for(i=0;i<vector.length;i++)
 {
   if(Number.isNaN(vector[i]))
   {
-    alert("index: "+i);
+   // alert("index: "+i);
   return true;
   }
 }
