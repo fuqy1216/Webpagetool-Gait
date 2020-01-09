@@ -13,7 +13,7 @@ loadScript('math-solver.js', function() {
   loadScript('plotly-latest.min.js', function() {
     //alert('script ready!'); 
   });
-function solvedoublestance(){
+function solvedoublestanceAFO(){
    /* LegSolver = new Solver({
       l1: 'l1',
       l2: 'l2',
@@ -65,7 +65,7 @@ function solvedoublestance(){
   }
   
   
-  function solveleg(theta, dtheta) {
+  function solvelegAFO(theta, dtheta) {
   m1 = mass1;
   m2 = mass2;
   m3 = mass3;
@@ -78,11 +78,11 @@ function solvedoublestance(){
   I3 = 1/12*m3*math.pow(l3,2);
   g = 9.8;
   T3 = 140;
-  k1 = 20*180/PI;
-  k2 = 20*180/PI;
+  k1 = k_3*180/PI;
+  k2 = k_4*180/PI;
  // k1 = 10;
  // k2 = 10;
-  m = 42.8;
+  m = mass4;
     a = [
     [l3*cos(theta[1]),-l3*sin(theta[1]),0,0,0,0,0,0,0,0,0,0,0,0,I3,0,0,0],
     [-sin(theta[0]+theta[1])/m3,-cos(theta[0]+theta[1])/m3,0,0,0,0,1/m3,0,0,0,0,0,0,0,-l3*sin(theta[0])/2,0,0,0],
@@ -271,7 +271,7 @@ function calculateThetaAFO(t) {
     DSIdtheta0 = DSthetaDot0Array[0];
     DSIdtheta1 = DSthetaDot1Array[0];
     
-    solvedoublestance();
+    solvedoublestanceAFO();
     //DStheta2Array[0] = initial.theta2;
     DStheta4Array[0] = DSItheta4;
     DSthetaDot2Array[0] = DSIdtheta2;
@@ -280,7 +280,7 @@ function calculateThetaAFO(t) {
     //corrisponding to trigger double stance
     DStheta = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
     DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
-    Doublestance(DStheta, DSdtheta);
+    DoublestanceAFO(DStheta, DSdtheta);
 
     DStheta0Array;
     //for trim purpose
@@ -634,7 +634,7 @@ timeArray = [];
      DSIdtheta0 = DSthetaDot0Array[0];
      DSIdtheta1 = DSthetaDot1Array[0];
      
-     solvedoublestance();
+     solvedoublestanceAFO();
      //DStheta2Array[0] = initial.theta2;
      DStheta4Array[0] = DSItheta4;
      DSthetaDot2Array[0] = DSIdtheta2;
@@ -643,7 +643,7 @@ timeArray = [];
      //corrisponding to trigger double stance
      DStheta = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
      DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
-     Doublestance(DStheta, DSdtheta);
+     DoublestanceAFO(DStheta, DSdtheta);
      DStheta0Array;
      //for trim purpose
      DSthetainit = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
@@ -1031,8 +1031,8 @@ timeArray = [];
         return LandingT;
   }
 
-  function Doublestance(DStheta, DSdtheta){
-      forces = solveleg(DStheta, DSdtheta);
+  function DoublestanceAFO(DStheta, DSdtheta){
+      forces = solvelegAFO(DStheta, DSdtheta);
       if (forces == 0)      return;
       index = 0;
       for (var i = 0; i < (time_-T1); i = i + deltaT) {
@@ -1057,7 +1057,7 @@ timeArray = [];
       DSItheta2 = DStheta2;
       DSIdtheta0 = DSdtheta0;
       DSIdtheta1 = DSdtheta1;
-      solvedoublestance();
+      solvedoublestanceAFO();
       //DStheta2 = initial.theta2;
       DStheta4 = DSItheta4;
       DSdtheta2 = DSIdtheta2;
@@ -1075,7 +1075,7 @@ timeArray = [];
       DSdtheta[1] = DSdtheta1;
       DSdtheta[2] = DSdtheta2;
       DSdtheta[3] = DSdtheta4;
-      forces = solveleg(DStheta, DSdtheta);
+      forces = solvelegAFO(DStheta, DSdtheta);
       //console.log(forces);
       console.log(forces[7]);
       if (forces == 0)      

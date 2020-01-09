@@ -24,7 +24,7 @@ var pendRadio;
 var pendState; // Number of Pendulums
 
 // Length of First Pendulum
-var len1 = 0.446;
+var len1 = 0.41;
 var len1Input;
 var len1Label;
 // Length of Second Pendulum
@@ -32,7 +32,7 @@ var len2 = .4;
 var len2Input;
 var len2Label;
 // Length of Third Pendulum
-var len3 = 0.15;
+var len3 = 0.22;
 var len3Input;
 var len3Label;
 // Length of Forth Pendulum
@@ -57,7 +57,7 @@ var mass3 = 2.4;
 var mass3Input;
 var mass3Label;
 // Mass of Forth Pendulum
-var mass4 = 12.14;
+var mass4 = 42.8;
 var mass4Input;
 var mass4Label;
 // Initial Angle of First Pendulum
@@ -104,6 +104,14 @@ var k_Label;
 var k_2 = 8.0;
 var k2_Input;
 var k2_Label;
+//DS hip
+var k_3 = 20.0;
+var k3_Input;
+var k3_Label;
+// DS KNEE
+var k_4 = 20.0;
+var k4_Input;
+var k4_Label;
 // Time Interval
 var time_ = 10.0;
 var time_Input;
@@ -202,63 +210,63 @@ function setup() {
   pendRadio.option('Single Pendulum');
   pendRadio.option('Double Pendulum');
   pendRadio.option('Double Pendulum with Foot');
-  pendRadio.option('Swing-Stance');
+  pendRadio.option('SW-DS-SS-DS-SW');
   pendRadio.position(130, 10);
   pendRadio.style('text-align', 'center');
-  pendRadio.value('Swing-Stance');
+  pendRadio.value('SW-DS-SS-DS-SW');
   pendState = 4;
   pendRadio.changed(switchState);
   // Length of First Pendulum
   len1Input = createInput();
-  len1Input.position(175, 60);
+  len1Input.position(250, 60);
   len1Input.style('width', '70px');
   len1Input.value(len1);
   len1Input.input(updateICs);
-  len1Label = createDiv('Length 1: ' + len1 + ' m');
+  len1Label = createDiv('Upperleg Length L<sub>1</sub> (m):');
   len1Label.position(10, len1Input.y);
   // Length of Second Pendulum
   len2Input = createInput();
-  len2Input.position(460, 60);
+  len2Input.position(575, 60);
   len2Input.value(len2);
   len2Input.style('width', '70px');
   len2Input.input(updateICs);
-  len2Label = createDiv('Length 2: ' + len2 + ' m');
-  len2Label.position(300, len2Input.y);
+  len2Label = createDiv('Lowerleg Length L<sub>2</sub> (m):');
+  len2Label.position(340, len2Input.y);
   // Length of Third Pendulum
   len3Input = createInput();
-  len3Input.position(745, 60);
+  len3Input.position(900, 60);
   len3Input.value(len3);
   len3Input.style('width', '70px');
   len3Input.input(updateICs);
-  len3Label = createDiv('Length 3: ' + len3 + ' m');
-  len3Label.position(590, len3Input.y);
+  len3Label = createDiv('Foot Length L<sub>3</sub>+L<sub>5</sub>+L<sub>6</sub> (m):');
+  len3Label.position(670, len3Input.y);
   // Length of Forth Pendulum
-    len4Input = createInput();
+   /*  len4Input = createInput();
     len4Input.position(1030, 60);
     len4Input.value(len4);
     len4Input.style('width', '70px');
     len4Input.input(updateICs);
-    len4Label = createDiv('Length 4: ' + len4 + ' m');
-    len4Label.position(880, len4Input.y);  
+    len4Label = createDiv('N/A: ' + len4 + ' m');
+    len4Label.position(880, len4Input.y);   */
     DoublePenRefer = createDiv('Double Pendulum Reference: http://scienceworld.wolfram.com/physics/DoublePendulum.html');
     //DoublePenRefer.href = "https://www.myphysicslab.com/pendulum/double-pendulum-en.html";
     //DoublePenRefer = document.createElement("LINK");
-    DoublePenRefer.position(1420, len4Input.y);
+    DoublePenRefer.position(1445, len3Input.y);
   // Length of Ankle Height
     len5Input = createInput();
-    len5Input.position(1300, len4Input.y);
+    len5Input.position(1225, len3Input.y);
     len5Input.value(len5);
     len5Input.style('width', '70px');
     len5Input.input(updateICs);
-    len5Label = createDiv('Length 5: ' + len5 + ' m');
-    len5Label.position(1150, len4Input.y);
-    //front stance knee
+    len5Label = createDiv('Ankle Height L<sub>4</sub> (m): ');
+    len5Label.position(1000, len3Input.y);
+   /*  //front stance knee
     theta0_5_Input = createInput();
     theta0_5_Input.position(len5Input.x, len5Input.y + 30);
     theta0_5_Input.style('width', '70px');
     theta0_5_Input.value(theta0_5);
     theta0_5_Input.input(updateICs);
-    theta0_5_Label = createDiv('Initial \u0398 5: ' + theta0_5 + ' deg');
+    theta0_5_Label = createDiv('N/A: ' + theta0_5 + ' deg');
     theta0_5_Label.position(len5Label.x, theta0_5_Input.y);
     //fron stance knee speed
     thetaDot0_5_Input = createInput();
@@ -266,15 +274,15 @@ function setup() {
     thetaDot0_5_Input.style('width', '70px');
     thetaDot0_5_Input.value(thetaDot0_5);
     thetaDot0_5_Input.input(updateICs);
-    thetaDot0_5_Label = createDiv('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s')
-    thetaDot0_5_Label.position(theta0_5_Label.x, thetaDot0_5_Input.y);
+    thetaDot0_5_Label = createDiv('N/A: ' + thetaDot0_5 + ' deg/s')
+    thetaDot0_5_Label.position(theta0_5_Label.x, thetaDot0_5_Input.y); */
   // Mass of First Pendulum
   mass1Input = createInput();
   mass1Input.position(len1Input.x, len1Input.y + 30);
   mass1Input.style('width', '70px');
   mass1Input.value(mass1);
   mass1Input.input(updateICs);
-  mass1Label = createDiv('Mass 1: ' + mass1 + ' kg');
+  mass1Label = createDiv('Upperleg Mass M<sub>1</sub> (kg): ');
   mass1Label.position(len1Label.x, mass1Input.y);
   // Mass of Second Pendulum
   mass2Input = createInput();
@@ -282,7 +290,7 @@ function setup() {
   mass2Input.style('width', '70px');
   mass2Input.value(mass2);
   mass2Input.input(updateICs);
-  mass2Label = createDiv('Mass 2: ' + mass2 + ' kg');
+  mass2Label = createDiv('Lowerleg Mass M<sub>2</sub> (kg): ');
   mass2Label.position(len2Label.x, mass2Input.y);
   // Mass of Third Pendulum
   mass3Input = createInput();
@@ -290,23 +298,23 @@ function setup() {
   mass3Input.style('width', '70px');
   mass3Input.value(mass3);
   mass3Input.input(updateICs);
-  mass3Label = createDiv('Mass 3: ' + mass3 + ' kg');
+  mass3Label = createDiv('Foot Mass M<sub>3</sub> (kg): ');
   mass3Label.position(len3Label.x, mass3Input.y);
     // Mass of Forth Pendulum
     mass4Input = createInput();
-    mass4Input.position(len4Input.x, len4Input.y + 30);
+    mass4Input.position(len5Input.x, len5Input.y + 30);
     mass4Input.style('width', '70px');
     mass4Input.value(mass4);
     mass4Input.input(updateICs);
-    mass4Label = createDiv('Mass 4: ' + mass4 + ' kg');
-    mass4Label.position(len4Label.x, mass4Input.y);
+    mass4Label = createDiv('Upperbody Mass M (kg): ');
+    mass4Label.position(len5Label.x, mass4Input.y);
   // Initial Angle of First Pendulum
   theta0_1_Input = createInput();
   theta0_1_Input.position(mass1Input.x, mass1Input.y + 30);
   theta0_1_Input.style('width', '70px');
   theta0_1_Input.value(theta0_1);
   theta0_1_Input.input(updateICs);
-  theta0_1_Label = createDiv('Initial \u0398 1: ' + theta0_1 + ' deg');
+  theta0_1_Label = createDiv('Right Hip Angle \u03B8 <sub>21</sub> (deg): ');
   theta0_1_Label.position(mass1Label.x, theta0_1_Input.y);
   // Initial Angle of Second Pendulum
   theta0_2_Input = createInput();
@@ -314,7 +322,7 @@ function setup() {
   theta0_2_Input.style('width', '70px');
   theta0_2_Input.value(theta0_2);
   theta0_2_Input.input(updateICs);
-  theta0_2_Label = createDiv('Initial \u0398 2: ' + theta0_2 + ' deg');
+  theta0_2_Label = createDiv('Right Knee Angle \u03B8 <sub>22</sub> (deg): ');
   theta0_2_Label.position(mass2Label.x, theta0_2_Input.y);
     // Initial Angle of Inverted Pendulum
     theta0_4_Input = createInput();
@@ -322,7 +330,7 @@ function setup() {
     theta0_4_Input.style('width', '70px');
     theta0_4_Input.value(theta0_4);
     theta0_4_Input.input(updateICs);
-    theta0_4_Label = createDiv('Initial \u0398 4: ' + theta0_4 + ' deg');
+    theta0_4_Label = createDiv('Left Hip Angle \u03B8 <sub>11</sub> (deg): ');
     theta0_4_Label.position(mass4Label.x, theta0_4_Input.y);
   // Initial Angular Velocity of First Pendulum
   thetaDot0_1_Input = createInput();
@@ -330,7 +338,7 @@ function setup() {
   thetaDot0_1_Input.style('width', '70px');
   thetaDot0_1_Input.value(thetaDot0_1);
   thetaDot0_1_Input.input(updateICs);
-  thetaDot0_1_Label = createDiv('Initial \u0398\u0027 1: ' + thetaDot0_1 + ' deg/s')
+  thetaDot0_1_Label = createDiv('Right Hip Velocity d\u03B8<sub>21</sub>/dt (deg/s): ')
   thetaDot0_1_Label.position(theta0_1_Label.x, thetaDot0_1_Input.y);
   // Initial Angular Velocity of Second Pendulum
   thetaDot0_2_Input = createInput();
@@ -338,7 +346,7 @@ function setup() {
   thetaDot0_2_Input.style('width', '70px');
   thetaDot0_2_Input.value(thetaDot0_2);
   thetaDot0_2_Input.input(updateICs);
-  thetaDot0_2_Label = createDiv('Initial \u0398\u0027 2: ' + thetaDot0_2 + ' deg/s')
+  thetaDot0_2_Label = createDiv('Right Knee Velocity d\u03B8<sub>22</sub>/dt (deg/s): ')
   thetaDot0_2_Label.position(theta0_2_Label.x, thetaDot0_2_Input.y);
     // Initial Angular Velocity of Inverted Pendulum
     thetaDot0_4_Input = createInput();
@@ -346,7 +354,7 @@ function setup() {
     thetaDot0_4_Input.style('width', '70px');
     thetaDot0_4_Input.value(thetaDot0_4);
     thetaDot0_4_Input.input(updateICs);
-    thetaDot0_4_Label = createDiv('Initial \u0398\u0027 4: ' + thetaDot0_4 + ' deg/s')
+    thetaDot0_4_Label = createDiv('Left Hip Velocity d\u03B8<sub>11</sub>/dt (deg/s): ')
     thetaDot0_4_Label.position(theta0_4_Label.x, thetaDot0_4_Input.y);
   // Mu
   mu_Input = createInput();
@@ -354,7 +362,7 @@ function setup() {
   mu_Input.style('width', '70px');
   mu_Input.value(mu_);
   mu_Input.input(updateICs);
-  mu_Label = createDiv('KAFO: ' + mu_ + ' Nm/deg');
+  mu_Label = createDiv('K<sub>AFO</sub> (Nm/deg):');
   mu_Label.position(thetaDot0_1_Label.x, mu_Input.y);
   // K
   k_Input = createInput();
@@ -362,7 +370,7 @@ function setup() {
   k_Input.style('width', '70px');
   k_Input.value(k_1);
   k_Input.input(updateICs);
-  k_Label = createDiv('KhipSW: ' + k_1 + ' Nm/deg');
+  k_Label = createDiv('K<sub>hipSW</sub> (Nm/deg):');
   k_Label.position(thetaDot0_2_Label.x, k_Input.y);
   //kknee
   k2_Input = createInput();
@@ -370,8 +378,24 @@ function setup() {
   k2_Input.style('width', '70px');
   k2_Input.value(k_2);
   k2_Input.input(updateICs);
-  k2_Label = createDiv('KkneeSW: ' + k_2 + ' Nm/deg');
+  k2_Label = createDiv('K<sub>kneeSW</sub> (Nm/deg): ');
   k2_Label.position(thetaDot0_2_Label.x, k2_Input.y);
+    // K
+    k3_Input = createInput();
+    k3_Input.position(mass3Input.x, thetaDot0_4_Input.y + 30);
+    k3_Input.style('width', '70px');
+    k3_Input.value(k_3);
+    k3_Input.input(updateICs);
+    k3_Label = createDiv('K<sub>hipDS</sub> (Nm/deg):');
+    k3_Label.position(mass3Label.x, k_Input.y);
+    //kknee
+    k4_Input = createInput();
+    k4_Input.position(k3_Input.x, k3_Input.y + 30);
+    k4_Input.style('width', '70px');
+    k4_Input.value(k_4);
+    k4_Input.input(updateICs);
+    k4_Label = createDiv('K<sub>kneeDS</sub> (Nm/deg): ');
+    k4_Label.position(mass3Label.x, k4_Input.y);
   // Time
   time_Input = createInput();
   time_Input.position(mu_Input.x, mu_Input.y + 30);
@@ -405,7 +429,7 @@ function setup() {
   // Loop Checkbox;
   loopC = createCheckbox('Loop Animation', true);
   //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
-  loopC.position(loadB.x + loadB.width + 10, loadB.y);
+  loopC.position(loadB.x + loadB.width + 210, loadB.y);
   Optimize = createCheckbox('Search Feasible Gait (Enumeration, debugging)', false);
   Optimize.position(loopC.x + 170, loopC.y);
   Optimizestep = createCheckbox('Search Feasible Gait (Gradient-based Search)', true);
@@ -505,7 +529,7 @@ function setup() {
   jPos21Label.position(jPos2Label.x + jPos2Label.width + 5, jPos2Label.y);
   jPos21Label.style('width', '200px');
   // Foot Fraction
-  footFraction = 0.33;
+  footFraction = 0.31;
   footFractionSlider = createSlider(0, 1, footFraction, 0.01);
   footFractionSlider.position(mass3Label.x, mass3Label.y + 30);
   footFractionSlider.style('width', '100px');
@@ -543,7 +567,8 @@ function draw() {
     var theta1 = Number(theta0_1_Input.value())*PI/180.0 + PI/2;
     var theta2 = Number(theta0_2_Input.value())*PI/180.0;
     var theta4 = Number(theta0_4_Input.value())*PI/180.0 + PI/2;
-    var theta5 = Number(theta0_5_Input.value())*PI/180.0;
+    //var theta5 = Number(theta0_5_Input.value())*PI/180.0;
+    var theta5 = 0;
     //upper leg
     line(width/2, height/4, width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1));
     //lower leg
@@ -736,46 +761,50 @@ function draw() {
 
 function updateICs() {
   len1 = Number(len1Input.value());
-  len1Label.html('Length 1: ' + len1 + ' m');
+  len1Label.html('Upperleg Length L<sub>1</sub> (m):');
   len2 = Number(len2Input.value());
-  len2Label.html('Length 2: ' + len2 + ' m');
+  len2Label.html('Lowerleg Length L<sub>2</sub> (m):');
   len3 = Number(len3Input.value());
-  len3Label.html('Length 3: ' + len3 + ' m');
-  len4 = Number(len4Input.value());
-  len4Label.html('Length 4: ' + len4 + ' m');
+  len3Label.html('Foot Length L<sub>3</sub> (m):');
+  /* len4 = Number(len4Input.value());
+  len4Label.html('Length 4: ' + len4 + ' m'); */
   DoublePenRefer.html('Double Pendulum Reference: https://www.myphysicslab.com/pendulum/double-pendulum-en.html');
   len5 = Number(len5Input.value());
-  len5Label.html('Length 5: ' + len5 + ' m');
+  len5Label.html('Ankle Height L<sub>4</sub> (m):');
   mass1 = Number(mass1Input.value());
-  mass1Label.html('Mass 1: ' + mass1 + ' kg');
+  mass1Label.html('Upperleg Mass M<sub>1</sub> (kg): ');
   mass2 = Number(mass2Input.value());
-  mass2Label.html('Mass 2: ' + mass2 + ' kg');
+  mass2Label.html('Lowerleg Mass M<sub>2</sub> (kg): ');
   mass3 = Number(mass3Input.value());
-  mass3Label.html('Mass 3: ' + mass3 + ' kg');
+  mass3Label.html('Foot Mass M<sub>3</sub> (kg): ');
   mass4 = Number(mass4Input.value());
-  mass4Label.html('Mass 4: ' + mass4 + ' kg');
+  mass4Label.html('Upperbody Mass M<sub></sub> (kg): ');
   theta0_1 = Number(theta0_1_Input.value());
-  theta0_1_Label.html('Initial \u0398 1: ' + theta0_1 + ' deg');
+  theta0_1_Label.html('Right Hip Angle \u03B8 <sub>21</sub> (deg): ');
   theta0_2 = Number(theta0_2_Input.value());
-  theta0_2_Label.html('Initial \u0398 2: ' + theta0_2 + ' deg');
+  theta0_2_Label.html('Right Knee Angle \u03B8 <sub>22</sub> (deg): ');
   theta0_4 = Number(theta0_4_Input.value());
-  theta0_4_Label.html('Initial \u0398 4: ' + theta0_4 + ' deg');
-  theta0_5 = Number(theta0_5_Input.value());
-  theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg');
+  theta0_4_Label.html('Left Hip Angle \u03B8 <sub>11</sub> (deg): ');
+/*   theta0_5 = Number(theta0_5_Input.value());
+  theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg'); */
   thetaDot0_1 = Number(thetaDot0_1_Input.value());
-  thetaDot0_1_Label.html('Initial \u0398\u0027 1: ' + thetaDot0_1 + ' deg/s');
+  thetaDot0_1_Label.html('Right Hip Velocity d\u03B8<sub>21</sub>/dt (deg/s): ');
   thetaDot0_2 = Number(thetaDot0_2_Input.value());
-  thetaDot0_2_Label.html('Initial \u0398\u0027 2: ' + thetaDot0_2 + ' deg/s');
+  thetaDot0_2_Label.html('Right Knee Velocity d\u03B8<sub>22</sub>/dt (deg/s): ');
   thetaDot0_4 = Number(thetaDot0_4_Input.value());
-  thetaDot0_4_Label.html('Initial \u0398\u0027 4: ' + thetaDot0_4 + ' deg/s');
-  thetaDot0_5 = Number(thetaDot0_5_Input.value());
-  thetaDot0_5_Label.html('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s');
+  thetaDot0_4_Label.html('Left Hip Velocity d\u03B8<sub>11</sub>/dt (deg/s): ');
+/*   thetaDot0_5 = Number(thetaDot0_5_Input.value());
+  thetaDot0_5_Label.html('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s'); */
   mu_ = Number(mu_Input.value());
-  mu_Label.html('KAFO: ' + mu_ + ' Nm/deg');
+  mu_Label.html('K<sub>AFO</sub> (Nm/deg):');
   k_1 = Number(k_Input.value());
-  k_Label.html('KhipSW: ' + k_1 + ' Nm/deg');
+  k_Label.html('K<sub>hipSW</sub> (Nm/deg):');
   k_2 = Number(k2_Input.value());
-  k2_Label.html('KkneeSW: ' + k_2 + ' Nm/deg');
+  k2_Label.html('K<sub>kneeSW</sub> (Nm/deg):');
+  k_3 = Number(k3_Input.value());
+  k3_Label.html('K<sub>hipDS</sub> (Nm/deg):');
+  k_4 = Number(k4_Input.value());
+  k4_Label.html('K<sub>kneeDS</sub> (Nm/deg):');
   time_ = Number(time_Input.value());
   time_Label.html('Time: ' + time_ + ' sec(s)');
 }
