@@ -919,7 +919,6 @@ timeArray = [];
     NewT[i] = NewarrayX[i] - interT[interT.length -1];
     }*/
     //slice data for plotting
-    alert(NewTA.length+','+intertheta1V.length+','+intertheta2V.length+','+intertheta3V.length+','+intertheta4V.length+','+intertheta5V.length+','+intertheta6V.length+','+NewTA[NewTA.length-1]);
      TotalT = NewTA.length;
     NewTA.splice(NewTA.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
     NewTA.splice(NewTA.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);

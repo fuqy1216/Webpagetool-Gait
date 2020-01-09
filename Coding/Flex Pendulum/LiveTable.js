@@ -45,8 +45,8 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Heel Strike";
-  myCell = myRow.insertCell(-1);
   myCell.style.fontStyle = "italic";
+  myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
 
   myRow = myTable.insertRow(-1);
@@ -111,8 +111,8 @@ function enterHeaders() {
   myCell = myRow.insertCell(-1);
   myCell = myRow.insertCell(-1);
   myCell.innerHTML = "Toe-off";
-  myCell = myRow.insertCell(-1);
   myCell.style.fontStyle = "italic";
+  myCell = myRow.insertCell(-1);
   myRow.setAttribute("align", "center");
 /* 
   myRow = myTable.insertRow(-1);
