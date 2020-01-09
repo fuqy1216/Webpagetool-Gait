@@ -860,12 +860,12 @@ timeArray = [];
       intertheta6[i] = intertheta6[i] / PI*180;
      }
      //alert("Length for 6: "+intertheta6.length+"\n Last element" + intertheta6[intertheta6.length-1]);
-     intertheta13 = intertheta1.concat(intertheta1,intertheta1);
-     intertheta23 = intertheta2.concat(intertheta2,intertheta2);
-     intertheta33 = intertheta3.concat(intertheta3,intertheta3);
-     intertheta43 = intertheta4.concat(intertheta4,intertheta4);
-     intertheta53 = intertheta5.concat(intertheta5,intertheta5);
-     intertheta63 = intertheta6.concat(intertheta6,intertheta6);
+     intertheta13 = intertheta1;
+     intertheta23 = intertheta2;
+     intertheta33 = intertheta3;
+     intertheta43 = intertheta4;
+     intertheta53 = intertheta5;
+     intertheta63 = intertheta6;
      var interTsec = [];
      var interThir = [];
      interT = [];
@@ -878,7 +878,7 @@ timeArray = [];
      interThir[i] = interT[i] + 2*(interT[interT.length-1]+deltaT);
     }
     //console.log('429');
-     interT3 = interT.concat(interTsec, interThir);
+     interT3 = interT;
      interTV = [];
      intertheta1V = [];
      intertheta2V = [];
@@ -897,7 +897,8 @@ timeArray = [];
       intertheta6V[i/interratio] = intertheta63[i];
      }
      //console.log('448');
-     NewT = [];
+    var NewTA = [];
+    var NewT = [];
     interRatio = 5;
     if(0){
     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
@@ -906,18 +907,47 @@ timeArray = [];
     intertheta4V = DataProcess(interTV, intertheta4V, interRatio);
     intertheta5V = DataProcess(interTV, intertheta5V, interRatio);
     intertheta6V = DataProcess(interTV, intertheta6V, interRatio);
-    NewT = NewarrayX;
+    NewTA = NewarrayX;
     }
     else{
-    NewT = interTV;
+    NewTA = interTV;
     }
-    for (var i = 0; i < NewT.length; i = i + 1){
-    NewT[i] = NewT[i]*2;
+    for (var i = 0; i < NewTA.length; i = i + 1){
+    NewTA[i] = NewTA[i]*2;
     }
     /*for (var i = 0; i < NewarrayX.length; i = i + 1){
     NewT[i] = NewarrayX[i] - interT[interT.length -1];
     }*/
-    
+    //slice data for plotting
+    alert(NewTA.length+','+intertheta1V.length+','+intertheta2V.length+','+intertheta3V.length+','+intertheta4V.length+','+intertheta5V.length+','+intertheta6V.length+','+NewTA[NewTA.length-1]);
+     TotalT = NewTA.length;
+    NewTA.splice(NewTA.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    NewTA.splice(NewTA.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta1V.splice(intertheta1V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    intertheta1V.splice(intertheta1V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta2V.splice(intertheta2V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    intertheta2V.splice(intertheta2V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta3V.splice(intertheta3V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    intertheta3V.splice(intertheta3V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta4V.splice(intertheta4V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    intertheta4V.splice(intertheta4V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta5V.splice(intertheta5V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    intertheta5V.splice(intertheta5V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta6V.splice(intertheta6V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
+    intertheta6V.splice(intertheta6V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    intertheta1V = ProcessDSphasedata(NewTA, intertheta1V);
+    intertheta2V = ProcessDSphasedata(NewTA, intertheta2V);
+    intertheta3V = ProcessDSphasedata(NewTA, intertheta3V);
+    intertheta4V = ProcessDSphasedata(NewTA, intertheta4V);
+    intertheta5V = ProcessDSphasedata(NewTA, intertheta5V);
+    intertheta6V = ProcessDSphasedata(NewTA, intertheta6V);
+    var num = 0;
+    for(i = 0;i<NewTA[NewTA.length-1];i=i+0.01)
+    {
+      NewT[num] = i;
+      num = num + 1;
+    }
+    //plot
     var trace1 = {
       x: NewT,
       y: intertheta1V,
@@ -1141,6 +1171,74 @@ timeArray = [];
       if (iter > (math.floor(NewarrayX.length / minterRatio) - 1)) iter = math.floor(NewarrayX.length / minterRatio) - 1;
       NewarrayY[i] = fun[iter].a * math.pow(NewarrayX[i],3) + fun[iter].b * math.pow(NewarrayX[i],2) + fun[iter].c * math.pow(NewarrayX[i],1) + fun[iter].d;
     }
+    //console.log(NewarrayX);
+    //console.log(NewarrayY);
+    return NewarrayY;
+    
+  }
+
+  function ProcessDSphasedata(Time, Angle){
+    //cut angle
+    var start = [];
+    var end = [];
+    var piece1 = [];
+    var piece2 = [];
+    var piece3 = [];
+    var piece4 = [];
+    var time1, time2, time3, time4;
+    var num = 0;
+    for(i = 1; i < Time.length; i = i + 1){
+      if(Time[i] - Time[i-1]>0.015){
+        start[num] = i-2;
+        end[num] = i+1;
+        num = num + 1;
+      }
+    }
+    //cut the array
+    piece1 = Angle.slice(0,start[0]);
+    piece2 = Angle.slice(start[0],end[0]+1);
+    piece3 = Angle.slice(end[0]+1,start[1]);
+    piece4 = Angle.slice(start[1],end[1]);
+    //piece5 = [Angle.slice(end[1]-1,end[1]),Angle[1]];
+    time1 = Time.slice(0,start[0]);
+    time2 = Time.slice(start[0],end[0]+1);
+    time3 = Time.slice(end[0]+1,start[1]);
+    time4 = Time.slice(start[1],end[1]);
+   // time5 = [Time.slice(end[1]-1),Time.slice(end[1]-1)+0.01];
+    piece2 = FillingGap(time2,piece2);
+    piece4 = FillingGap(time4,piece4);
+    var Newangle = [];
+    Newangle = piece1.concat(Angle[start[0]],piece2,piece3,Angle[start[1]],piece4);
+    return Newangle;
+  }
+
+  function FillingGap(T, ArrayVar){
+    //alert(T+', '+ArrayVar);
+    var NewarrayY=[];
+    var p = [];
+    var NewT= [];
+    var Num= 0;
+    for (var i = T[1]; i < T[T.length-1]; i = i + 0.01){
+    NewT[Num] = i;
+    Num = Num + 1;
+    }   
+    //alert('NewT: '+NewT);
+    //console.log('Doing interpolation');
+    for(var i = 0; i<T.length; i = i+1)
+      p.push({
+        x: T[i], //i * deltaT,
+        y: ArrayVar[i]//DStheta0Array[i]
+    });
+    var fun = [];
+    fun = cubicSplineInterpolation(p);
+    //console.log(fun);
+    //calculate new values
+    //console.log(NewarrayX.length);
+    for (var i = 0; i < NewT.length; i = i + 1){
+      //console.log(i);
+      NewarrayY[i] = fun[1].a * math.pow(NewT[i],3) + fun[1].b * math.pow(NewT[i],2) + fun[1].c * math.pow(NewT[i],1) + fun[1].d;
+    }
+    
     //console.log(NewarrayX);
     //console.log(NewarrayY);
     return NewarrayY;
