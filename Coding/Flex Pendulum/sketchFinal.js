@@ -857,15 +857,23 @@ function start() {
   pendRadio.attribute('disabled', '');
   len1Input.attribute('disabled', '');
   len2Input.attribute('disabled', '');
+  len3Input.attribute('disabled', '');
+  len5Input.attribute('disabled', '');
   mass1Input.attribute('disabled', '');
   mass2Input.attribute('disabled', '');
+  mass3Input.attribute('disabled', '');
+  mass4Input.attribute('disabled', '');
   theta0_1_Input.attribute('disabled', '');
   theta0_2_Input.attribute('disabled', '');
   thetaDot0_1_Input.attribute('disabled', '');
   thetaDot0_2_Input.attribute('disabled', '');
+  theta0_4_Input.attribute('disabled', '');
+  thetaDot0_4_Input.attribute('disabled', '');
   mu_Input.attribute('disabled', '');
   k_Input.attribute('disabled', '');
   k2_Input.attribute('disabled', '');
+  k3_Input.attribute('disabled', '');
+  k4_Input.attribute('disabled', '');
   time_Input.attribute('disabled', '');
   startB.attribute('disabled', '');
   loadB.attribute('disabled', '');
@@ -1015,15 +1023,23 @@ function reset() {
   pendRadio.removeAttribute('disabled');
   len1Input.removeAttribute('disabled');
   len2Input.removeAttribute('disabled');
+  len3Input.removeAttribute('disabled');
+  len5Input.removeAttribute('disabled');
   mass1Input.removeAttribute('disabled');
   mass2Input.removeAttribute('disabled');
+  mass3Input.removeAttribute('disabled');
+  mass4Input.removeAttribute('disabled');
   theta0_1_Input.removeAttribute('disabled');
   theta0_2_Input.removeAttribute('disabled');
   thetaDot0_1_Input.removeAttribute('disabled');
   thetaDot0_2_Input.removeAttribute('disabled');
+  theta0_4_Input.removeAttribute('disabled');
+  thetaDot0_4_Input.removeAttribute('disabled');
   mu_Input.removeAttribute('disabled');
   k_Input.removeAttribute('disabled');
   k2_Input.removeAttribute('disabled');
+  k3_Input.removeAttribute('disabled');
+  k4_Input.removeAttribute('disabled');
   time_Input.removeAttribute('disabled');
   startB.removeAttribute('disabled');
   loadB.removeAttribute('disabled');
@@ -1114,7 +1130,7 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 
 
 function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
-  return -1 * mu_*180/PI * myTheta*3/pow(len1+len2,2)/(mass1+mass2) - (g/(len1+len2) * Math.sin(myTheta));
+  return -1 * mu_/10*180/PI * myTheta*3/pow(len1+len2,2)/(mass1+mass2) - (g/(len1+len2) * Math.sin(myTheta));
   //return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {

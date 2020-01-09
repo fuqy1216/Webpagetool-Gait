@@ -299,8 +299,10 @@ function calculateThetaAFO(t) {
     for (var i = 0; i < DStheta0ArrayM.length; i = i + 1){
       arrayX[i] = i * deltaT;
     }
-    DStheta0Array;
+    if(DStheta0Array.length < 8)
     interRatio = 20;
+    else
+    interRatio = 10;
     //interpolation
     DStheta0ArrayV = DataProcess(arrayX, DStheta0ArrayM, interRatio);
     DStheta1ArrayV = DataProcess(arrayX, DStheta1ArrayM, interRatio);
@@ -660,8 +662,10 @@ timeArray = [];
      for (var i = 0; i < DStheta0ArrayM.length; i = i + 1){
        arrayX[i] = i * deltaT;
      }
-     DStheta0Array;
+     if(DStheta0Array.length < 8)
      interRatio = 20;
+     else
+     interRatio = 10;
      //interpolation
      if(DStheta0Array.length == 1){
       DStheta0ArrayV = DStheta0Array;
