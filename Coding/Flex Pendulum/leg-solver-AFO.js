@@ -564,7 +564,7 @@ timeArray = [];
       // if((abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4))||(theta4DotSEC*thetaDot0_4 < 0)){
         if(abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4)) 
       theta4DotSEC = thetaDot0_4/180*PI;
-        }
+        
         //if((abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4))||(theta4SEC*theta0_4 < 0)){
         if(abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4)){
           theta4SEC = theta0_4/180*PI;
