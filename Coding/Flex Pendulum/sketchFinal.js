@@ -312,7 +312,7 @@ function setup() {
   theta0_1_Input = createInput();
   theta0_1_Input.position(mass1Input.x, mass1Input.y + 30);
   theta0_1_Input.style('width', '70px');
-  theta0_1_Input.value(theta0_1);
+  theta0_1_Input.value(-theta0_1);
   theta0_1_Input.input(updateICs);
   theta0_1_Label = createDiv('Right Hip Angle \u03B8 <sub>21</sub> (deg): ');
   theta0_1_Label.position(mass1Label.x, theta0_1_Input.y);
@@ -328,7 +328,7 @@ function setup() {
     theta0_4_Input = createInput();
     theta0_4_Input.position(mass4Input.x, mass4Input.y + 30);
     theta0_4_Input.style('width', '70px');
-    theta0_4_Input.value(theta0_4);
+    theta0_4_Input.value(-theta0_4);
     theta0_4_Input.input(updateICs);
     theta0_4_Label = createDiv('Left Hip Angle \u03B8 <sub>11</sub> (deg): ');
     theta0_4_Label.position(mass4Label.x, theta0_4_Input.y);
@@ -336,7 +336,7 @@ function setup() {
   thetaDot0_1_Input = createInput();
   thetaDot0_1_Input.position(theta0_1_Input.x, theta0_1_Input.y + 30);
   thetaDot0_1_Input.style('width', '70px');
-  thetaDot0_1_Input.value(thetaDot0_1);
+  thetaDot0_1_Input.value(-thetaDot0_1);
   thetaDot0_1_Input.input(updateICs);
   thetaDot0_1_Label = createDiv('Right Hip Velocity d\u03B8<sub>21</sub>/dt (deg/s): ')
   thetaDot0_1_Label.position(theta0_1_Label.x, thetaDot0_1_Input.y);
@@ -564,9 +564,9 @@ function draw() {
     //hip joint
     ellipse(width/2, height/4, 5, 5);
     //two angles
-    var theta1 = Number(theta0_1_Input.value())*PI/180.0 + PI/2;
+    var theta1 = -Number(theta0_1_Input.value())*PI/180.0 + PI/2;
     var theta2 = Number(theta0_2_Input.value())*PI/180.0;
-    var theta4 = Number(theta0_4_Input.value())*PI/180.0 + PI/2;
+    var theta4 = -Number(theta0_4_Input.value())*PI/180.0 + PI/2;
     //var theta5 = Number(theta0_5_Input.value())*PI/180.0;
     var theta5 = 0;
     //upper leg
@@ -790,15 +790,15 @@ function updateICs() {
   mass3Label.html('Foot Mass M<sub>3</sub> (kg): ');
   mass4 = Number(mass4Input.value());
   mass4Label.html('Upperbody Mass M<sub></sub> (kg): ');
-  theta0_1 = Number(theta0_1_Input.value());
+  theta0_1 = -Number(theta0_1_Input.value());
   theta0_1_Label.html('Right Hip Angle \u03B8 <sub>21</sub> (deg): ');
   theta0_2 = Number(theta0_2_Input.value());
   theta0_2_Label.html('Right Knee Angle \u03B8 <sub>22</sub> (deg): ');
-  theta0_4 = Number(theta0_4_Input.value());
+  theta0_4 = -Number(theta0_4_Input.value());
   theta0_4_Label.html('Left Hip Angle \u03B8 <sub>11</sub> (deg): ');
 /*   theta0_5 = Number(theta0_5_Input.value());
   theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg'); */
-  thetaDot0_1 = Number(thetaDot0_1_Input.value());
+  thetaDot0_1 = -Number(thetaDot0_1_Input.value());
   thetaDot0_1_Label.html('Right Hip Velocity d\u03B8<sub>21</sub>/dt (deg/s): ');
   thetaDot0_2 = Number(thetaDot0_2_Input.value());
   thetaDot0_2_Label.html('Right Knee Velocity d\u03B8<sub>22</sub>/dt (deg/s): ');
@@ -1474,10 +1474,10 @@ function Stepsearch(){
 
 function Updateinit(){
   theta0_2 = round(180/PI*acos(((len1+len2+len5)*cos(-theta0_4/180*PI)+len3*footFraction*sin(-theta0_4/180*PI)-0.1-len3*(1-footFraction)*sin(1.5*theta0_1/180*PI)-len1*cos(theta0_1/180*PI))/(len2+len5)))-theta0_1;
-  theta0_1_Input.value(theta0_1);
+  theta0_1_Input.value(-theta0_1);
   theta0_2_Input.value(theta0_2);
-  theta0_4_Input.value(theta0_4);
-  thetaDot0_1_Input.value(thetaDot0_1);
+  theta0_4_Input.value(-theta0_4);
+  thetaDot0_1_Input.value(-thetaDot0_1);
   thetaDot0_2_Input.value(thetaDot0_2);
   thetaDot0_4_Input.value(thetaDot0_4);
 }
