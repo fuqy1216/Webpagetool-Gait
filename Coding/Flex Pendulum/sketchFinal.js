@@ -452,7 +452,7 @@ function setup() {
       return;
     }
     drawIndex = drawIndex - 1000*min/10;
-    if (drawIndex < 0) drawIndex = drawIndex + intertheta1.length;
+    if (drawIndex < 0) drawIndex = drawIndex + intertheta1V.length;
   });
   toggleIncInput = createInput();
   toggleIncInput.position(toggleBacB.x + toggleBacB.width + 5, toggleBacB.y);
@@ -469,7 +469,7 @@ function setup() {
       return;
     }
     drawIndex = drawIndex + 1000*add/10;
-    if (drawIndex >= intertheta1.length) drawIndex = drawIndex - intertheta1.length;
+    if (drawIndex >= intertheta1V.length) drawIndex = drawIndex - intertheta1V.length;
   });
 
   // Time Label
@@ -712,17 +712,28 @@ function draw() {
     fill(0, 255, 0);
     stroke(0,155,0);
     // Green
+    if(mu_ == 0){
     rect(5, height - 15, (width - 10)*(3*drawIndex/intertheta1V.length), 10);
-
-    // Advance frame
-    if (isPaused == 0) drawIndex = drawIndex + 1;
-
-    // Check drawIndex amd loop back to beginning
     if (drawIndex >= intertheta1V.length/3)  {
       var myBool = loopC.checked();
       if (myBool) drawIndex = 0;
       if (!myBool) drawIndex = intertheta1V.length/3 - 1;
     }
+  }
+    else{
+    rect(5, height - 15, (width - 10)*(drawIndex/intertheta1V.length), 10);
+    if (drawIndex >= intertheta1V.length)  {
+      var myBool = loopC.checked();
+      if (myBool) drawIndex = 0;
+      if (!myBool) drawIndex = intertheta1V.length - 1;
+    }
+  }
+    // Advance frame
+    if (isPaused == 0) drawIndex = drawIndex + 1;
+
+    // Check drawIndex amd loop back to beginning
+
+
     var rownum;
     if(mu_ == 0){
     T1 = anklestance.length;
@@ -898,8 +909,11 @@ if(Optimizestep.checked())
   var Time = EndT-StartT;
   alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec");
   }
+   if(mu_ > 0){
+    calculateThetaAFO(time_,true);   
+    }  
 }
-if(Optimize.checked())
+else if(Optimize.checked())
 { 
   for(theta0_4 = -30; theta0_4<-10; theta0_4 = theta0_4 + 10)
   {
@@ -936,7 +950,7 @@ else{
   if(mu_ == 0){
   calculateTheta(time_);
   }else{
-  calculateThetaAFO(time_);   
+  calculateThetaAFO(time_,true);   
   }
 }
 
@@ -1198,7 +1212,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }  
   res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
   }
@@ -1220,7 +1234,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
   if(CheckNaN())
   errorlist[0] = 999;
@@ -1238,7 +1252,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[1] = 999;
@@ -1258,7 +1272,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[2] = 999;
@@ -1276,7 +1290,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[3] = 999;
@@ -1296,7 +1310,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[4] = 999;
@@ -1314,7 +1328,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[5] = 999;
@@ -1334,7 +1348,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[6] = 999;
@@ -1352,7 +1366,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[7] = 999;
@@ -1372,7 +1386,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[8] = 999;
@@ -1390,7 +1404,7 @@ function Stepsearch(){
     if(mu_ == 0){
       calculateTheta(time_);
       }else{
-      calculateThetaAFO(time_);   
+      calculateThetaAFO(time_,false);   
       }
     if(CheckNaN())
     errorlist[9] = 999;

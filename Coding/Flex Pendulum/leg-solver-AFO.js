@@ -158,7 +158,7 @@ function solvedoublestanceAFO(){
   }
 
   
-function calculateThetaAFO(t) {
+function calculateThetaAFO(t, Final) {
     timeArray = [];
     theta1Array = [];
     theta2Array = [];
@@ -502,15 +502,19 @@ timeArray = [];
        console.log('2nd calculateThetaAFO: swing initial knee angle' + theta2SEC/PI*180);
        console.log('2nd calculateThetaAFO: swing initial hip angular velocity' + thetaDot1SEC/PI*180);
        console.log('2nd calculateThetaAFO: swing initial knee angular velocity' + thetaDot2SEC/PI*180);
+       //if((abs(thetaDot1SEC/PI*180)>Tolerance*abs(thetaDot0_1))||(thetaDot1SEC*thetaDot0_1 < 0)){
        if(abs(thetaDot1SEC/PI*180)>Tolerance*abs(thetaDot0_1)){
-       thetaDot1SEC = thetaDot0_1/180*PI;
+          thetaDot1SEC = thetaDot0_1/180*PI;
        }
+       //if((abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2))||(thetaDot2SEC*thetaDot0_2 < 0)){
        if(abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2)){
-       thetaDot2SEC = thetaDot0_2/180*PI;
+          thetaDot2SEC = thetaDot0_2/180*PI;
        }
+       //if((abs(theta1SEC/PI*180)>Tolerance*abs(theta0_1))||(theta1SEC*theta0_1 < 0)){
        if(abs(theta1SEC/PI*180)>Tolerance*abs(theta0_1)){
         theta1SEC = theta0_1/180*PI;
         }
+        //if((abs(theta2SEC/PI*180)>Tolerance*abs(theta0_2))||(theta2SEC*theta0_2 < 0)){
         if(abs(theta2SEC/PI*180)>Tolerance*abs(theta0_2)){
         theta2SEC = theta0_2/180*PI;
         }
@@ -554,18 +558,21 @@ timeArray = [];
        var theta4DotSEC = DSthetaDot4Array[DSthetaDot4Array.length-1];
        var theta4DoubleDotSEC;
        var indexSEC = 0;
-       console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
-       console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
-       if(abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4)){
-        theta4DotSEC = thetaDot0_4/180*PI;
+      //  console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
+      //  console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
+       //alert('theta4SEC: '+theta4SEC+', theta0_4: '+theta0_4);
+      // if((abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4))||(theta4DotSEC*thetaDot0_4 < 0)){
+        if(abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4)) 
+      theta4DotSEC = thetaDot0_4/180*PI;
         }
+        //if((abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4))||(theta4SEC*theta0_4 < 0)){
         if(abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4)){
           theta4SEC = theta0_4/180*PI;
         }
         //if(theta4SEC > 0)
         //theta4SEC = -theta4SEC;
-        console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
-        console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
+        // console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
+        // console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
         //if( abs(180 - theta4SEC/PI*180) > 0)
         //{
         //  theta4SEC = PI + (PI - theta4SEC);
@@ -898,7 +905,7 @@ timeArray = [];
      }
      //console.log('448');
     var NewTA = [];
-    var NewT = [];
+    NewT = [];
     interRatio = 5;
     if(0){
     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);
@@ -919,21 +926,29 @@ timeArray = [];
     NewT[i] = NewarrayX[i] - interT[interT.length -1];
     }*/
     //slice data for plotting
+    if(Final){
      TotalT = NewTA.length;
     NewTA.splice(NewTA.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    NewTA.splice(NewTA.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
-    intertheta1V.splice(intertheta1V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    intertheta1V.splice(intertheta1V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
-    intertheta2V.splice(intertheta2V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    intertheta2V.splice(intertheta2V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
-    intertheta3V.splice(intertheta3V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    intertheta3V.splice(intertheta3V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
-    intertheta4V.splice(intertheta4V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    intertheta4V.splice(intertheta4V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
-    intertheta5V.splice(intertheta5V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    intertheta5V.splice(intertheta5V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
-    intertheta6V.splice(intertheta6V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
-    intertheta6V.splice(intertheta6V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+4);
+    NewTA.splice(NewTA.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
+    alert(NewTA);
+    intertheta1V.splice(intertheta1V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
+    intertheta1V = intertheta1V.concat(intertheta1V[0]);
+    intertheta1V.splice(intertheta1V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
+    intertheta2V.splice(intertheta2V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
+    intertheta2V = intertheta2V.concat(intertheta2V[0]);
+    intertheta2V.splice(intertheta2V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
+    intertheta3V.splice(intertheta3V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
+    intertheta3V = intertheta3V.concat(intertheta3V[0]);
+    intertheta3V.splice(intertheta3V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
+    intertheta4V.splice(intertheta4V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
+    intertheta4V = intertheta4V.concat(intertheta4V[0]);
+    intertheta4V.splice(intertheta4V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
+    intertheta5V.splice(intertheta5V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
+    intertheta5V = intertheta5V.concat(intertheta5V[0]);
+    intertheta5V.splice(intertheta5V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
+    intertheta6V.splice(intertheta6V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
+    intertheta6V = intertheta6V.concat(intertheta6V[0]);
+    intertheta6V.splice(intertheta6V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
     intertheta1V = ProcessDSphasedata(NewTA, intertheta1V);
     intertheta2V = ProcessDSphasedata(NewTA, intertheta2V);
     intertheta3V = ProcessDSphasedata(NewTA, intertheta3V);
@@ -946,6 +961,11 @@ timeArray = [];
       NewT[num] = i;
       num = num + 1;
     }
+    }
+    else{
+      NewT = NewTA;
+    }
+    
     //plot
     var trace1 = {
       x: NewT,
