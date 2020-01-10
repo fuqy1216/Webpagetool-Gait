@@ -905,7 +905,7 @@ timeArray = [];
      }
      //console.log('448');
     var NewTA = [];
-    NewT = [];
+    var NewT = [];
     interRatio = 5;
     if(0){
     intertheta1V = DataProcess(interTV, intertheta1V, interRatio);

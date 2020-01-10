@@ -909,7 +909,9 @@ if(Optimizestep.checked())
   var Time = EndT-StartT;
   alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec");
   }
-   if(mu_ > 0){
+   if(mu_ == 0){
+    calculateTheta(time_);
+    }else{
     calculateThetaAFO(time_,true);   
     }  
 }
