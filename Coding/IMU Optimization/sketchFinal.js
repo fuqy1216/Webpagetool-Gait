@@ -29,7 +29,8 @@ var SwingStance;
 var Att1;
 var Att2;
 var Att3;
-
+var Optmuscle;
+var Optangle;
 //sw st time
 var TSW_Input;
 var TSW_Label;
@@ -74,6 +75,30 @@ var mass3Label;
 var mass4 = 42.8;
 var mass4Input;
 var mass4Label;
+// Initial Angle of Stance Inverted Pendulum
+var Stheta0_1 = -15.0;
+var Stheta0_1_Input;
+var Stheta0_1_Label;
+// Initial Angle of Stance Inverted Pendulum
+var Stheta0_2 = -15.0;
+var Stheta0_2_Input;
+var Stheta0_2_Label;
+// Initial Angle of Stance Inverted Pendulum
+var Stheta0_3 = -15.0;
+var Stheta0_3_Input;
+var Stheta0_3_Label;
+// Initial Angular Velocity of First Pendulum
+var SthetaDot0_1 = -250.0;
+var SthetaDot0_1_Input;
+var SthetaDot0_1_Label;
+// Initial Angular Velocity of Second Pendulum
+var SthetaDot0_2 = 500.0;
+var SthetaDot0_2_Input;
+var SthetaDot0_2_Label;
+// Initial Angular Velocity of Second Pendulum
+var SthetaDot0_3 = 500.0;
+var SthetaDot0_3_Input;
+var SthetaDot0_3_Label;
 // Initial Angle of First Pendulum
 var theta0_1 = 15.0;
 var theta0_1_Input;
@@ -82,10 +107,6 @@ var theta0_1_Label;
 var theta0_2 = 30.0;
 var theta0_2_Input;
 var theta0_2_Label;
-// Initial Angle of Stance Inverted Pendulum
-var theta0_3 = -15.0;
-var theta0_3_Input;
-var theta0_3_Label;
 // Initial Angle of Stance Inverted Pendulum
 var theta0_4 = -15.0;
 var theta0_4_Input;
@@ -134,10 +155,32 @@ var k3_Label;
 var k_4 = 20.0;
 var k4_Input;
 var k4_Label;
+// K - Coefficient of Spring Constant hip swing
+var k_5 = 5.0;
+var k5_Input;
+var k5_Label;
+// K - Coefficient of Spring Constant knee swing
+var k_6 = 8.0;
+var k6_Input;
+var k6_Label;
+//DS hip
+var k_7 = 20.0;
+var k7_Input;
+var k7_Label;
+// DS KNEE
+var k_8 = 20.0;
+var k8_Input;
+var k8_Label;
+// DS KNEE
+var T13 = 120.0;
+var T13_Input;
+var T13_Label;
+// DS KNEE
+var T23 = 120.0;
+var T23_Input;
+var T23_Label;
 // Time Interval
 var time_ = 10.0;
-var time_Input;
-var time_Label;
 // Start Button
 var startB;
 var active;
@@ -151,7 +194,6 @@ var Refervec;
 var Errorvec;
 var iteration;
 var loopC;
-var Optimize;
 var Optimizestep;
 // Arrays for Calculations
 var timeArray;
@@ -225,7 +267,7 @@ var footFractionLabel;
 
 function setup() {
   myCan = createCanvas(1000, 500);
-  myCan.position(30, 280);
+  myCan.position(30, 780);
   background(220);
   // Radio Button for # of Pendulums
   // Length of First Pendulum
@@ -370,74 +412,210 @@ function setup() {
  Att1.style('font-weight', 'bold');
  Att1.style('font-size', '26');
 
- theta0_1_Input = createInput();
- theta0_1_Input.position(mass1Input.x, Att1.y + 30);
- theta0_1_Input.style('width', '70px');
- theta0_1_Input.value(theta0_1);
- theta0_1_Input.input(updateICs);
- theta0_1_Label = createDiv('Shank Flex Angle \u03B8(t<sub>1</sub>) (deg): ');
- theta0_1_Label.position(mass1Label.x, theta0_1_Input.y);
+ Stheta0_1_Input = createInput();
+ Stheta0_1_Input.position(mass1Input.x, Att1.y + 30);
+ Stheta0_1_Input.style('width', '70px');
+ Stheta0_1_Input.value(Stheta0_1);
+ Stheta0_1_Input.input(updateICs);
+ Stheta0_1_Label = createDiv('Shank Flex Angle \u03B8(t<sub>1</sub>) (deg): ');
+ Stheta0_1_Label.position(mass1Label.x, Stheta0_1_Input.y);
 
- thetaDot0_1_Input = createInput();
- thetaDot0_1_Input.position(mass2Input.x , theta0_1_Input.y);
- thetaDot0_1_Input.style('width', '70px');
- thetaDot0_1_Input.value(thetaDot0_1);
- thetaDot0_1_Input.input(updateICs);
- thetaDot0_1_Label = createDiv('Shank Flex Vel \u03C9(t<sub>1</sub>) (deg/s): ')
- thetaDot0_1_Label.position(mass2Label.x, thetaDot0_1_Input.y);
+ SthetaDot0_1_Input = createInput();
+ SthetaDot0_1_Input.position(mass2Input.x , Stheta0_1_Input.y);
+ SthetaDot0_1_Input.style('width', '70px');
+ SthetaDot0_1_Input.value(SthetaDot0_1);
+ SthetaDot0_1_Input.input(updateICs);
+ SthetaDot0_1_Label = createDiv('Shank Flex Vel \u03C9(t<sub>1</sub>) (deg/s): ')
+ SthetaDot0_1_Label.position(mass2Label.x, SthetaDot0_1_Input.y);
 
  //Att2
  Att2 = createDiv('Angular Information at Heel Strike, t<sub>2</sub>');
- Att2.position(10, theta0_1_Input.y+40);
+ Att2.position(10, Stheta0_1_Input.y+40);
  Att2.style('font-weight', 'bold');
  Att2.style('font-size', '26');
 
- theta0_2_Input = createInput();
- theta0_2_Input.position(mass1Input.x, Att2.y + 30);
- theta0_2_Input.style('width', '70px');
- theta0_2_Input.value(theta0_2);
- theta0_2_Input.input(updateICs);
- theta0_2_Label = createDiv('Shank Flex Angle \u03B8(t<sub>2</sub>) (deg): ');
- theta0_2_Label.position(mass1Label.x, theta0_2_Input.y);
+ Stheta0_2_Input = createInput();
+ Stheta0_2_Input.position(mass1Input.x, Att2.y + 30);
+ Stheta0_2_Input.style('width', '70px');
+ Stheta0_2_Input.value(Stheta0_2);
+ Stheta0_2_Input.input(updateICs);
+ Stheta0_2_Label = createDiv('Shank Flex Angle \u03B8(t<sub>2</sub>) (deg): ');
+ Stheta0_2_Label.position(mass1Label.x, Stheta0_2_Input.y);
 
- thetaDot0_2_Input = createInput();
- thetaDot0_2_Input.position(mass2Input.x , theta0_2_Input.y);
- thetaDot0_2_Input.style('width', '70px');
- thetaDot0_2_Input.value(thetaDot0_2);
- thetaDot0_2_Input.input(updateICs);
- thetaDot0_2_Label = createDiv('Shank Flex Vel \u03C9(t<sub>1</sub>) (deg/s): ')
- thetaDot0_2_Label.position(mass2Label.x, thetaDot0_2_Input.y);
+ SthetaDot0_2_Input = createInput();
+ SthetaDot0_2_Input.position(mass2Input.x , Stheta0_2_Input.y);
+ SthetaDot0_2_Input.style('width', '70px');
+ SthetaDot0_2_Input.value(SthetaDot0_2);
+ SthetaDot0_2_Input.input(updateICs);
+ SthetaDot0_2_Label = createDiv('Shank Flex Vel \u03C9(t<sub>2</sub>) (deg/s): ')
+ SthetaDot0_2_Label.position(mass2Label.x, SthetaDot0_2_Input.y);
 
  //Att3
  Att3 = createDiv('Angular Information at Ending Toe-off , t<sub>3</sub>');
- Att3.position(10, theta0_2_Input.y+40);
+ Att3.position(10, Stheta0_2_Input.y+40);
  Att3.style('font-weight', 'bold');
  Att3.style('font-size', '26');
 
- theta0_3_Input = createInput();
- theta0_3_Input.position(mass1Input.x, Att3.y + 30);
- theta0_3_Input.style('width', '70px');
- theta0_3_Input.value(theta0_3);
- theta0_3_Input.input(updateICs);
- theta0_3_Label = createDiv('Shank Flex Angle \u03B8(t<sub>3</sub>) (deg): ');
- theta0_3_Label.position(mass1Label.x, theta0_3_Input.y);
+ Stheta0_3_Input = createInput();
+ Stheta0_3_Input.position(mass1Input.x, Att3.y + 30);
+ Stheta0_3_Input.style('width', '70px');
+ Stheta0_3_Input.value(Stheta0_3);
+ Stheta0_3_Input.input(updateICs);
+ Stheta0_3_Label = createDiv('Shank Flex Angle \u03B8(t<sub>3</sub>) (deg): ');
+ Stheta0_3_Label.position(mass1Label.x, Stheta0_3_Input.y);
 
- thetaDot0_3_Input = createInput();
- thetaDot0_3_Input.position(mass2Input.x , theta0_3_Input.y);
- thetaDot0_3_Input.style('width', '70px');
- thetaDot0_3_Input.value(thetaDot0_3);
- thetaDot0_3_Input.input(updateICs);
- thetaDot0_3_Label = createDiv('Shank Flex Vel \u03C9(t<sub>1</sub>) (deg/s): ')
- thetaDot0_3_Label.position(mass2Label.x, thetaDot0_3_Input.y);
+ SthetaDot0_3_Input = createInput();
+ SthetaDot0_3_Input.position(mass2Input.x , Stheta0_3_Input.y);
+ SthetaDot0_3_Input.style('width', '70px');
+ SthetaDot0_3_Input.value(SthetaDot0_3);
+ SthetaDot0_3_Input.input(updateICs);
+ SthetaDot0_3_Label = createDiv('Shank Flex Vel \u03C9(t<sub>3</sub>) (deg/s): ')
+ SthetaDot0_3_Label.position(mass2Label.x, SthetaDot0_3_Input.y);
 
  //Optimization Result:
- Att3 = createDiv('Angular Information at Ending Toe-off , t<sub>3</sub>');
- Att3.position(10, theta0_2_Input.y+40);
- Att3.style('font-weight', 'bold');
- Att3.style('font-size', '26');
+ Optangle = createDiv('Optimization Result - Initial Joint Angles:');
+ Optangle.position(10, Stheta0_3_Input.y+40);
+ Optangle.style('font-weight', 'bold');
+ Optangle.style('font-size', '26');
+
+// Initial Angle of First Pendulum
+theta0_1_Input = createInput();
+theta0_1_Input.position(mass1Input.x, Optangle.y + 30);
+theta0_1_Input.style('width', '70px');
+theta0_1_Input.value(-theta0_1);
+theta0_1_Input.input(updateICs);
+theta0_1_Label = createDiv('L Hip Angle \u03B8<sub>11</sub>(t<sub>1</sub>) (deg): ');
+theta0_1_Label.position(mass1Label.x, theta0_1_Input.y);
+// Initial Angle of Second Pendulum
+theta0_2_Input = createInput();
+theta0_2_Input.position(mass1Input.x, theta0_1_Input.y + 30);
+theta0_2_Input.style('width', '70px');
+theta0_2_Input.value(theta0_2);
+theta0_2_Input.input(updateICs);
+theta0_2_Label = createDiv('L Knee Angle \u03B8<sub>12</sub>(t<sub>1</sub>) (deg): ');
+theta0_2_Label.position(mass1Label.x, theta0_2_Input.y);
+  // Initial Angle of Inverted Pendulum
+  theta0_4_Input = createInput();
+  theta0_4_Input.position(mass1Input.x, theta0_2_Input.y + 30);
+  theta0_4_Input.style('width', '70px');
+  theta0_4_Input.value(-theta0_4);
+  theta0_4_Input.input(updateICs);
+  theta0_4_Label = createDiv('R Hip Angle \u03B8<sub>21</sub>(t<sub>1</sub>) (deg): ');
+  theta0_4_Label.position(mass1Label.x, theta0_4_Input.y);
+// Initial Angular Velocity of First Pendulum
+thetaDot0_1_Input = createInput();
+thetaDot0_1_Input.position(mass2Input.x, theta0_1_Input.y);
+thetaDot0_1_Input.style('width', '70px');
+thetaDot0_1_Input.value(-thetaDot0_1);
+thetaDot0_1_Input.input(updateICs);
+thetaDot0_1_Label = createDiv('L Hip Vel \u03C9<sub>11</sub>(t<sub>1</sub>) (deg/s): ')
+thetaDot0_1_Label.position(mass2Label.x, theta0_1_Input.y);
+// Initial Angular Velocity of Second Pendulum
+thetaDot0_2_Input = createInput();
+thetaDot0_2_Input.position(mass2Input.x, theta0_2_Input.y);
+thetaDot0_2_Input.style('width', '70px');
+thetaDot0_2_Input.value(thetaDot0_2);
+thetaDot0_2_Input.input(updateICs);
+thetaDot0_2_Label = createDiv('L Knee Vel \u03C9<sub>12</sub>(t<sub>1</sub>) (deg/s): ')
+thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
+  // Initial Angular Velocity of Inverted Pendulum
+  thetaDot0_4_Input = createInput();
+  thetaDot0_4_Input.position(mass2Input.x, theta0_4_Input.y);
+  thetaDot0_4_Input.style('width', '70px');
+  thetaDot0_4_Input.value(thetaDot0_4);
+  thetaDot0_4_Input.input(updateICs);
+  thetaDot0_4_Label = createDiv('R Hip Vel \u03C9<sub>21</sub>(t<sub>1</sub>) (deg/s): ')
+  thetaDot0_4_Label.position(mass2Label.x, theta0_4_Input.y);
+
+//opt muscle
+ Optmuscle = createDiv('Optimization Result - Muscles:');
+ Optmuscle.position(10, theta0_4_Input.y+40);
+ Optmuscle.style('font-weight', 'bold');
+ Optmuscle.style('font-size', '26');
+ // KhipSW
+ k_Input = createInput();
+ k_Input.position(mass1Input.x, Optmuscle.y + 30);
+ k_Input.style('width', '70px');
+ k_Input.value(k_1);
+ k_Input.input(updateICs);
+ k_Label = createDiv('K<sub>11SW</sub> (Nm/deg):');
+ k_Label.position(mass1Label.x, k_Input.y);
+ //kknee
+ k2_Input = createInput();
+ k2_Input.position(k_Input.x, k_Input.y + 30);
+ k2_Input.style('width', '70px');
+ k2_Input.value(k_2);
+ k2_Input.input(updateICs);
+ k2_Label = createDiv('K<sub>12SW</sub> (Nm/deg): ');
+ k2_Label.position(k_Label.x, k2_Input.y);
+   // K
+   k3_Input = createInput();
+   k3_Input.position(mass2Input.x, Optmuscle.y + 30);
+   k3_Input.style('width', '70px');
+   k3_Input.value(k_3);
+   k3_Input.input(updateICs);
+   k3_Label = createDiv('K<sub>11DS</sub> (Nm/deg):');
+   k3_Label.position(mass2Label.x, k_Input.y);
+   //kknee
+   k4_Input = createInput();
+   k4_Input.position(k3_Input.x, k3_Input.y + 30);
+   k4_Input.style('width', '70px');
+   k4_Input.value(k_4);
+   k4_Input.input(updateICs);
+   k4_Label = createDiv('K<sub>12DS</sub> (Nm/deg): ');
+   k4_Label.position(mass2Label.x, k4_Input.y);
+   //kknee
+   T13_Input = createInput();
+   T13_Input.position(k2_Input.x, k2_Input.y + 30);
+   T13_Input.style('width', '70px');
+   T13_Input.value(T13);
+   T13_Input.input(updateICs);
+   T13_Label = createDiv('T<sub>13DS</sub> (Nm): ');
+   T13_Label.position(k2_Label.x, T13_Input.y);
+
+   // KhipSW
+ k5_Input = createInput();
+ k5_Input.position(mass3Input.x, Optmuscle.y + 30);
+ k5_Input.style('width', '70px');
+ k5_Input.value(k_5);
+ k5_Input.input(updateICs);
+ k5_Label = createDiv('K<sub>21SW</sub> (Nm/deg):');
+ k5_Label.position(mass3Label.x, k5_Input.y);
+ //kknee
+ k6_Input = createInput();
+ k6_Input.position(k5_Input.x, k5_Input.y + 30);
+ k6_Input.style('width', '70px');
+ k6_Input.value(k_6);
+ k6_Input.input(updateICs);
+ k6_Label = createDiv('K<sub>22SW</sub> (Nm/deg): ');
+ k6_Label.position(k5_Label.x, k6_Input.y);
+   // K
+   k7_Input = createInput();
+   k7_Input.position(mass4Input.x, Optmuscle.y + 30);
+   k7_Input.style('width', '70px');
+   k7_Input.value(k_7);
+   k7_Input.input(updateICs);
+   k7_Label = createDiv('K<sub>21DS</sub> (Nm/deg):');
+   k7_Label.position(mass4Label.x, k7_Input.y);
+   //kknee
+   k8_Input = createInput();
+   k8_Input.position(k7_Input.x, k7_Input.y + 30);
+   k8_Input.style('width', '70px');
+   k8_Input.value(k_8);
+   k8_Input.input(updateICs);
+   k8_Label = createDiv('K<sub>22DS</sub> (Nm/deg): ');
+   k8_Label.position(mass4Label.x, k8_Input.y);
+   //kknee
+   T23_Input = createInput();
+   T23_Input.position(k6_Input.x, k6_Input.y + 30);
+   T23_Input.style('width', '70px');
+   T23_Input.value(T23);
+   T23_Input.input(updateICs);
+   T23_Label = createDiv('T<sub>23DS</sub> (Nm): ');
+   T23_Label.position(k6_Label.x, T23_Input.y);
   // Start Button
   startB = createButton('Load');
-  startB.position(mass2Label.x, Att1.y + 300);
+  startB.position(mass2Label.x, Att1.y + 500);
   startB.style('width', '100px');
   startB.style('height', '30px');
   startB.mousePressed(start);
@@ -461,10 +639,8 @@ function setup() {
   loopC = createCheckbox('Loop Animation', true);
   //loopC.position(myCan.x + myCan.width - 50, myCan.y - 25);
   loopC.position(loadB.x + loadB.width + 210, loadB.y);
-  Optimize = createCheckbox('Search Feasible Gait (Enumeration, debugging)', false);
-  Optimize.position(loopC.x + 170, loopC.y);
   Optimizestep = createCheckbox('Search Feasible Gait (Gradient-based Search)', true);
-  Optimizestep.position(Optimize.x, Optimize.y-30);
+  Optimizestep.position(loopC.x + 170, loopC.y);
   // Pause Button
   pauseB = createButton('Pause');
   pauseB.position(myCan.x, myCan.y + myCan.height + 10);
@@ -576,6 +752,23 @@ function setup() {
   recTable.position(myCan.x + myCan.width + 10, myCan.y);
 
   enterHeaders();
+
+  theta0_1_Input.attribute('disabled', '');
+  theta0_2_Input.attribute('disabled', '');
+  thetaDot0_1_Input.attribute('disabled', '');
+  thetaDot0_2_Input.attribute('disabled', '');
+  theta0_4_Input.attribute('disabled', '');
+  thetaDot0_4_Input.attribute('disabled', '');
+  k_Input.attribute('disabled', '');
+  k2_Input.attribute('disabled', ''); 
+  k3_Input.attribute('disabled', '');
+  k4_Input.attribute('disabled', ''); 
+  k5_Input.attribute('disabled', '');
+  k6_Input.attribute('disabled', ''); 
+  k7_Input.attribute('disabled', '');
+  k8_Input.attribute('disabled', '');
+  T13_Input.attribute('disabled', '');
+  T23_Input.attribute('disabled', '');
 }
 
 
@@ -605,7 +798,10 @@ function draw() {
     line(width/2, height/4, width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1));
     //lower leg
     line(width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1), width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2));
-
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(width/2 - 4 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1), width/2 - 4 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2));
+       }
     //knee
    // ellipse(width/2 + length1*100*Math.cos(theta1), height/2 + length1*100*Math.sin(theta1), mass1*4, mass1*4);
     ellipse(width/2 + length1*100*Math.cos(theta1), height/4 + length1*100*Math.sin(theta1), 4, 4);
@@ -617,6 +813,13 @@ function draw() {
       line(width/2 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2));
       line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + footFraction*length3*100*Math.cos(theta1 + theta2 + PI/2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + footFraction*length3*100*Math.sin(theta1 + theta2 + PI/2));
       line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + (1 - footFraction)*length3*100*Math.cos(theta1 + theta2 - PI/2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + (1 - footFraction)*length3*100*Math.sin(theta1 + theta2 - PI/2));
+      if((mu_ > 0)||(mu_ < 0))
+      {
+        line(width/2 - 4 + length1*100*Math.cos(theta1) + length2*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + length2*100*Math.sin(theta1 + theta2), width/2 - 4 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2));
+        line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 - 4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + footFraction*length3*100*Math.cos(theta1 + theta2 + PI/2), height/4 - 4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + footFraction*length3*100*Math.sin(theta1 + theta2 + PI/2));
+        line(width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2), height/4 - 4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2), width/2 + length1*100*Math.cos(theta1) + (length2+length5)*100*Math.cos(theta1 + theta2) + (1 - footFraction)*length3*100*Math.cos(theta1 + theta2 - PI/2), height/4 - 4 + length1*100*Math.sin(theta1) + (length2+length5)*100*Math.sin(theta1 + theta2) + (1 - footFraction)*length3*100*Math.sin(theta1 + theta2 - PI/2));
+        }
+
       fill(0);
       stroke(0);
       //knee joint
@@ -627,10 +830,7 @@ function draw() {
      line(width/2, height/4, width/2 + (length1)*100*Math.cos(theta4), height/4 + (length1)*100*Math.sin(theta4));
      //stance lowerleg
      line(width/2 + length1*100*Math.cos(theta4), height/4 + length1*100*Math.sin(theta4), width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
-     if((mu_ > 0)||(mu_ < 0))
-     {
-      line(width/2 - 2 + length1*100*Math.cos(theta4), height/4 + length1*100*Math.sin(theta4), width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5));
-    }
+
      //ankle joint
      //ellipse(width/2 + (length4)*100*Math.cos(theta4), height/2 + (length4)*100*Math.sin(theta4), mass2*4, mass2*4);
      ellipse(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), 4, 4);
@@ -639,12 +839,7 @@ function draw() {
      line(width/2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
-     if((mu_ > 0)||(mu_ < 0))
-     {
-      line(width/2 - 2 + length1*100*Math.cos(theta4) + length2*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + length2*100*Math.sin(theta4 + theta5), width/2 - 2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5));
-      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + footFraction*length3*100*Math.cos(theta4 + theta5 + PI/2), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + footFraction*length3*100*Math.sin(theta4 + theta5 + PI/2));
-      line(width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5), width/2 + length1*100*Math.cos(theta4) + (length2+length5)*100*Math.cos(theta4 + theta5) + (1 - footFraction)*length3*100*Math.cos(theta4 + theta5 - PI/2), height/4 - 1 + length1*100*Math.sin(theta4) + (length2+length5)*100*Math.sin(theta4 + theta5) + (1 - footFraction)*length3*100*Math.sin(theta4 + theta5 - PI/2));
-     }
+
 
   }
   //loading interface
@@ -671,10 +866,7 @@ function draw() {
     var sankleY = skneeY + (length2)*100*Math.sin(drawTheta3 + drawTheta2);
     //lower leg
     line(skneeX, skneeY, sankleX, sankleY);
-    if((mu_ > 0)||(mu_ < 0))
-    {
-      line(skneeX - 2, skneeY, sankleX - 2, sankleY);
-    }
+
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(sankleX, sankleY, 4, 4);
@@ -689,19 +881,8 @@ function draw() {
     line(sankleX, sankleY, sfootX, sfootY);
     line(sfootX, sfootY, sheelX, sheelY);
     line(sfootX, sfootY, stoeX, stoeY);
-    if((mu_ > 0)||(mu_ < 0))
-    {
-      line(sankleX - 2, sankleY, sfootX - 2, sfootY);
-      line(sfootX, sfootY - 1, sheelX, sheelY - 1);
-      line(sfootX, sfootY - 1, stoeX, stoeY - 1);
-    }
       //show the angle and joint location
-      if (isPaused == 1) {
-        jAng1Label.html('\u0398(1) = ' + round((drawTheta1 - PI/2)*180/PI*100)/100 + ' deg');
-        jPos1Label.html('Left (Green) Toe: (' + round((stoeX-sheelX)*100)/100 + ', ' + -1*round((stoeY-sheelY)*100)/100 + ')');
-        jPos11Label.html('Left (Green) Heel: (' + round((sheelX-sheelX)*100)/100 + ', ' + -1*round((sheelY-sheelY)*100)/100 + ')');
-        drawTimeLabel.html('Time: ' + drawIndex/100 + ' seconds');
-      }  
+   
     
     //calculated theta1 value
    // drawTheta1 = theta1Array[drawIndex] + PI/2;
@@ -719,6 +900,10 @@ function draw() {
     var ankleY = kneeY + (length2)*100*Math.sin(drawTheta4 + drawTheta5);
     //lower leg
     line(kneeX, kneeY, ankleX, ankleY);
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(kneeX - 4, kneeY, ankleX - 4, ankleY);
+    }
     //ankle joint
     //ellipse(sankleX, sankleY, mass2*4, mass2*4);
     ellipse(ankleX, ankleY, 4, 4);
@@ -733,13 +918,24 @@ function draw() {
     line(ankleX, ankleY, footX, footY);
     line(footX, footY, heelX, heelY);
     line(footX, footY, toeX, toeY);
-
+    if((mu_ > 0)||(mu_ < 0))
+    {
+      line(ankleX - 4, ankleY, footX - 4,sfootY);
+      line(footX, footY - 4, heelX, heelY - 4);
+      line(footX, footY - 4, toeX, toeY - 4);
+    }
       //show the infor when paused
       if (isPaused == 1) {
         jAng2Label.html('\u0398(2) = ' + round((drawTheta2 - PI/2)*180/PI*100)/100 + ' deg');
-        jPos2Label.html('Right (Black) Toe: (' + round((toeX-sheelX)*100)/100 + ', ' + -1*round((toeY-sheelY)*100)/100 + ')');
-        jPos21Label.html('Right (Black) Heel: (' + round((heelX-sheelX)*100)/100 + ', ' + -1*round((heelY-sheelY)*100)/100 + ')');
+        jPos2Label.html('Right (Black) Toe: (' + round((stoeX-sheelX)*100)/100 + ', ' + -1*round((stoeY-sheelY)*100)/100 + ')');
+        jPos21Label.html('Right (Black) Heel: (' + round((sheelX-sheelX)*100)/100 + ', ' + -1*round((sheelY-sheelY)*100)/100 + ')');
       }
+      if (isPaused == 1) {
+        jAng1Label.html('\u0398(1) = ' + round((drawTheta1 - PI/2)*180/PI*100)/100 + ' deg');
+        jPos1Label.html('Left (Green) Toe: (' + round((toeX-sheelX)*100)/100 + ', ' + -1*round((toeY-sheelY)*100)/100 + ')');
+        jPos11Label.html('Left (Green) Heel: (' + round((heelX-sheelX)*100)/100 + ', ' + -1*round((heelY-sheelY)*100)/100 + ')');
+        drawTimeLabel.html('Time: ' + drawIndex/100 + ' seconds');
+      }  
       //calculated theta3 value (global angle)
       
     // Draw Progres Bar
@@ -850,8 +1046,6 @@ function updateICs() {
   k3_Label.html('K<sub>hipDS</sub> (Nm/deg):');
   k_4 = Number(k4_Input.value());
   k4_Label.html('K<sub>kneeDS</sub> (Nm/deg):');
-  time_ = Number(time_Input.value());
-  time_Label.html('Time: ' + time_ + ' sec(s)');
 }
 
 function start() {
@@ -863,18 +1057,15 @@ function start() {
   mass2Input.attribute('disabled', '');
   mass3Input.attribute('disabled', '');
   mass4Input.attribute('disabled', '');
-  theta0_1_Input.attribute('disabled', '');
-  theta0_2_Input.attribute('disabled', '');
-  thetaDot0_1_Input.attribute('disabled', '');
-  thetaDot0_2_Input.attribute('disabled', '');
-  theta0_4_Input.attribute('disabled', '');
-  thetaDot0_4_Input.attribute('disabled', '');
+  Stheta0_1_Input.attribute('disabled', '');
+  Stheta0_2_Input.attribute('disabled', '');
+  SthetaDot0_1_Input.attribute('disabled', '');
+  SthetaDot0_2_Input.attribute('disabled', '');
+  Stheta0_3_Input.attribute('disabled', '');
+  SthetaDot0_3_Input.attribute('disabled', '');
+  TSW_Input.attribute('disabled', '');
+  TST_Input.attribute('disabled', '');
   mu_Input.attribute('disabled', '');
-  k_Input.attribute('disabled', '');
-  k2_Input.attribute('disabled', '');
-  k3_Input.attribute('disabled', '');
-  k4_Input.attribute('disabled', '');
-  time_Input.attribute('disabled', '');
   startB.attribute('disabled', '');
   loadB.attribute('disabled', '');
   resetB.removeAttribute('disabled');
@@ -898,51 +1089,11 @@ if(Optimizestep.checked())
   var Time = EndT-StartT;
   alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec");
   }
-   if(mu_ == 0){
-    calculateTheta(time_);
-    }else{
     calculateThetaAFO(time_,true);   
-    }  
-}
-else if(Optimize.checked())
-{ 
-  for(theta0_4 = -30; theta0_4<-10; theta0_4 = theta0_4 + 10)
-  {
-    for(theta0_1 = 0; theta0_1<-theta0_4; theta0_1 = theta0_1 + 10)
-    {
-        for(thetaDot0_1 = -500; thetaDot0_1<-50; thetaDot0_1 = thetaDot0_1 + 50)
-        {
-          for(thetaDot0_2 = 100; thetaDot0_2<1000; thetaDot0_2 = thetaDot0_2 + 100)
-          {
-            for(thetaDot0_4 = max(-500,thetaDot0_1-250); thetaDot0_4<min(-50,theta0_1+250); thetaDot0_4 = thetaDot0_4 + 50)
-            {
-              Updateinit();
-              try{
-                setTimeout(calculateTheta(time_),3000);
-              }catch(err)
-              {
-                console.error(err);
-                continue;
-              }
-              res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-              if(res <= Errorvec)
-              {
-              Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
-              Errorvec = res;
-              }
-            }
-          }
-        }
-    }
-  }
-
 }
 else{
   if(mu_ == 0){
-  calculateTheta(time_);
-  }else{
   calculateThetaAFO(time_,true);   
-  }
 }
 
   // Print Min/Max of Motion
@@ -1033,18 +1184,15 @@ function reset() {
   mass2Input.removeAttribute('disabled');
   mass3Input.removeAttribute('disabled');
   mass4Input.removeAttribute('disabled');
-  theta0_1_Input.removeAttribute('disabled');
-  theta0_2_Input.removeAttribute('disabled');
-  thetaDot0_1_Input.removeAttribute('disabled');
-  thetaDot0_2_Input.removeAttribute('disabled');
-  theta0_4_Input.removeAttribute('disabled');
-  thetaDot0_4_Input.removeAttribute('disabled');
+  Stheta0_1_Input.removeAttribute('disabled');
+  Stheta0_2_Input.removeAttribute('disabled');
+  SthetaDot0_1_Input.removeAttribute('disabled');
+  SthetaDot0_2_Input.removeAttribute('disabled');
+  Stheta0_3_Input.removeAttribute('disabled');
+  SthetaDot0_3_Input.removeAttribute('disabled');
+  TSW_Input.removeAttribute('disabled');
+  TST_Input.removeAttribute('disabled');
   mu_Input.removeAttribute('disabled');
-  k_Input.removeAttribute('disabled');
-  k2_Input.removeAttribute('disabled');
-  k3_Input.removeAttribute('disabled');
-  k4_Input.removeAttribute('disabled');
-  time_Input.removeAttribute('disabled');
   startB.removeAttribute('disabled');
   loadB.removeAttribute('disabled');
   resetB.attribute('disabled', '');
@@ -1151,27 +1299,6 @@ function doublePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThet
   var num = 3*mass2*len1*len2*myThetaDDot1*Math.cos(myTheta1-myTheta2)-3*mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)+3*mass2*len2*g*Math.sin(myTheta2)+6*k_2;
   var den = 2*mass2*pow(len2,2);
   return -num / den;
-}
-
-function triplePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var len1E = len1/3;
-  var len2E = len2/3;
-  var len2CE = pow(len1*len1 + len2*len2/4 - len1*len2/2*cos(myTheta1+myTheta2),0.5);
-  var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2E + myThetaDot1*myThetaDot1*len1E*Math.cos(myTheta1 - myTheta2)));
-  var den = len1E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den - k_1*180/PI*myTheta1/(len1E*len1E*mass1 + len2E*len2E*mass2 + mass2*len2CE*len2CE);
-}
-
-function triplePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var len1E = len1/3;
-  var len2E = len2/3
-  var num = 2*Math.sin(myTheta1 - myTheta2)*(myThetaDot1*myThetaDot1*len1E*(mass1 + mass2) + g*(mass1 + mass2)*Math.cos(myTheta1) + myThetaDot2*myThetaDot2*len2E*mass2*Math.cos(myTheta1 - myTheta2));
-  var den = len2E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den;
-}
-
-function triplePend_getThetaDoubleDot_3 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  return 0;
 }
 
 function loadScript( url, callback ) {
@@ -1489,4 +1616,25 @@ for(i=0;i<vector.length;i++)
   }
 }
 return false;
+}
+
+function triplePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
+  var len1E = len1/3;
+  var len2E = len2/3;
+  var len2CE = pow(len1*len1 + len2*len2/4 - len1*len2/2*cos(myTheta1+myTheta2),0.5);
+  var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2E + myThetaDot1*myThetaDot1*len1E*Math.cos(myTheta1 - myTheta2)));
+  var den = len1E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
+  return num / den - k_1*180/PI*myTheta1/(len1E*len1E*mass1 + len2E*len2E*mass2 + mass2*len2CE*len2CE);
+}
+
+function triplePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
+  var len1E = len1/3;
+  var len2E = len2/3
+  var num = 2*Math.sin(myTheta1 - myTheta2)*(myThetaDot1*myThetaDot1*len1E*(mass1 + mass2) + g*(mass1 + mass2)*Math.cos(myTheta1) + myThetaDot2*myThetaDot2*len2E*mass2*Math.cos(myTheta1 - myTheta2));
+  var den = len2E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
+  return num / den;
+}
+
+function triplePend_getThetaDoubleDot_3 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
+  return 0;
 }
