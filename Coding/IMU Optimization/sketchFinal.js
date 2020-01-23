@@ -960,22 +960,13 @@ function draw() {
     fill(0, 255, 0);
     stroke(0,155,0);
     // Green
-    if(mu_ == 0){
-    rect(5, height - 15, (width - 10)*(3*drawIndex/intertheta1V.length), 10);
-    if (drawIndex >= intertheta1V.length/3)  {
-      var myBool = loopC.checked();
-      if (myBool) drawIndex = 0;
-      if (!myBool) drawIndex = intertheta1V.length/3 - 1;
-    }
-  }
-    else{
+
     rect(5, height - 15, (width - 10)*(drawIndex/intertheta1V.length), 10);
     if (drawIndex >= intertheta1V.length)  {
       var myBool = loopC.checked();
       if (myBool) drawIndex = 0;
       if (!myBool) drawIndex = intertheta1V.length - 1;
     }
-  }
     // Advance frame
     if (isPaused == 0) drawIndex = drawIndex + 1;
 
@@ -983,12 +974,7 @@ function draw() {
 
 
     var rownum;
-    if(mu_ == 0){
-    T1 = anklestance.length;
-    T2 = DStheta1ArrayV.length;
-    T3 = ankleswing.length;
-    T4 = Anklezero2.length;
-    }
+
 /*     console.log('drawIndex:' + drawIndex);
     console.log('length1:' + T1);
     console.log('length2:' + T2); */
