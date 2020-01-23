@@ -24,11 +24,13 @@ var pendState = 4; // Number of Pendulums
 //titles
 var Title;
 var Anthro;
+var IMUtitle;
 var AFO;
 var SwingStance;
 var Att1;
 var Att2;
 var Att3;
+var Opttitle;
 var Optmuscle;
 var Optangle;
 //sw st time
@@ -267,7 +269,7 @@ var footFractionLabel;
 
 function setup() {
   myCan = createCanvas(1000, 500);
-  myCan.position(30, 780);
+  myCan.position(30, 880);
   background(220);
   // Radio Button for # of Pendulums
   // Length of First Pendulum
@@ -277,7 +279,7 @@ function setup() {
   Anthro = createDiv('Anthropometry');
   Anthro.position(10, 50);
   Anthro.style('font-weight', 'bold');
-  Anthro.style('font-size', '26');
+  Anthro.style('font-size', '32');
   len1Input = createInput();
   len1Input.position(250, Anthro.y+30);
   len1Input.style('width', '70px');
@@ -369,11 +371,16 @@ function setup() {
     mass4Input.input(updateICs);
     mass4Label = createDiv('Upperbody Mass M (kg): ');
     mass4Label.position(len5Label.x, mass4Input.y);
-
+//
+    IMUtitle = createDiv('IMU Information');
+    IMUtitle.position(10, mass1Input.y+40);
+    IMUtitle.style('font-weight', 'bold');
+    IMUtitle.style('font-size', '32');
 //AFO
   AFO = createDiv('AFO stiffness');
-  AFO.position(10, mass1Input.y+40);
+  AFO.position(10, IMUtitle.y+40);
   AFO.style('font-weight', 'bold');
+  AFO.style('font-style', 'italic');
   AFO.style('font-size', '26');
 
   mu_Input = createInput();
@@ -386,8 +393,9 @@ function setup() {
 
   //Swing and Stance Time
   SwingStance = createDiv('Swing and Stance Time');
-  SwingStance.position(mass2Label.x, mass1Input.y+40);
+  SwingStance.position(mass2Label.x, IMUtitle.y+40);
   SwingStance.style('font-weight', 'bold');
+  SwingStance.style('font-style', 'italic');
   SwingStance.style('font-size', '26');
 
   TSW_Input = createInput();
@@ -410,6 +418,7 @@ function setup() {
  Att1 = createDiv('Angular Information at Initial Toe-off, t<sub>1</sub>');
  Att1.position(10, mu_Input.y+40);
  Att1.style('font-weight', 'bold');
+ Att1.style('font-style', 'italic');
  Att1.style('font-size', '26');
 
  Stheta0_1_Input = createInput();
@@ -432,6 +441,7 @@ function setup() {
  Att2 = createDiv('Angular Information at Heel Strike, t<sub>2</sub>');
  Att2.position(10, Stheta0_1_Input.y+40);
  Att2.style('font-weight', 'bold');
+ Att2.style('font-style', 'italic');
  Att2.style('font-size', '26');
 
  Stheta0_2_Input = createInput();
@@ -454,6 +464,7 @@ function setup() {
  Att3 = createDiv('Angular Information at Ending Toe-off , t<sub>3</sub>');
  Att3.position(10, Stheta0_2_Input.y+40);
  Att3.style('font-weight', 'bold');
+ Att3.style('font-style', 'italic');
  Att3.style('font-size', '26');
 
  Stheta0_3_Input = createInput();
@@ -472,10 +483,16 @@ function setup() {
  SthetaDot0_3_Label = createDiv('Shank Flex Vel \u03C9(t<sub>3</sub>) (deg/s): ')
  SthetaDot0_3_Label.position(mass2Label.x, SthetaDot0_3_Input.y);
 
+  //Optimization Result:
+  Opttitle = createDiv('Optimization Result');
+  Opttitle.position(10, Stheta0_3_Input.y+40);
+  Opttitle.style('font-weight', 'bold');
+  Opttitle.style('font-size', '32');
  //Optimization Result:
- Optangle = createDiv('Optimization Result - Initial Joint Angles:');
- Optangle.position(10, Stheta0_3_Input.y+40);
+ Optangle = createDiv('Initial Joint Angles');
+ Optangle.position(10, Opttitle.y+40);
  Optangle.style('font-weight', 'bold');
+ Optangle.style('font-style', 'italic');
  Optangle.style('font-size', '26');
 
 // Initial Angle of First Pendulum
@@ -528,9 +545,10 @@ thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
   thetaDot0_4_Label.position(mass2Label.x, theta0_4_Input.y);
 
 //opt muscle
- Optmuscle = createDiv('Optimization Result - Muscles:');
+ Optmuscle = createDiv('Muscle Parameters');
  Optmuscle.position(10, theta0_4_Input.y+40);
  Optmuscle.style('font-weight', 'bold');
+ Optmuscle.style('font-style', 'italic');
  Optmuscle.style('font-size', '26');
  // KhipSW
  k_Input = createInput();
@@ -566,12 +584,12 @@ thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
    k4_Label.position(mass2Label.x, k4_Input.y);
    //kknee
    T13_Input = createInput();
-   T13_Input.position(k2_Input.x, k2_Input.y + 30);
+   T13_Input.position(k4_Input.x, k2_Input.y + 30);
    T13_Input.style('width', '70px');
    T13_Input.value(T13);
    T13_Input.input(updateICs);
    T13_Label = createDiv('T<sub>13DS</sub> (Nm): ');
-   T13_Label.position(k2_Label.x, T13_Input.y);
+   T13_Label.position(k4_Label.x, T13_Input.y);
 
    // KhipSW
  k5_Input = createInput();
@@ -607,12 +625,12 @@ thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
    k8_Label.position(mass4Label.x, k8_Input.y);
    //kknee
    T23_Input = createInput();
-   T23_Input.position(k6_Input.x, k6_Input.y + 30);
+   T23_Input.position(k8_Input.x, k6_Input.y + 30);
    T23_Input.style('width', '70px');
    T23_Input.value(T23);
    T23_Input.input(updateICs);
    T23_Label = createDiv('T<sub>23DS</sub> (Nm): ');
-   T23_Label.position(k6_Label.x, T23_Input.y);
+   T23_Label.position(k8_Label.x, T23_Input.y);
   // Start Button
   startB = createButton('Load');
   startB.position(mass2Label.x, Att1.y + 500);
@@ -1092,7 +1110,6 @@ if(Optimizestep.checked())
     calculateThetaAFO(time_,true);   
 }
 else{
-  if(mu_ == 0){
   calculateThetaAFO(time_,true);   
 }
 
@@ -1289,14 +1306,14 @@ function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
   return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 //www.myphysicslab.com/pendulum/double-pendulum-en.html
-function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var num = 9*len1*Math.cos(myTheta1-myTheta2)*(mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)-mass2*len2*g*Math.sin(myTheta2)-2*k_2)+6*len2*(mass2*len1*len2*pow(myThetaDot2,2)*Math.sin(myTheta1-myTheta2)+mass1*len1*g*Math.sin(myTheta1)+2*mass2*len1*g*Math.sin(myTheta1)+2*k_1);
+function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2, khip, kknee) {
+  var num = 9*len1*Math.cos(myTheta1-myTheta2)*(mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)-mass2*len2*g*Math.sin(myTheta2)-2*kknee)+6*len2*(mass2*len1*len2*pow(myThetaDot2,2)*Math.sin(myTheta1-myTheta2)+mass1*len1*g*Math.sin(myTheta1)+2*mass2*len1*g*Math.sin(myTheta1)+2*khip);
   var den = 4*mass1*pow(len1,2)*len2 + 12*mass2*pow(len1,2)*len2 - 9 * mass2*pow(len1,2)*len2*pow(Math.cos(myTheta1-myTheta2),2);
   return -num / den;
 }
 
-function doublePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2, myThetaDDot1) {
-  var num = 3*mass2*len1*len2*myThetaDDot1*Math.cos(myTheta1-myTheta2)-3*mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)+3*mass2*len2*g*Math.sin(myTheta2)+6*k_2;
+function doublePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2, myThetaDDot1, kknee) {
+  var num = 3*mass2*len1*len2*myThetaDDot1*Math.cos(myTheta1-myTheta2)-3*mass2*len1*len2*pow(myThetaDot1,2)*Math.sin(myTheta1-myTheta2)+3*mass2*len2*g*Math.sin(myTheta2)+6*kknee;
   var den = 2*mass2*pow(len2,2);
   return -num / den;
 }
@@ -1326,11 +1343,8 @@ function Stepsearch(){
   var speedsteplength = 50;
   var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
+
       calculateThetaAFO(time_,false);   
-      }  
   res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
   }
   catch(err)
@@ -1348,11 +1362,7 @@ function Stepsearch(){
   theta0_1 = theta0_1 + anglesteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
   if(CheckNaN())
   errorlist[0] = 999;
   else
@@ -1366,11 +1376,7 @@ function Stepsearch(){
   theta0_1 = theta0_1 - 2*anglesteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[1] = 999;
     else
@@ -1386,11 +1392,7 @@ function Stepsearch(){
   theta0_4 = theta0_4 + anglesteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[2] = 999;
     else
@@ -1404,11 +1406,7 @@ function Stepsearch(){
   theta0_4 = theta0_4 - 2*anglesteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[3] = 999;
     else
@@ -1424,11 +1422,7 @@ function Stepsearch(){
   thetaDot0_1 = thetaDot0_1 + speedsteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[4] = 999;
     else
@@ -1442,11 +1436,7 @@ function Stepsearch(){
   thetaDot0_1 = thetaDot0_1 - 2*speedsteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[5] = 999;
     else
@@ -1462,11 +1452,7 @@ function Stepsearch(){
   thetaDot0_2 = thetaDot0_2 + speedsteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[6] = 999;
     else
@@ -1480,11 +1466,7 @@ function Stepsearch(){
   thetaDot0_2 = thetaDot0_2 - 2*speedsteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[7] = 999;
     else
@@ -1500,11 +1482,7 @@ function Stepsearch(){
   thetaDot0_4 = thetaDot0_4 + speedsteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[8] = 999;
     else
@@ -1518,11 +1496,7 @@ function Stepsearch(){
   thetaDot0_4 = thetaDot0_4 - 2*speedsteplength;
   Updateinit();
   try{
-    if(mu_ == 0){
-      calculateTheta(time_);
-      }else{
       calculateThetaAFO(time_,false);   
-      }
     if(CheckNaN())
     errorlist[9] = 999;
     else
@@ -1616,25 +1590,4 @@ for(i=0;i<vector.length;i++)
   }
 }
 return false;
-}
-
-function triplePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var len1E = len1/3;
-  var len2E = len2/3;
-  var len2CE = pow(len1*len1 + len2*len2/4 - len1*len2/2*cos(myTheta1+myTheta2),0.5);
-  var num = (-1*g*(2*mass1 + mass2)*Math.sin(myTheta1) - mass2*g*Math.sin(myTheta1 - 2*myTheta2) - 2*Math.sin(myTheta1 - myTheta2)*mass2*(myThetaDot2*myThetaDot2*len2E + myThetaDot1*myThetaDot1*len1E*Math.cos(myTheta1 - myTheta2)));
-  var den = len1E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den - k_1*180/PI*myTheta1/(len1E*len1E*mass1 + len2E*len2E*mass2 + mass2*len2CE*len2CE);
-}
-
-function triplePend_getThetaDoubleDot_2 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  var len1E = len1/3;
-  var len2E = len2/3
-  var num = 2*Math.sin(myTheta1 - myTheta2)*(myThetaDot1*myThetaDot1*len1E*(mass1 + mass2) + g*(mass1 + mass2)*Math.cos(myTheta1) + myThetaDot2*myThetaDot2*len2E*mass2*Math.cos(myTheta1 - myTheta2));
-  var den = len2E*(2*mass1 + mass2 - mass2*Math.cos(2*myTheta1 - 2*myTheta2));
-  return num / den;
-}
-
-function triplePend_getThetaDoubleDot_3 (myTheta1, myTheta2, myThetaDot1, myThetaDot2) {
-  return 0;
 }
