@@ -1,6 +1,3 @@
-loadScript('leg-solver.js', function() {
-  //alert('script ready!'); 
-});
 loadScript('leg-solver-AFO.js', function() {
   //alert('script ready!'); 
 });
@@ -102,15 +99,15 @@ var SthetaDot0_3 = 500.0;
 var SthetaDot0_3_Input;
 var SthetaDot0_3_Label;
 // Initial Angle of First Pendulum
-var theta0_1 = 15.0;
+var theta0_1 = 31.0;
 var theta0_1_Input;
 var theta0_1_Label;
 // Initial Angle of Second Pendulum
-var theta0_2 = 30.0;
+var theta0_2 = 18.0;
 var theta0_2_Input;
 var theta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var theta0_4 = -15.0;
+var theta0_4 = -13.0;
 var theta0_4_Input;
 var theta0_4_Label;
 // Initial Angle for DS stance leg
@@ -118,11 +115,11 @@ var theta0_5 = 0;
 var theta0_5_Input;
 var theta0_5_Label;
 // Initial Angular Velocity of First Pendulum
-var thetaDot0_1 = -250.0;
+var thetaDot0_1 = -300.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 500.0;
+var thetaDot0_2 = 300.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
@@ -279,7 +276,7 @@ function setup() {
   Anthro = createDiv('Anthropometry');
   Anthro.position(10, 50);
   Anthro.style('font-weight', 'bold');
-  Anthro.style('font-size', '32');
+  Anthro.style('font-size', '26px');
   len1Input = createInput();
   len1Input.position(250, Anthro.y+30);
   len1Input.style('width', '70px');
@@ -375,13 +372,13 @@ function setup() {
     IMUtitle = createDiv('IMU Information');
     IMUtitle.position(10, mass1Input.y+40);
     IMUtitle.style('font-weight', 'bold');
-    IMUtitle.style('font-size', '32');
+    IMUtitle.style('font-size', '26px');
 //AFO
   AFO = createDiv('AFO stiffness');
   AFO.position(10, IMUtitle.y+40);
   AFO.style('font-weight', 'bold');
   AFO.style('font-style', 'italic');
-  AFO.style('font-size', '26');
+  AFO.style('font-size', '20px');
 
   mu_Input = createInput();
   mu_Input.position(mass1Input.x-50, AFO.y+30);
@@ -396,7 +393,7 @@ function setup() {
   SwingStance.position(mass2Label.x, IMUtitle.y+40);
   SwingStance.style('font-weight', 'bold');
   SwingStance.style('font-style', 'italic');
-  SwingStance.style('font-size', '26');
+  SwingStance.style('font-size', '20px');
 
   TSW_Input = createInput();
   TSW_Input.position(mass2Input.x-100, AFO.y+30);
@@ -419,7 +416,7 @@ function setup() {
  Att1.position(10, mu_Input.y+40);
  Att1.style('font-weight', 'bold');
  Att1.style('font-style', 'italic');
- Att1.style('font-size', '26');
+ Att1.style('font-size', '20px');
 
  Stheta0_1_Input = createInput();
  Stheta0_1_Input.position(mass1Input.x, Att1.y + 30);
@@ -442,7 +439,7 @@ function setup() {
  Att2.position(10, Stheta0_1_Input.y+40);
  Att2.style('font-weight', 'bold');
  Att2.style('font-style', 'italic');
- Att2.style('font-size', '26');
+ Att2.style('font-size', '20px');
 
  Stheta0_2_Input = createInput();
  Stheta0_2_Input.position(mass1Input.x, Att2.y + 30);
@@ -465,7 +462,7 @@ function setup() {
  Att3.position(10, Stheta0_2_Input.y+40);
  Att3.style('font-weight', 'bold');
  Att3.style('font-style', 'italic');
- Att3.style('font-size', '26');
+ Att3.style('font-size', '20px');
 
  Stheta0_3_Input = createInput();
  Stheta0_3_Input.position(mass1Input.x, Att3.y + 30);
@@ -487,13 +484,13 @@ function setup() {
   Opttitle = createDiv('Optimization Result');
   Opttitle.position(10, Stheta0_3_Input.y+40);
   Opttitle.style('font-weight', 'bold');
-  Opttitle.style('font-size', '32');
+  Opttitle.style('font-size', '26px');
  //Optimization Result:
  Optangle = createDiv('Initial Joint Angles');
  Optangle.position(10, Opttitle.y+40);
  Optangle.style('font-weight', 'bold');
  Optangle.style('font-style', 'italic');
- Optangle.style('font-size', '26');
+ Optangle.style('font-size', '20px');
 
 // Initial Angle of First Pendulum
 theta0_1_Input = createInput();
@@ -549,7 +546,7 @@ thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
  Optmuscle.position(10, theta0_4_Input.y+40);
  Optmuscle.style('font-weight', 'bold');
  Optmuscle.style('font-style', 'italic');
- Optmuscle.style('font-size', '26');
+ Optmuscle.style('font-size', '20px');
  // KhipSW
  k_Input = createInput();
  k_Input.position(mass1Input.x, Optmuscle.y + 30);
@@ -938,7 +935,7 @@ function draw() {
     line(footX, footY, toeX, toeY);
     if((mu_ > 0)||(mu_ < 0))
     {
-      line(ankleX - 4, ankleY, footX - 4,sfootY);
+      line(ankleX - 4, ankleY, footX - 4,footY);
       line(footX, footY - 4, heelX, heelY - 4);
       line(footX, footY - 4, toeX, toeY - 4);
     }
@@ -1285,7 +1282,7 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 
 
 function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
-  return -1 * mu_/10*180/PI * myTheta*3/pow(len1+len2,2)/(mass1+mass2) - (g/(len1+len2) * Math.sin(myTheta));
+  return -1 * mu_*180/PI * myTheta*3/pow(len1+len2,2)/(mass1+mass2) - (g/(len1+len2) * Math.sin(myTheta));
   //return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {

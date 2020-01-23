@@ -63,8 +63,77 @@ function solvedoublestanceAFO(){
     DSIdtheta2 = result24[0];
     DSIdtheta4 = result24[1];
   }
-  
-  
+  function solveleg(theta, dtheta, Tankle, Thip, Tknee) {
+    m1 = mass1;
+    m2 = mass2;
+    m3 = mass3;
+    l1 = len1;
+    l2 = len2;
+    l3 = len3*(1-footFraction);
+    l4 = len5;
+    I1 = 1/12*m1*math.pow(l1,2);
+    I2 = 1/12*m2*math.pow(l2,2);
+    I3 = 1/12*m3*math.pow(l3,2);
+    g = 9.8;
+    T3 = Tankle;
+    k1 = Thip*180/PI;
+    k2 = Tknee*180/PI;
+   // k1 = 10;
+   // k2 = 10;
+    m = mass4;
+      a = [
+      [l3*cos(theta[1]),-l3*sin(theta[1]),0,0,0,0,0,0,0,0,0,0,0,0,I3,0,0,0],
+      [-sin(theta[0]+theta[1])/m3,-cos(theta[0]+theta[1])/m3,0,0,0,0,1/m3,0,0,0,0,0,0,0,-l3*sin(theta[0])/2,0,0,0],
+      [cos(theta[0]+theta[1])/m3,-sin(theta[0]+theta[1])/m3,0,0,0,0,0,-1/m3,0,0,0,0,0,0,l3*cos(theta[0])/2,0,0,0],
+      [0,0,0,0,0,0,0,0,1,0,0,0,0,0,l3*sin(theta[0]),0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,-l3*cos(theta[0]),0,0,0],
+      [0,0,-l2*sin(theta[2]),l2*cos(theta[2]),0,0,0,0,0,0,0,0,0,0,0,I2,0,0],
+      [sin(theta[0]+theta[1])/m2,cos(theta[0]+theta[1])/m2,-sin(theta[0]+theta[1]-theta[2])/m2,-cos(theta[0]+theta[1]-theta[2])/m2,0,0,0,0,1,0,0,0,0,0,0,-l2*cos(theta[0]+theta[1])/2,0,0],
+      [-cos(theta[0]+theta[1])/m2,sin(theta[0]+theta[1])/m2,cos(theta[0]+theta[1]-theta[2])/m2,-sin(theta[0]+theta[1]-theta[2])/m2,0,0,0,0,0,1,0,0,0,0,0,-l2*sin(theta[0]+theta[1])/2,0,0],
+      [0,0,0,0,0,0,0,0,-1,0,1,0,0,0,0,l2*cos(theta[0]+theta[1]),0,0],
+      [0,0,0,0,0,0,0,0,0,-1,0,1,0,0,0,l2*sin(theta[0]+theta[1]),0,0],
+      [0,0,0,0,l1*sin(theta[3]+theta[0]+theta[1]-theta[2]),-l1*cos(theta[3]+theta[0]+theta[1]-theta[2]),0,0,0,0,0,0,0,0,0,0,-I1,0],
+      [0,0,sin(theta[1]+theta[0]-theta[2])/m1,cos(theta[1]+theta[0]-theta[2])/m1,sin(theta[3])/m1,-cos(theta[3])/m1,0,0,0,0,1,0,0,0,0,0,-l1*cos(theta[0]+theta[1]-theta[2])/2,0],
+      [0,0,-cos(theta[1]+theta[0]-theta[2])/m1,sin(theta[1]+theta[0]-theta[2])/m1,cos(theta[3])/m1,sin(theta[3])/m1,0,0,0,0,0,1,0,0,0,0,-l1*sin(theta[0]+theta[1]-theta[2])/2,0],
+      [0,0,0,0,0,0,0,0,0,0,-1,0,1,0,0,0,l1*cos(theta[0]+theta[1]-theta[2]),0],
+      [0,0,0,0,0,0,0,0,0,0,0,-1,0,1,0,0,l1*sin(theta[0]+theta[1]-theta[2]),0],
+      [0,0,0,0,0,(l1+l2+l4),0,0,0,0,0,0,0,0,0,0,0,1/12*math.pow((l1+l2+l4),2)*(m1+m2+m3)],
+      [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,-(l1+l2+l4)*cos(theta[3])],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,(l1+l2+l4)*sin(theta[3])]
+      ]
+      
+      b = [T3-m3*g*l3*cos(theta[0])/2,
+      math.pow((dtheta[0]),2)*l3*cos(theta[0])/2,
+      math.pow((dtheta[0]),2)*l3*sin(theta[0])/2-g,
+      -l3*cos(theta[0])*math.pow((dtheta[0]),2),
+      -math.pow((dtheta[0]),2)*l3*sin(theta[0]),
+      m2*g*l2*sin(theta[0]+theta[1])/2-T3-k2*theta[2],
+      -math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1])/2,
+      math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1])/2-g,
+      math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1]),
+      -math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1]),
+      k1*(theta[0]+theta[1]-theta[2])-k2*theta[2]-m1*g*l1*sin(theta[0]+theta[1]-theta[2])/2-m*g*l1*sin(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2])/2,
+      math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2])/2-g-m*g/m1,
+      math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2]),
+      (m1+m2+m3)*g*(l1+l2+l4)*sin(theta[3])/2+m*g*(l1+l2+l4)*sin(theta[3])-k1*(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
+      -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
+    ]
+    try {
+      math.inv(a)
+    }
+    catch(error) {
+      //console.log(a);
+      console.log("forces calculation error");
+      return 0;
+      // expected output: ReferenceError: nonExistentFunction is not defined
+      // Note - error messages will vary depending on browser
+    }
+    console.log("forces calculation success!");
+      return math.multiply(math.inv(a),b);
+    }
   function solvelegAFO(theta, dtheta, Tankle, Thip, Tknee) {
   m1 = mass1;
   m2 = mass2;
@@ -77,7 +146,6 @@ function solvedoublestanceAFO(){
   I2 = 1/12*m2*math.pow(l2,2);
   I3 = 1/12*m3*math.pow(l3,2);
   g = 9.8;
-  T3 = Tankle;
   k1 = Thip*180/PI;
   k2 = Tknee*180/PI;
  // k1 = 10;
@@ -103,26 +171,48 @@ function solvedoublestanceAFO(){
     [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,-(l1+l2+l4)*cos(theta[3])],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,(l1+l2+l4)*sin(theta[3])]
     ]
+    if((mu_>0)||(mu_<0)){
+      b = [-mu_*180/PI*theta[1]-m3*g*l3*cos(theta[0])/2,
+      math.pow((dtheta[0]),2)*l3*cos(theta[0])/2,
+      math.pow((dtheta[0]),2)*l3*sin(theta[0])/2-g,
+      -l3*cos(theta[0])*math.pow((dtheta[0]),2),
+      -math.pow((dtheta[0]),2)*l3*sin(theta[0]),
+      m2*g*l2*sin(theta[0]+theta[1])/2+mu_*180/PI*theta[1]-k2*theta[2],
+      -math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1])/2,
+      math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1])/2-g,
+      math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1]),
+      -math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1]),
+      k1*(theta[0]+theta[1]-theta[2])-k2*theta[2]-m1*g*l1*sin(theta[0]+theta[1]-theta[2])/2-m*g*l1*sin(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2])/2,
+      math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2])/2-g-m*g/m1,
+      math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2]),
+      (m1+m2+m3)*g*(l1+l2+l4)*sin(theta[3])/2+m*g*(l1+l2+l4)*sin(theta[3])-k1*(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
+      -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
+    ]
+    }else{
+      b = [Tankle-m3*g*l3*cos(theta[0])/2,
+      math.pow((dtheta[0]),2)*l3*cos(theta[0])/2,
+      math.pow((dtheta[0]),2)*l3*sin(theta[0])/2-g,
+      -l3*cos(theta[0])*math.pow((dtheta[0]),2),
+      -math.pow((dtheta[0]),2)*l3*sin(theta[0]),
+      m2*g*l2*sin(theta[0]+theta[1])/2-Tankle-k2*theta[2],
+      -math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1])/2,
+      math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1])/2-g,
+      math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1]),
+      -math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1]),
+      k1*(theta[0]+theta[1]-theta[2])-k2*theta[2]-m1*g*l1*sin(theta[0]+theta[1]-theta[2])/2-m*g*l1*sin(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2])/2,
+      math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2])/2-g-m*g/m1,
+      math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2]),
+      (m1+m2+m3)*g*(l1+l2+l4)*sin(theta[3])/2+m*g*(l1+l2+l4)*sin(theta[3])-k1*(theta[0]+theta[1]-theta[2]),
+      -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
+      -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
+    ]
+    }
     
-    b = [T3-m3*g*l3*cos(theta[0])/2,
-    math.pow((dtheta[0]),2)*l3*cos(theta[0])/2,
-    math.pow((dtheta[0]),2)*l3*sin(theta[0])/2-g,
-    -l3*cos(theta[0])*math.pow((dtheta[0]),2),
-    -math.pow((dtheta[0]),2)*l3*sin(theta[0]),
-    m2*g*l2*sin(theta[0]+theta[1])/2-T3-k2*theta[2],
-    -math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1])/2,
-    math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1])/2-g,
-    math.pow((dtheta[0]+dtheta[1]),2)*l2*sin(theta[0]+theta[1]),
-    -math.pow((dtheta[0]+dtheta[1]),2)*l2*cos(theta[0]+theta[1]),
-    k1*(theta[0]+theta[1]-theta[2])-k2*theta[2]-m1*g*l1*sin(theta[0]+theta[1]-theta[2])/2-m*g*l1*sin(theta[0]+theta[1]-theta[2]),
-    -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2])/2,
-    math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2])/2-g-m*g/m1,
-    math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*sin(theta[0]+theta[1]-theta[2]),
-    -math.pow(dtheta[0]+dtheta[1]-dtheta[2],2)*l1*cos(theta[0]+theta[1]-theta[2]),
-    (m1+m2+m3)*g*(l1+l2+l4)*sin(theta[3])/2+m*g*(l1+l2+l4)*sin(theta[3])-k1*(theta[0]+theta[1]-theta[2]),
-    -math.pow(dtheta[3],2)*(l1+l2+l4)*sin(theta[3]),
-    -math.pow(dtheta[3],2)*(l1+l2+l4)*cos(theta[3])
-  ]
   try {
     math.inv(a)
   }
@@ -196,27 +286,23 @@ function calculateThetaAFO(t, Final) {
       var thetaDoubleDot3;
       var index = 0;
       for (var i = 0; i < t; i = i + deltaT) {
-        thetaDoubleDot1 = doublePend_getThetaDoubleDot_1(theta1, theta2, thetaDot1, thetaDot2, k_1, k_2);
-        thetaDoubleDot2 = doublePend_getThetaDoubleDot_2(theta1, theta2, thetaDot1, thetaDot2, thetaDoubleDot1, k_2);
-        
+        TMtheta2 = theta1+theta2;
+        TMthetaDot2 = thetaDot1+thetaDot2;
+        thetaDoubleDot1 = doublePend_getThetaDoubleDot_1(theta1, TMtheta2, thetaDot1, TMthetaDot2, k_1, k_2);
+        TMthetaDoubleDot2 = doublePend_getThetaDoubleDot_2(theta1, TMtheta2, thetaDot1, TMthetaDot2, thetaDoubleDot1, k_2);
         theta1 = theta1 + thetaDot1 * deltaT;
         theta2 = theta2 + thetaDot2 * deltaT;
         // theta3 = theta3 + thetaDot3 * deltaT;
         theta3 = theta2 + PI/2; // Hard-coded
+        thetaDoubleDot2 = - thetaDoubleDot1+TMthetaDoubleDot2;
         thetaDot1 = thetaDot1 + thetaDoubleDot1 * deltaT;
         thetaDot2 = thetaDot2 + thetaDoubleDot2 * deltaT;
         thetaDot3 = thetaDot3 + thetaDoubleDot3 * deltaT;
         timeArray[index] = i;
         theta1Array[index] = theta1;
         theta2Array[index] = theta2;
-        if (theta2Array[index]-theta1Array[index] < 0){
-          theta2Array[index] = theta1Array[index];
-          thetaDot2Array[index] = thetaDot1;
-          thetaDbDot2Array[index] = thetaDoubleDot1;
-        }else{
-          thetaDot2Array[index] = thetaDot2;
-          thetaDbDot2Array[index] = thetaDoubleDot2;
-        }
+        thetaDot2Array[index] = thetaDot2;
+        thetaDbDot2Array[index] = thetaDoubleDot2;
         theta3Array[index] = theta3;
         thetaDot1Array[index] = thetaDot1;
         thetaDot3Array[index] = thetaDot3;
@@ -280,7 +366,7 @@ function calculateThetaAFO(t, Final) {
     //corrisponding to trigger double stance
     DStheta = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
     DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
-    DoublestanceAFO(DStheta, DSdtheta, T23, k_7, k_8);
+    Doublestance(DStheta, DSdtheta, T23, k_7, k_8);
 
     DStheta0Array;
     //for trim purpose
@@ -486,7 +572,7 @@ timeArray = [];
     
 
        //double pendulum Left Second
-       var Tolerance = 1.5;
+       var Tolerance = 1.1;
        var theta1SEC = -intertheta3[intertheta3.length-1];
        var theta2SEC = intertheta2[intertheta2.length-1];
        var theta3SEC = theta2SEC + PI/2;
@@ -503,29 +589,32 @@ timeArray = [];
        console.log('2nd calculateThetaAFO: swing initial hip angular velocity' + thetaDot1SEC/PI*180);
        console.log('2nd calculateThetaAFO: swing initial knee angular velocity' + thetaDot2SEC/PI*180);
        //if((abs(thetaDot1SEC/PI*180)>Tolerance*abs(thetaDot0_1))||(thetaDot1SEC*thetaDot0_1 < 0)){
-       if(abs(thetaDot1SEC/PI*180)>Tolerance*abs(thetaDot0_1)){
-          thetaDot1SEC = thetaDot0_1/180*PI;
-       }
-       //if((abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2))||(thetaDot2SEC*thetaDot0_2 < 0)){
-       if(abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2)){
-          thetaDot2SEC = thetaDot0_2/180*PI;
+       if((abs(thetaDot1SEC/PI*180)>Tolerance*abs(thetaDot0_1))||(abs(thetaDot1SEC/PI*180)<abs(thetaDot0_1)/Tolerance)){
+          thetaDot1SEC = -thetaDot0_1/180*PI;
        }
        //if((abs(theta1SEC/PI*180)>Tolerance*abs(theta0_1))||(theta1SEC*theta0_1 < 0)){
-       if(abs(theta1SEC/PI*180)>Tolerance*abs(theta0_1)){
+       if((abs(theta1SEC/PI*180)>Tolerance*abs(theta0_1))||(abs(theta1SEC/PI*180)<abs(theta0_1)/Tolerance)){
         theta1SEC = theta0_1/180*PI;
         }
+               //if((abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2))||(thetaDot2SEC*thetaDot0_2 < 0)){
+       if((abs(thetaDot2SEC/PI*180)>Tolerance*abs(thetaDot0_2))||(abs(thetaDot2SEC/PI*180)<abs(thetaDot0_2)/Tolerance)){
+        thetaDot2SEC = -thetaDot0_2/180*PI;
+     }
         //if((abs(theta2SEC/PI*180)>Tolerance*abs(theta0_2))||(theta2SEC*theta0_2 < 0)){
-        if(abs(theta2SEC/PI*180)>Tolerance*abs(theta0_2)){
+        if((abs(theta2SEC/PI*180)>Tolerance*abs(theta0_2))||(abs(theta2SEC/PI*180)<abs(theta0_2)/Tolerance)){
         theta2SEC = theta0_2/180*PI;
-        }
+        } 
        console.log('2nd calculateThetaAFO: corrected swing initial hip angle' + theta1SEC/PI*180);
        console.log('2nd calculateThetaAFO: corrected swing initial knee angle' + theta2SEC/PI*180);
        console.log('2nd calculateThetaAFO: corrected swing initial hip angular velocity' + thetaDot1SEC/PI*180);
        console.log('2nd calculateThetaAFO: corrected swing initial knee angular velocity' + thetaDot2SEC/PI*180);
        
        for (var i = 0; i < t; i = i + deltaT) {
-         thetaDoubleDot1SEC = doublePend_getThetaDoubleDot_1(theta1SEC, theta2SEC, thetaDot1SEC, thetaDot2SEC, k_5, k_6);
-         thetaDoubleDot2SEC = doublePend_getThetaDoubleDot_2(theta1SEC, theta2SEC, thetaDot1SEC, thetaDot2SEC, thetaDoubleDot1SEC, k_6);
+         TMtheta2SEC = theta1SEC+theta2SEC;
+         TMthetaDot2SEC = thetaDot1SEC+thetaDot2SEC;
+         thetaDoubleDot1SEC = doublePend_getThetaDoubleDot_1(theta1SEC, TMtheta2SEC, thetaDot1SEC, TMthetaDot2SEC, k_5, k_6);
+         TMthetaDoubleDot2SEC = doublePend_getThetaDoubleDot_2(theta1SEC, TMtheta2SEC, thetaDot1SEC, TMthetaDot2SEC, thetaDoubleDot1SEC, k_6);
+         thetaDoubleDot2SEC = TMthetaDoubleDot2SEC - thetaDoubleDot1SEC;
          theta1SEC = theta1SEC + thetaDot1SEC * deltaT;
          theta2SEC = theta2SEC + thetaDot2SEC * deltaT;
          // theta3 = theta3 + thetaDot3 * deltaT;
@@ -557,26 +646,26 @@ timeArray = [];
        var theta4DotSEC = DSthetaDot4Array[DSthetaDot4Array.length-1];
        var theta4DoubleDotSEC;
        var indexSEC = 0;
-      //  console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
-      //  console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
+      console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
+       console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
        //alert('theta4SEC: '+theta4SEC+', theta0_4: '+theta0_4);
       // if((abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4))||(theta4DotSEC*thetaDot0_4 < 0)){
-        if(abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4)) 
+        if((abs(theta4DotSEC/PI*180)>Tolerance*abs(thetaDot0_4)) ||(abs(theta4DotSEC/PI*180)<abs(thetaDot0_4)/Tolerance))
       theta4DotSEC = thetaDot0_4/180*PI;
         
         //if((abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4))||(theta4SEC*theta0_4 < 0)){
-        if(abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4)){
+        if((abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4))||(abs(theta4SEC/PI*180)<abs(theta0_4)/Tolerance)){
           theta4SEC = theta0_4/180*PI;
         }
-        //if(theta4SEC > 0)
-        //theta4SEC = -theta4SEC;
-        // console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
-        // console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
+        if(theta4SEC < 0)
+        theta4SEC = -theta4SEC;
+         console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
+         console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
         //if( abs(180 - theta4SEC/PI*180) > 0)
         //{
         //  theta4SEC = PI + (PI - theta4SEC);
         //}
-        console.log('theta4SEC' + theta4SEC);
+       // console.log('theta4SEC' + theta4SEC);
        for (var i = 0; i < t; i = i + deltaT) {
          theta4DoubleDotSEC = singlePendAFO_getThetaDoubleDot(theta4SEC, theta4DotSEC);
          theta4SEC = theta4SEC + theta4DotSEC * deltaT;
@@ -762,7 +851,7 @@ timeArray = [];
                    //hip1 start with stance
                    Realdiffhip1 = theta1Array[0] - latterhip[latterhip.length-1];
                    //hip2 start with swing
-                   Realdiffhip2 = theta4Array[0] - DStheta4ArrayV[DStheta4ArrayV.length-1];
+                   Realdiffhip2 = abs(theta4Array[0]) - abs(DStheta4ArrayV[DStheta4ArrayV.length-1]);
                    Realdiffknee = theta2Array[0] - DStheta2ArrayV[DStheta2ArrayV.length-1];
           for (var i = 0; i < length4; i = i + 1){
             latterhip[i] = latterhip[i]/5;
@@ -1082,9 +1171,94 @@ timeArray = [];
     }
         return LandingT;
   }
-
   function DoublestanceAFO(DStheta, DSdtheta, Tankle, Thip, Tknee){
-      forces = solvelegAFO(DStheta, DSdtheta, Tankle, Thip, Tknee);
+    forces = solvelegAFO(DStheta, DSdtheta, Tankle, Thip, Tknee);
+    if (forces == 0)      return;
+    index = 0;
+    for (var i = 0; i < (time_-T1); i = i + deltaT) {
+      DStheta0 = DStheta[0];
+      DStheta1 = DStheta[1];
+      DStheta2 = DStheta[2];
+      DStheta4 = DStheta[3];
+      DSdtheta0 = DSdtheta[0];
+      DSdtheta1 = DSdtheta[1];
+      DSdtheta2 = DSdtheta[2];
+      DSdtheta4 = DSdtheta[3];
+      if((mu_>0)||(mu_<0)){
+    DSthetaDbDot0 = (-forces[0]*len3*cos(DStheta1)-mu_*180/PI*DStheta1+forces[1]*len3*sin(DStheta1)-m3*g*0.5*len3*cos(DStheta0))/I3;
+    lowerlegrot = (mu_*180/PI*DStheta1-k2*DStheta2 - forces[3]*len2*cos(DStheta2) + forces[2]*len2*sin(DStheta2)+m2*g*0.5*len2*sin(DStheta0+DStheta1))/I2;
+       }
+       else
+       {
+        DSthetaDbDot0 = (-forces[0]*len3*cos(DStheta1)+Tankle+forces[1]*len3*sin(DStheta1)-m3*g*0.5*len3*cos(DStheta0))/I3;
+        lowerlegrot = (-Tankle-k2*DStheta2 - forces[3]*len2*cos(DStheta2) + forces[2]*len2*sin(DStheta2)+m2*g*0.5*len2*sin(DStheta0+DStheta1))/I2;    
+       }
+    DSthetaDbDot1 = (-DSthetaDbDot0+lowerlegrot);
+    DStheta0 = DStheta0 + DSdtheta0 * deltaT;
+    DStheta1 = DStheta1 + DSdtheta1 * deltaT;
+    DSdtheta0 = DSdtheta0 + DSthetaDbDot0 * deltaT;
+    DSdtheta1 = DSdtheta1 + DSthetaDbDot1 * deltaT;
+    //initialize for solve double stance
+    DSItheta0 = DStheta0;
+    DSItheta1 = DStheta1;
+    DSItheta2 = DStheta2;
+    DSIdtheta0 = DSdtheta0;
+    DSIdtheta1 = DSdtheta1;
+    solvedoublestanceAFO();
+    //DStheta2 = initial.theta2;
+    DStheta4 = DSItheta4;
+    DSdtheta2 = DSIdtheta2;
+    DSdtheta4 = DSIdtheta4;
+    DStheta2 = DStheta2 + DSdtheta2 * deltaT;
+    //console.log(DStheta2);
+    //console.log(DSdtheta2);
+    index = index + 1;
+    //update data to solve force
+    DStheta[0] = DStheta0;
+    DStheta[1] = DStheta1;
+    DStheta[2] = DStheta2;
+    DStheta[3] = DStheta4;
+    DSdtheta[0] = DSdtheta0;
+    DSdtheta[1] = DSdtheta1;
+    DSdtheta[2] = DSdtheta2;
+    DSdtheta[3] = DSdtheta4;
+    forces = solvelegAFO(DStheta, DSdtheta, Tankle, Thip, Tknee);
+    //console.log(forces);
+    console.log(forces[7]);
+    if (forces == 0)      
+    {
+      console.log('Doublestance: forces all zero');
+      return;}
+      /*if((DStheta[2]>theta0_2/180*PI))
+      {DStheta0Array[index] = DStheta0;
+        DStheta1Array[index] = DStheta1;
+        DStheta2Array[index] = DStheta2;
+        DStheta4Array[index] = DStheta4;
+        DSthetaDot0Array[index] = DSdtheta0;
+        DSthetaDot1Array[index] = DSdtheta1;
+        DSthetaDot2Array[index] = DSdtheta2;
+        DSthetaDot4Array[index] = DSdtheta4;
+        console.log('knee exceed limit');
+        return;
+      }*/
+    if((forces[7]<0)||(DStheta[0] > PI/2))     
+    {
+      console.log('Doublestance: solve success');
+      return;
+    }
+    DStheta0Array[index] = DStheta0;
+    DStheta1Array[index] = DStheta1;
+    DStheta2Array[index] = DStheta2;
+    DStheta4Array[index] = DStheta4;
+    DSthetaDot0Array[index] = DSdtheta0;
+    DSthetaDot1Array[index] = DSdtheta1;
+    DSthetaDot2Array[index] = DSdtheta2;
+    DSthetaDot4Array[index] = DSdtheta4;
+    }
+
+}
+  function Doublestance(DStheta, DSdtheta, Tankle, Thip, Tknee){
+      forces = solveleg(DStheta, DSdtheta, Tankle, Thip, Tknee);
       if (forces == 0)      return;
       index = 0;
       for (var i = 0; i < (time_-T1); i = i + deltaT) {
@@ -1096,8 +1270,8 @@ timeArray = [];
         DSdtheta1 = DSdtheta[1];
         DSdtheta2 = DSdtheta[2];
         DSdtheta4 = DSdtheta[3];
-      DSthetaDbDot0 = (-forces[0]*len3*cos(DStheta1)+T3+forces[1]*len3*sin(DStheta1)-m3*g*0.5*len3*cos(DStheta0))/I3;
-      lowerlegrot = (-T3-k2*DStheta2 - forces[3]*len2*cos(DStheta2) + forces[2]*len2*sin(DStheta2)+m2*g*0.5*len2*sin(DStheta0+DStheta1))/I2;
+      DSthetaDbDot0 = (-forces[0]*len3*cos(DStheta1)+Tankle+forces[1]*len3*sin(DStheta1)-m3*g*0.5*len3*cos(DStheta0))/I3;
+      lowerlegrot = (-Tankle-k2*DStheta2 - forces[3]*len2*cos(DStheta2) + forces[2]*len2*sin(DStheta2)+m2*g*0.5*len2*sin(DStheta0+DStheta1))/I2;
       DSthetaDbDot1 = (-DSthetaDbDot0+lowerlegrot);
       DStheta0 = DStheta0 + DSdtheta0 * deltaT;
       DStheta1 = DStheta1 + DSdtheta1 * deltaT;

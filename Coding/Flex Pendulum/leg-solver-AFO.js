@@ -569,8 +569,8 @@ timeArray = [];
         if(abs(theta4SEC/PI*180)>Tolerance*abs(theta0_4)){
           theta4SEC = theta0_4/180*PI;
         }
-        //if(theta4SEC > 0)
-        //theta4SEC = -theta4SEC;
+        if(theta4SEC < 0)
+        theta4SEC = -theta4SEC;
         // console.log('2nd calculateThetaAFO: stance initial hip angle' + theta4SEC/PI*180);
         // console.log('2nd calculateThetaAFO: stance initial hip angular velocity' + theta4DotSEC/PI*180);
         //if( abs(180 - theta4SEC/PI*180) > 0)
