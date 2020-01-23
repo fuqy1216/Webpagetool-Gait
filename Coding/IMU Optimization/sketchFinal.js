@@ -99,15 +99,15 @@ var SthetaDot0_3 = 500.0;
 var SthetaDot0_3_Input;
 var SthetaDot0_3_Label;
 // Initial Angle of First Pendulum
-var theta0_1 = 31.0;
+var theta0_1 = 24.0;
 var theta0_1_Input;
 var theta0_1_Label;
 // Initial Angle of Second Pendulum
-var theta0_2 = 18.0;
+var theta0_2 = 33.0;
 var theta0_2_Input;
 var theta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var theta0_4 = -13.0;
+var theta0_4 = -26.0;
 var theta0_4_Input;
 var theta0_4_Label;
 // Initial Angle for DS stance leg
@@ -115,11 +115,11 @@ var theta0_5 = 0;
 var theta0_5_Input;
 var theta0_5_Label;
 // Initial Angular Velocity of First Pendulum
-var thetaDot0_1 = -300.0;
+var thetaDot0_1 = -200.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 300.0;
+var thetaDot0_2 = 450.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
@@ -127,7 +127,7 @@ var thetaDot0_3 = 500.0;
 var thetaDot0_3_Input;
 var thetaDot0_3_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -150.0;
+var thetaDot0_4 = -200.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Initial Angular Velocity of DS Stance knee
@@ -139,7 +139,7 @@ var mu_ = 0.0;
 var mu_Input;
 var mu_Label;
 // K - Coefficient of Spring Constant hip swing
-var k_1 = 5.0;
+var k_1 = 10.0;
 var k_Input;
 var k_Label;
 // K - Coefficient of Spring Constant knee swing
@@ -155,7 +155,7 @@ var k_4 = 20.0;
 var k4_Input;
 var k4_Label;
 // K - Coefficient of Spring Constant hip swing
-var k_5 = 5.0;
+var k_5 = 10.0;
 var k5_Input;
 var k5_Label;
 // K - Coefficient of Spring Constant knee swing
