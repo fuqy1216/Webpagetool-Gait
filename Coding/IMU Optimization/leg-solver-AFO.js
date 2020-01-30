@@ -378,7 +378,7 @@ function calculateThetaAFO(t, Final) {
     DStheta0ArrayM = DStheta0Array.slice(1);
     DStheta1ArrayM = DStheta1Array.slice(1);
     DStheta2ArrayM = DStheta2Array.slice(1);
-    DStheta4ArrayM = DStheta4Array.slice(1);
+    DStheta4ArrayM = DStheta4Array.slice(1); 
 
     //var p = [];
     arrayX = [];
@@ -485,14 +485,19 @@ function calculateThetaAFO(t, Final) {
              DStheta1ArrayV[i] = DStheta1ArrayV[i] * (1 + (i+1)*(Ratioankle - 1)/length2);
             }
            }
+          // alert(latterhip);
            if(1){
             for (var i = 0; i < length2; i = i + 1){
-              latterhip[i] = latterhip[i]/5;
-              DStheta4ArrayV[i] = DStheta4ArrayV[i]/5;
+              latterhip[i] = -latterhip[i]/5;
+              DStheta4ArrayV[i] = -DStheta4ArrayV[i]/5;
               }
+             // alert(latterhip);
              elevatehip = theta4Array[theta4Array.length-1] - latterhip[0];
+             //alert('elevatehip: '+elevatehip);
+             //alert('theta4end: '+theta4Array[theta4Array.length-1]);
              diffknee = theta2Array[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
              diffhip = theta1Array[0]-latterhip[latterhip.length-1]-elevatehip;
+            // alert('diffhip: '+diffhip);
              //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
              diffankle = ankleswing[0]-DStheta1ArrayV[DStheta1ArrayV.length-1];
  
@@ -551,6 +556,7 @@ for  (var i = 0; i < intertheta2.length; i = i + 1){
  }   
 //left and right hip
 intertheta3 = theta4Array.concat(latterhip);
+//alert(latterhip);
 //alert(theta1Array[theta1Array.length-1]+'vs'+DStheta4ArrayV[0]);
 intertheta4 = theta1Array.concat(DStheta4ArrayV);
 
@@ -566,10 +572,7 @@ timeArray = [];
     thetaDbDot1Array = [];
     thetaDbDot2Array = [];
     thetaDbDot3Array = [];
-    thetaDbDot4Array =[];
-
-    
-    
+    thetaDbDot4Array =[];         
 
        //double pendulum Left Second
        var Tolerance = 1.1;
@@ -1052,7 +1055,7 @@ timeArray = [];
     //plot
     var trace1 = {
       x: NewT,
-      y: intertheta1V,
+      y: intertheta6V,
       name: 'Left Ankle Angle',
       type: 'scatter',
   line: {shape: 'spline',dash: 'solid',
@@ -1061,7 +1064,7 @@ timeArray = [];
     
     var trace2 = {
       x: NewT,
-      y: intertheta2V,
+      y: intertheta5V,
       name: 'Left Knee Angle',
       type: 'scatter',
   line: {shape: 'spline',dash: 'solid',
@@ -1070,7 +1073,7 @@ timeArray = [];
 
     var trace3 = {
       x: NewT,
-      y: intertheta3V,
+      y: intertheta4V,
       name: 'Left Hip Angle',
       type: 'scatter',
   line: {shape: 'spline',dash: 'solid',
@@ -1078,7 +1081,7 @@ timeArray = [];
     };
     var trace4 = {
       x: NewT,
-      y: intertheta6V,
+      y: intertheta1V,
       name: 'Right Ankle Angle',
       type: 'scatter',
   line: {shape: 'spline',dash: 'dashdot',
@@ -1087,7 +1090,7 @@ timeArray = [];
     
     var trace5 = {
       x: NewT,
-      y: intertheta5V,
+      y: intertheta2V,
       name: 'Right Knee Angle',
       type: 'scatter',
   line: {shape: 'spline',dash: 'dashdot',
@@ -1096,7 +1099,7 @@ timeArray = [];
 
     var trace6 = {
       x: NewT,
-      y: intertheta4V,
+      y: intertheta3V,
       name: 'Right Hip Angle',
       type: 'scatter',
   line: {shape: 'spline',dash: 'dashdot',
@@ -1170,6 +1173,7 @@ timeArray = [];
     forces = solvelegAFO(DStheta, DSdtheta, Tankle, Thip, Tknee);
     if (forces == 0)      return;
     index = 0;
+    var temphip = PI/2;
     for (var i = 0; i < (time_-T1); i = i + deltaT) {
       DStheta0 = DStheta[0];
       DStheta1 = DStheta[1];
@@ -1243,7 +1247,12 @@ timeArray = [];
       }
       if(DStheta[0] > PI/2)
       {
-        console.log('Doublestance: solve success - Angle');
+        console.log('Doublestance: solve success - Foot Angle');
+        return;        
+      }
+      if(DStheta[0]+DStheta[1]-DStheta[2] >temphip)
+      {
+        console.log('Doublestance: solve success - Hip Angle');
         return;        
       }
     DStheta0Array[index] = DStheta0;
@@ -1254,6 +1263,7 @@ timeArray = [];
     DSthetaDot1Array[index] = DSdtheta1;
     DSthetaDot2Array[index] = DSdtheta2;
     DSthetaDot4Array[index] = DSdtheta4;
+    temphip = DStheta[0]+DStheta[1]-DStheta[2];
     }
 
 }
@@ -1261,6 +1271,7 @@ timeArray = [];
       forces = solveleg(DStheta, DSdtheta, Tankle, Thip, Tknee);
       if (forces == 0)      return;
       index = 0;
+      var temphip = PI/2;
       for (var i = 0; i < (time_-T1); i = i + deltaT) {
         DStheta0 = DStheta[0];
         DStheta1 = DStheta[1];
@@ -1301,7 +1312,7 @@ timeArray = [];
       DSdtheta[1] = DSdtheta1;
       DSdtheta[2] = DSdtheta2;
       DSdtheta[3] = DSdtheta4;
-      forces = solvelegAFO(DStheta, DSdtheta, Tankle, Thip, Tknee);
+      forces = solveleg(DStheta, DSdtheta, Tankle, Thip, Tknee);
       //console.log(forces);
       console.log(forces[7]);
       if (forces == 0)      
@@ -1327,7 +1338,12 @@ timeArray = [];
       }
       if(DStheta[0] > PI/2)
       {
-        console.log('Doublestance: solve success - Angle');
+        console.log('Doublestance: solve success - Foot Angle');
+        return;        
+      }
+      if(DStheta[0]+DStheta[1]-DStheta[2] >temphip)
+      {
+        console.log('Doublestance: solve success - Hip Angle');
         return;        
       }
       DStheta0Array[index] = DStheta0;
@@ -1338,6 +1354,7 @@ timeArray = [];
       DSthetaDot1Array[index] = DSdtheta1;
       DSthetaDot2Array[index] = DSdtheta2;
       DSthetaDot4Array[index] = DSdtheta4;
+      temphip = DStheta[0]+DStheta[1]-DStheta[2];
       }
 
   }

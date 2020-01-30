@@ -75,7 +75,7 @@ var mass4 = 42.8;
 var mass4Input;
 var mass4Label;
 // Initial Angle of Stance Inverted Pendulum
-var Stheta0_1 = -15.0;
+var Stheta0_1 = 52.0;
 var Stheta0_1_Input;
 var Stheta0_1_Label;
 // Initial Angle of Stance Inverted Pendulum
@@ -87,7 +87,7 @@ var Stheta0_3 = -15.0;
 var Stheta0_3_Input;
 var Stheta0_3_Label;
 // Initial Angular Velocity of First Pendulum
-var SthetaDot0_1 = -250.0;
+var SthetaDot0_1 = 550.0;
 var SthetaDot0_1_Input;
 var SthetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
@@ -99,15 +99,15 @@ var SthetaDot0_3 = 500.0;
 var SthetaDot0_3_Input;
 var SthetaDot0_3_Label;
 // Initial Angle of First Pendulum
-var theta0_1 = 24.0;
+var theta0_1 = 14.0;
 var theta0_1_Input;
 var theta0_1_Label;
 // Initial Angle of Second Pendulum
-var theta0_2 = 33.0;
+var theta0_2 = 35.0;
 var theta0_2_Input;
 var theta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var theta0_4 = -26.0;
+var theta0_4 = -17.0;
 var theta0_4_Input;
 var theta0_4_Label;
 // Initial Angle for DS stance leg
@@ -115,11 +115,11 @@ var theta0_5 = 0;
 var theta0_5_Input;
 var theta0_5_Label;
 // Initial Angular Velocity of First Pendulum
-var thetaDot0_1 = -200.0;
+var thetaDot0_1 = -150.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 450.0;
+var thetaDot0_2 = 400.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
@@ -127,7 +127,7 @@ var thetaDot0_3 = 500.0;
 var thetaDot0_3_Input;
 var thetaDot0_3_Label;
 // Initial Angular Velocity of Inverted Pendulum
-var thetaDot0_4 = -200.0;
+var thetaDot0_4 = -150.0;
 var thetaDot0_4_Input;
 var thetaDot0_4_Label;
 // Initial Angular Velocity of DS Stance knee
@@ -1022,31 +1022,64 @@ function updateICs() {
   mass4 = Number(mass4Input.value());
   mass4Label.html('Upperbody Mass M<sub></sub> (kg): ');
   theta0_1 = -Number(theta0_1_Input.value());
-  theta0_1_Label.html('Right Hip Angle \u03B8 <sub>21</sub> (deg): ');
+  theta0_1_Label.html('L Hip Angle \u03B8 <sub>21</sub> (deg): ');
   theta0_2 = Number(theta0_2_Input.value());
-  theta0_2_Label.html('Right Knee Angle \u03B8 <sub>22</sub> (deg): ');
+  theta0_2_Label.html('L Knee Angle \u03B8 <sub>22</sub> (deg): ');
   theta0_4 = -Number(theta0_4_Input.value());
-  theta0_4_Label.html('Left Hip Angle \u03B8 <sub>11</sub> (deg): ');
+  theta0_4_Label.html('R Hip Angle \u03B8 <sub>11</sub> (deg): ');
 /*   theta0_5 = Number(theta0_5_Input.value());
   theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg'); */
   thetaDot0_1 = -Number(thetaDot0_1_Input.value());
-  thetaDot0_1_Label.html('Right Hip Vel d\u03B8<sub>21</sub>/dt (deg/s): ');
+  thetaDot0_1_Label.html('L Hip Vel \u03C9<sub>21</sub> (deg/s): ');
   thetaDot0_2 = Number(thetaDot0_2_Input.value());
-  thetaDot0_2_Label.html('Right Knee Vel d\u03B8<sub>22</sub>/dt (deg/s): ');
+  thetaDot0_2_Label.html('L Knee Vel \u03C9<sub>22</sub> (deg/s): ');
   thetaDot0_4 = Number(thetaDot0_4_Input.value());
-  thetaDot0_4_Label.html('Left Hip Vel d\u03B8<sub>11</sub>/dt (deg/s): ');
+  thetaDot0_4_Label.html('R Hip Vel \u03C9<sub>11</sub> (deg/s): ');
 /*   thetaDot0_5 = Number(thetaDot0_5_Input.value());
   thetaDot0_5_Label.html('Initial \u0398\u0027 5: ' + thetaDot0_5 + ' deg/s'); */
   mu_ = Number(mu_Input.value());
   mu_Label.html('K<sub>AFO</sub> (Nm/deg):');
+  Tsw = Number(TSW_Input.value());
+  TSW_Label.html('T<sub>SW</sub> (sec): ');
+  Tst = Number(TST_Input.value());
+  TST_Label.html('T<sub>ST</sub> (sec): ');
+
   k_1 = Number(k_Input.value());
-  k_Label.html('K<sub>hipSW</sub> (Nm/deg):');
+  k_Label.html('K<sub>11SW</sub> (Nm/deg):');
   k_2 = Number(k2_Input.value());
-  k2_Label.html('K<sub>kneeSW</sub> (Nm/deg):');
+  k2_Label.html('K<sub>12SW</sub> (Nm/deg):');
   k_3 = Number(k3_Input.value());
-  k3_Label.html('K<sub>hipDS</sub> (Nm/deg):');
+  k3_Label.html('K<sub>11DS</sub> (Nm/deg):');
   k_4 = Number(k4_Input.value());
-  k4_Label.html('K<sub>kneeDS</sub> (Nm/deg):');
+  k4_Label.html('K<sub>12DS</sub> (Nm/deg):');
+  k_5 = Number(k5_Input.value());
+  k5_Label.html('K<sub>21SW</sub> (Nm/deg):');
+  k_6 = Number(k6_Input.value());
+  k6_Label.html('K<sub>22SW</sub> (Nm/deg):');
+  k_7 = Number(k7_Input.value());
+  k7_Label.html('K<sub>21DS</sub> (Nm/deg):');
+  k_8 = Number(k8_Input.value());
+  k8_Label.html('K<sub>22DS</sub> (Nm/deg):');
+
+  T13 = Number(T13_Input.value());
+  T13_Label.html('T<sub>13DS</sub> (Nm): ');
+  T23 = Number(T23_Input.value());
+  T23_Label.html('T<sub>23DS</sub> (Nm): ');
+
+  Stheta0_1 = -Number(Stheta0_1_Input.value());
+  Stheta0_1_Label.html('Shank Flex Angle \u03B8(t<sub>1</sub>) (deg): ');
+  Stheta0_2 = Number(Stheta0_2_Input.value());
+  Stheta0_2_Label.html('Shank Flex Angle \u03B8(t<sub>2</sub>) (deg): ');
+  Stheta0_3 = -Number(Stheta0_3_Input.value());
+  Stheta0_3_Label.html('Shank Flex Angle \u03B8(t<sub>3</sub>) (deg): ');
+/*   theta0_5 = Number(theta0_5_Input.value());
+  theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg'); */
+  SthetaDot0_1 = -Number(SthetaDot0_1_Input.value());
+  SthetaDot0_1_Label.html('Shank Flex Vel \u03C9(t<sub>1</sub>) (deg/s): ');
+  SthetaDot0_2 = Number(SthetaDot0_2_Input.value());
+  SthetaDot0_2_Label.html('Shank Flex Vel \u03C9(t<sub>2</sub>) (deg/s): ');
+  SthetaDot0_3 = Number(SthetaDot0_3_Input.value());
+  SthetaDot0_3_Label.html('Shank Flex Vel \u03C9(t<sub>3</sub>) (deg/s): ');
 }
 
 function start() {
@@ -1325,10 +1358,15 @@ function Stepsearch(){
   var anglesteplength = 2;
   var speedsteplength = 50;
   var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
+  //calculate theta
+  BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
+  theta0_2 = Stheta0_1-theta0_1;
+  theta0_4 = BETA[0];
+  thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
+  thetaDot0_4 = BETA[1];
   try{
-
       calculateThetaAFO(time_,false);   
-  res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
+      res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
   }
   catch(err)
     {
@@ -1573,4 +1611,11 @@ for(i=0;i<vector.length;i++)
   }
 }
 return false;
+}
+
+function findfronthip(len1,len2,len3,len5,footFraction,alpha,theta,Dalpha,Dtheta){
+  var beta;
+  beta[0] = acos((len1*cos(alpha)+len2*cos(theta)+len5*cos(theta+10/180*PI)+(1-footFraction)*len3*sin(theta+10/180*PI)-len5)/(len1+len2));
+  beta[1] = (Dalpha*len1*sin(alpha)+Dtheta*len2*sin(theta)+Dtheta*len5*sin(theta+10/180*PI)-Dtheta*(1-footFraction)*len3*cos(theta+10/180*PI))/((len1+len2)*sin(beta));
+return beta;
 }
