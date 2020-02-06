@@ -1127,6 +1127,7 @@ timeArray = [];
            SwingHeel = [];
            var LandingT = 0;
            for (var drawIndex = 0; drawIndex < index; drawIndex = drawIndex + 1) {
+          //alert(theta4Array);
            drawTheta4 = theta4Array[drawIndex] + PI/2; //theta3Array[drawIndex] + PI/2;
            var skneeX = width/2 + (len1)*100*Math.cos(2*PI - drawTheta4);
         var skneeY = height/2 + (len1)*100*Math.sin(2*PI - drawTheta4);
@@ -1459,7 +1460,6 @@ timeArray = [];
     
   }
   
-
   function Drawplot(Arrayxplot, ArrayYplot, typeplot){
     var trace1 = {
       x: Arrayxplot,
@@ -1476,4 +1476,87 @@ timeArray = [];
     var data = [trace1];//, trace2];
     
     Plotly.newPlot('myDiv', data);   
+  }
+
+  function calculateSW(){
+    var t = 2;
+    var timeArray = [];
+    theta1Array = [];
+    theta2Array = [];
+    var theta3Array = [];
+    theta4Array = [];
+    var thetaDot1Array = [];
+    var thetaDot2Array = [];
+    var thetaDot3Array = [];
+    var thetaDot4Array = [];
+    var thetaDbDot1Array = [];
+    var thetaDbDot2Array = [];
+    var thetaDbDot3Array = [];
+    var thetaDbDot4Array =[];
+    var ENDT2 = 0;
+    var DStheta0Array = [];
+    var DSthetaDot0Array = [];
+    var DStheta1Array = [];
+    var DSthetaDot1Array = [];
+    //DSthetaDbDot1Array = [];
+    var DStheta2Array = [];
+    var DSthetaDot2Array = [];
+    //DSthetaDbDot2Array = [];
+    var DStheta4Array = [];
+    var DSthetaDot4Array = [];
+      //double pendulum Right First
+      var theta1 = theta0_1*PI/180.0;
+      var theta2 = theta0_2*PI/180.0;
+      var theta3 = theta2 + PI/2;
+      var theta5 = theta0_5*PI/180;
+      var thetaDot1 = thetaDot0_1*PI/180.0;
+      var thetaDot2 = thetaDot0_2*PI/180.0;
+      var thetaDot3 = 0;
+      var thetaDoubleDot1;
+      var thetaDoubleDot2;
+      var thetaDoubleDot3;
+      var index = 0;
+      for (var i = 0; i < t; i = i + deltaT) {
+        var TMtheta2 = theta1+theta2;
+        var TMthetaDot2 = thetaDot1+thetaDot2;
+        thetaDoubleDot1 = doublePend_getThetaDoubleDot_1(theta1, TMtheta2, thetaDot1, TMthetaDot2, k_1, k_2);
+        TMthetaDoubleDot2 = doublePend_getThetaDoubleDot_2(theta1, TMtheta2, thetaDot1, TMthetaDot2, thetaDoubleDot1, k_2);
+        theta1 = theta1 + thetaDot1 * deltaT;
+        theta2 = theta2 + thetaDot2 * deltaT;
+        // theta3 = theta3 + thetaDot3 * deltaT;
+        theta3 = theta2 + PI/2; // Hard-coded
+        thetaDoubleDot2 = - thetaDoubleDot1+TMthetaDoubleDot2;
+        thetaDot1 = thetaDot1 + thetaDoubleDot1 * deltaT;
+        thetaDot2 = thetaDot2 + thetaDoubleDot2 * deltaT;
+        thetaDot3 = thetaDot3 + thetaDoubleDot3 * deltaT;
+        timeArray[index] = i;
+        theta1Array[index] = theta1;
+        theta2Array[index] = theta2;
+        thetaDot2Array[index] = thetaDot2;
+        thetaDbDot2Array[index] = thetaDoubleDot2;
+        theta3Array[index] = theta3;
+        thetaDot1Array[index] = thetaDot1;
+        thetaDot3Array[index] = thetaDot3;
+        thetaDbDot1Array[index] = thetaDoubleDot1;
+        thetaDbDot3Array[index] = thetaDoubleDot3;
+  
+        index = index + 1;
+      }
+      //inverted pendulum
+      var theta4 =  PI - theta0_4*PI/180.0;
+      var theta4Dot = thetaDot0_4*PI/180.0;
+      var theta4DoubleDot;
+      var index = 0;
+      for (var i = 0; i < t; i = i + deltaT) {
+        theta4DoubleDot = singlePendAFO_getThetaDoubleDot(theta4, theta4Dot);
+        theta4 = theta4 + theta4Dot * deltaT;
+        theta4Dot = theta4Dot + theta4DoubleDot * deltaT;
+        //timeArray[index] = i;
+        theta4Array[index] = theta4;
+        thetaDot4Array[index] = theta4Dot;
+        thetaDbDot4Array[index] = theta4DoubleDot;
+        index = index + 1;
+      }
+      var T1 = calculateSwingHeel(t/deltaT, );
+      return T1;
   }

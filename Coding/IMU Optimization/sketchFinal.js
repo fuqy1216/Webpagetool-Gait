@@ -33,10 +33,10 @@ var Optangle;
 //sw st time
 var TSW_Input;
 var TSW_Label;
-var Tsw = 0;
+var Tsw = 0.4;
 var TST_Input;
 var TST_Label;
-var Tst = 0;
+var Tst = 0.8;
 // Length of First Pendulum
 var len1 = 0.41;
 var len1Input;
@@ -179,7 +179,7 @@ var T23 = 120.0;
 var T23_Input;
 var T23_Label;
 // Time Interval
-var time_ = 10.0;
+var time_ = 3.0;
 // Start Button
 var startB;
 var active;
@@ -512,7 +512,7 @@ theta0_2_Label.position(mass1Label.x, theta0_2_Input.y);
   theta0_4_Input = createInput();
   theta0_4_Input.position(mass1Input.x, theta0_2_Input.y + 30);
   theta0_4_Input.style('width', '70px');
-  theta0_4_Input.value(-theta0_4);
+  theta0_4_Input.value(-Math.round(theta0_4));
   theta0_4_Input.input(updateICs);
   theta0_4_Label = createDiv('R Hip Angle \u03B8<sub>21</sub>(t<sub>1</sub>) (deg): ');
   theta0_4_Label.position(mass1Label.x, theta0_4_Input.y);
@@ -536,7 +536,7 @@ thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
   thetaDot0_4_Input = createInput();
   thetaDot0_4_Input.position(mass2Input.x, theta0_4_Input.y);
   thetaDot0_4_Input.style('width', '70px');
-  thetaDot0_4_Input.value(thetaDot0_4);
+  thetaDot0_4_Input.value(Math.round(thetaDot0_4));
   thetaDot0_4_Input.input(updateICs);
   thetaDot0_4_Label = createDiv('R Hip Vel \u03C9<sub>21</sub>(t<sub>1</sub>) (deg/s): ')
   thetaDot0_4_Label.position(mass2Label.x, theta0_4_Input.y);
@@ -1112,18 +1112,22 @@ Refervec = [];
 Errorvec = 999;
 if(Optimizestep.checked())
 { 
-  alert("This optimization process may take up to several minutes. Please wait.");
+  alert("This SW optimization process may take up to several minutes. Please wait.");
   var StartT = Date.now();
+  iterationSW = 0;
+
   iteration = 0;
-  Stepsearch();
-  if((Errorvec == 999)||(CheckNaN()))
+  var CalculatedT = StepsearchSW();
+  if((Errorvec == 999)||(CheckNaNSW(CalculatedT)))
   alert("No feaible solution, please try other initial input.");
   else{
   var EndT = Date.now();
   var Time = EndT-StartT;
-  alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec");
+  alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec"+"\nError:"+Errorvec);
   }
-    calculateThetaAFO(time_,true);   
+  var TimeReport;
+  TimeReport = calculateSW();   
+  alert("Predicted SW Time"+ TimeReport);
 }
 else{
   calculateThetaAFO(time_,true);   
@@ -1592,8 +1596,32 @@ function Updateinit(){
   thetaDot0_4_Input.value(thetaDot0_4);
 }
 
+function UpdateinitSW(){
+  BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
+  theta0_2 = Stheta0_1-theta0_1;
+  theta0_4 = BETA[0];
+  thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
+  thetaDot0_4 = BETA[1];
+  theta0_1_Input.value(-theta0_1);
+  theta0_2_Input.value(theta0_2);
+  theta0_4_Input.value(-Math.round(theta0_4));
+  thetaDot0_1_Input.value(-thetaDot0_1);
+  thetaDot0_2_Input.value(thetaDot0_2);
+  thetaDot0_4_Input.value(Math.round(thetaDot0_4));
+  k_Input.value(k_1);
+  k2_Input.value(k_2);
+}
+
 function CheckNaN(){
   if((ifnan(intertheta1V))||(ifnan(intertheta2V))||(ifnan(intertheta3V))||(ifnan(intertheta4V))||(ifnan(intertheta5V))||(ifnan(intertheta6V)))
+  {
+    return true;
+  }
+  else 
+  return false;
+}
+function CheckNaNSW(T){
+  if(T > 1.5)
   {
     return true;
   }
@@ -1614,8 +1642,198 @@ return false;
 }
 
 function findfronthip(len1,len2,len3,len5,footFraction,alpha,theta,Dalpha,Dtheta){
-  var beta;
-  beta[0] = acos((len1*cos(alpha)+len2*cos(theta)+len5*cos(theta+10/180*PI)+(1-footFraction)*len3*sin(theta+10/180*PI)-len5)/(len1+len2));
-  beta[1] = (Dalpha*len1*sin(alpha)+Dtheta*len2*sin(theta)+Dtheta*len5*sin(theta+10/180*PI)-Dtheta*(1-footFraction)*len3*cos(theta+10/180*PI))/((len1+len2)*sin(beta));
+  var beta = [];
+  beta[0] = 180/PI*acos((len1*cos(alpha/180*PI)+len2*cos(theta/180*PI)+len5*cos(theta/180*PI+10/180*PI)+(1-footFraction)*len3*sin(theta/180*PI+10/180*PI)-len5)/(len1+len2));
+  beta[1] = 180/PI*(Dalpha/180*PI*len1*sin(alpha/180*PI)+Dtheta/180*PI*len2*sin(theta/180*PI)+Dtheta/180*PI*len5*sin(theta/180*PI+10/180*PI)-Dtheta/180*PI*(1-footFraction)*len3*cos(theta/180*PI+10/180*PI))/((len1+len2)*sin(beta[0]/180*PI));
 return beta;
+}
+
+function StepsearchSW(){
+  var anglesteplength = 2;
+  var speedsteplength = 10;
+  var musclesteplength = 0.5;
+  var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
+  var CalculatedT;
+  //calculate theta
+  UpdateinitSW();
+  try{
+      CalculatedT = calculateSW();   
+      res = abs(CalculatedT - Tsw);
+  }
+  catch(err)
+    {
+      console.error(err);
+      res = 999;
+    }
+  if(res <= Errorvec)
+  {
+  Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
+  Errorvec = res;
+  //alert("New error is: "+Errorvec);
+  }
+  //theta0_1
+  theta0_1 = theta0_1 + anglesteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    
+  if(CheckNaNSW(CalculatedT))
+  errorlist[0] = 999;
+  else
+  errorlist[0] = abs(CalculatedT - Tsw);
+  }
+  catch(err)
+  {
+    console.error(err);
+    errorlist[0] = 999;
+  }
+  theta0_1 = theta0_1 - 2*anglesteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    if(CheckNaNSW(CalculatedT))
+    errorlist[1] = 999;
+    else
+    errorlist[1] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[1] = 999;
+    }
+  theta0_1 = theta0_1 + anglesteplength;
+  //thetaDot0_1
+  thetaDot0_1 = thetaDot0_1 + speedsteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    if(CheckNaNSW(CalculatedT))
+    errorlist[2] = 999;
+    else
+    errorlist[2] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[2] = 999;
+    }
+  thetaDot0_1 = thetaDot0_1 - 2*speedsteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    if(CheckNaNSW(CalculatedT))
+    errorlist[3] = 999;
+    else
+    errorlist[3] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[3] = 999;
+    }
+  thetaDot0_1= thetaDot0_1 + speedsteplength;
+  //KneeSWMuscle
+  k_2 = k_2 + musclesteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    if(CheckNaNSW(CalculatedT))
+    errorlist[4] = 999;
+    else
+    errorlist[4] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[4] = 999;
+    }
+    k_2 = k_2 - 2 * musclesteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    if(CheckNaNSW(CalculatedT))
+    errorlist[5] = 999;
+    else
+    errorlist[5] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[5] = 999;
+    }
+    k_2 = k_2 + musclesteplength;
+  //thetaDot0_4
+  k_1 = k_1 + musclesteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();    
+    if(CheckNaNSW(CalculatedT))
+    errorlist[6] = 999;
+    else
+    errorlist[6] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[6] = 999;
+    }
+    k_1 = k_1 - 2 * musclesteplength;
+  UpdateinitSW();
+  try{
+    CalculatedT = calculateSW();   
+    if(CheckNaNSW(CalculatedT))
+    errorlist[7] = 999;
+    else
+    errorlist[7] = abs(CalculatedT - Tsw);
+    }
+    catch(err)
+    {
+      console.error(err);
+      errorlist[7] = 999;
+    }
+    k_1 = k_1 + musclesteplength;
+  UpdateinitSW();
+  if(min(errorlist) >= Errorvec)
+  {
+    return;
+  }
+  else{
+    var index = errorlist.indexOf(min(errorlist));
+    if( index == 0)
+    {
+      theta0_1 = theta0_1 + anglesteplength;
+    }
+    else if(index == 1)
+    {
+      theta0_1 = theta0_1 - anglesteplength;
+    }
+    else if( index == 2)
+    {
+      thetaDot0_1 = thetaDot0_1 + speedsteplength;
+    }
+    else if(index == 3)
+    {
+      thetaDot0_1 = thetaDot0_1 - speedsteplength;
+    }
+    else if( index == 4)
+    {
+      k_2 = k_2 + musclesteplength;
+    }
+    else if(index == 5)
+    {
+      k_2 = k_2 - musclesteplength;
+    }
+    else if( index == 6)
+    {
+      k_ = k_ + musclesteplength;
+    }
+    else if(index == 7)
+    {
+      k_ = k_ - musclesteplength;
+    }
+    UpdateinitSW();
+    iteration = iteration + 1;
+    StepsearchSW();
+    return CalculatedT
+  }
 }
