@@ -1392,9 +1392,9 @@ function Stepsearch(){
   //calculate theta
   BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
   theta0_2 = Stheta0_1-theta0_1;
-  theta0_4 = -abs(BETA[0]);
+  theta0_4 = BETA[0];
   thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
-  thetaDot0_4 = -abs(BETA[1]);
+  thetaDot0_4 = BETA[1];
   try{
       calculateThetaAFO(time_,false);   
       res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
@@ -1626,9 +1626,9 @@ function Updateinit(){
 function UpdateinitSW(){
   BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
   theta0_2 = Stheta0_1-theta0_1;
-  theta0_4 = -abs(BETA[0]);
+  theta0_4 = BETA[0];
   thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
-  thetaDot0_4 = -abs(BETA[1]);
+  thetaDot0_4 = BETA[1];
   theta0_1_Input.value(-theta0_1);
   theta0_2_Input.value(theta0_2);
   theta0_4_Input.value(-Math.round(theta0_4));
@@ -1687,7 +1687,7 @@ return false;
 
 function findfronthip(len1,len2,len3,len5,footFraction,alpha,theta,Dalpha,Dtheta){
   var beta = [];
-  beta[0] = 180/PI*acos((len1*cos(alpha/180*PI)+len2*cos(theta/180*PI)+len5*cos(theta/180*PI+10/180*PI)+(1-footFraction)*len3*sin(theta/180*PI+10/180*PI)-len5)/(len1+len2));
+  beta[0] = -180/PI*acos((len1*cos(alpha/180*PI)+len2*cos(theta/180*PI)+len5*cos(theta/180*PI+10/180*PI)+(1-footFraction)*len3*sin(theta/180*PI+10/180*PI)-len5)/(len1+len2));
   beta[1] = 180/PI*(Dalpha/180*PI*len1*sin(alpha/180*PI)+Dtheta/180*PI*len2*sin(theta/180*PI)+Dtheta/180*PI*len5*sin(theta/180*PI+10/180*PI)-Dtheta/180*PI*(1-footFraction)*len3*cos(theta/180*PI+10/180*PI))/((len1+len2)*sin(beta[0]/180*PI));
 return beta;
 }
