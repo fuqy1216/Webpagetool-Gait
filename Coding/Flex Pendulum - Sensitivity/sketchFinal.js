@@ -1,9 +1,6 @@
 loadScript('leg-solver.js', function() {
   //alert('script ready!'); 
 });
-loadScript('leg-solver-AFO.js', function() {
-  //alert('script ready!'); 
-});
 // Canvas
 var myCan;
 var T1stswing;
@@ -964,16 +961,16 @@ else if(Optimize.checked())
 //{
   //for(theta0_1 = 0; theta0_1<30; theta0_1 = theta0_1 + 5)
   //{
-    theta0_4 = 0;
-    theta0_1 = 0;
-    Refervec = [];
-    for(theta0_2 = 0; theta0_2<60; theta0_2 = theta0_2 + 5)
+    //theta0_4 = 0;
+    //theta0_1 = 0;
+    var Refervec = [];
+    for(theta0_2 = 10; theta0_2<60; theta0_2 = theta0_2 + 10)
     {
-      for(thetaDot0_1 = 0; thetaDot0_1>-400; thetaDot0_1 = thetaDot0_1 - 50)
+      for(thetaDot0_1 = 0; thetaDot0_1>-300; thetaDot0_1 = thetaDot0_1 - 50)
       {
-        for(thetaDot0_2 = 0; thetaDot0_2<800; thetaDot0_2 = thetaDot0_2 + 50)
+        for(thetaDot0_2 = 0; thetaDot0_2<600; thetaDot0_2 = thetaDot0_2 + 50)
         {
-          for(thetaDot0_4 = 0; thetaDot0_4>-400; thetaDot0_4 = thetaDot0_4 - 50)
+          for(thetaDot0_4 = 0; thetaDot0_4>-300; thetaDot0_4 = thetaDot0_4 - 50)
           {
             Updateinit();
             try{
@@ -981,16 +978,20 @@ else if(Optimize.checked())
             }catch(err)
             {
               console.error(err);
-              Refervec.push([theta0_4, theta0_1,theta0_2, thetaDot0_4, thetaDot0_1, thetaDot0_2, 999,999,
-              999,999,999,999,999,999,999,999,999,999]);
+              //Refervec.push([theta0_4, theta0_1,theta0_2, thetaDot0_4, thetaDot0_1, thetaDot0_2, 999,999,
+              //999,999,999,999,999,999,999,999,999,999,999,999,999,"enter"]);
               continue;
             }
             //res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
             //if(res <= Errorvec)
             //{
-            Refervec.push([theta0_4, theta0_1,theta0_2, thetaDot0_4, thetaDot0_1, thetaDot0_2, Realdiffhip2, 0,
-              -Realdiffhip2, Realdiffhip1, Realdiffknee, Finalankle, Realdiffdhip2, 0, -Realdiffdhip2, Realdiffdhip1,
-            Realdiffdknee, Finaldankle]);
+              Stepl = (len1+len2)*sin(abs(theta0_4)/180*PI)+len1*sin(theta0_1/180*PI)+len2*sin((theta0_1+theta0_2)/180*PI);
+            if((len1+len2)*cos(abs(theta0_4)/180*PI)+len5 > len1*cos(theta0_1/180*PI)+len2*cos((theta0_1+theta0_2)/180*PI)
+            &&((len1+len2)*cos(abs(theta0_4)/180*PI)+len5 < len1*cos(theta0_1/180*PI)+len2*cos((theta0_1+theta0_2)/180*PI)+pow(pow(len3,2)+pow(len5,2),0.5))&&(T1 > 0.2)&&(Stepl < 1.5)){
+              Refervec.push([-theta0_4, -theta0_1,theta0_2, -thetaDot0_4, -thetaDot0_1, thetaDot0_2, -Realdiffhip2, 0,
+              Realdiffhip2, -Realdiffhip1, Realdiffknee, Finalankle, -Realdiffdhip2, 0, Realdiffdhip2, -Realdiffdhip1,
+            Realdiffdknee, Finaldankle,Stepl,T1,T1+T2,"enter"]);
+              }
             //}
           }
         }

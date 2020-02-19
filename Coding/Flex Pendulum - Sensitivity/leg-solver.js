@@ -131,12 +131,12 @@ function solvedoublestance(){
   }
   catch(error) {
     //console.log(a);
-    console.log("forces calculation error");
+    //console.log("forces calculation error");
     return 0;
     // expected output: ReferenceError: nonExistentFunction is not defined
     // Note - error messages will vary depending on browser
   }
-  console.log("forces calculation success!");
+  //console.log("forces calculation success!");
     return math.multiply(math.inv(a),b);
   }
 
@@ -282,12 +282,14 @@ function calculateTheta(t) {
     //corrisponding to trigger double stance
     DStheta = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
     DSdtheta = [DSthetaDot0Array[0], DSthetaDot1Array[0], DSthetaDot2Array[0], DSthetaDot4Array[0]];
-    Doublestance(DStheta, DSdtheta);
+    var result = Doublestance(DStheta, DSdtheta);
+    if(result == false)
+    throw "wrong in force calculation";
     //var p = [];
 
-    DStheta0Array;
+    //DStheta0Array;
     //for trim purpose
-    DSthetainit = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
+    /* DSthetainit = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
     DStheta0ArrayM = [];
     DStheta1ArrayM = [];
     DStheta2ArrayM = [];
@@ -310,6 +312,11 @@ function calculateTheta(t) {
     DStheta1ArrayV = [DSthetainit[1]].concat(DStheta1ArrayV);
     DStheta2ArrayV = [DSthetainit[2]].concat(DStheta2ArrayV);
     DStheta4ArrayV = [DSthetainit[3]].concat(DStheta4ArrayV);
+     */
+    DStheta0ArrayV = DStheta0Array;
+    DStheta1ArrayV = DStheta1Array;
+    DStheta2ArrayV = DStheta2Array;
+    DStheta4ArrayV = DStheta4Array;
     //Length for swing+stance
     length1 = T1/deltaT;
     (zero1 = []).length = length1;
@@ -324,11 +331,12 @@ function calculateTheta(t) {
       ankleswing[i] = Maxankle + (i + 1 - math.floor(length1/2)) * ( 0 - Maxankle )/(length1 - math.floor(length1/2));
     }   
     //Length for Doublestance
-    length2 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
+    length2 = DStheta0ArrayV.length;
+    T2 = length2*deltaT;
     (zero2 = []).length = length2;
     zero2.fill(0);
     interT = [];
-    for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){
+    for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayV.length); i = i + 1){
       interT[i] = i * deltaT;
     }    
     //Correct Hip angle
@@ -692,7 +700,7 @@ function calculateTheta(t) {
 
   function Doublestance(DStheta, DSdtheta){
       forces = solveleg(DStheta, DSdtheta);
-      if (forces == 0)      return;
+      if (forces == 0)      return false;
       index = 0;
       for (var i = 0; i < (time_-T1); i = i + deltaT) {
         DStheta0 = DStheta[0];
@@ -738,12 +746,12 @@ function calculateTheta(t) {
       //console.log(forces);
       if (forces == 0)      
       {
-        console.log('Doublestance: forces all zero');
-        return;}
+        //console.log('Doublestance: forces all zero');
+        return false;}
       if((forces[7]<0)||(DStheta[0] > PI/2))     
       {
-        console.log('Doublestance: solve success');
-        return;
+        //console.log('Doublestance: solve success');
+        return true;
       }
       DStheta0Array[index] = DStheta0;
       DStheta1Array[index] = DStheta1;
@@ -753,8 +761,9 @@ function calculateTheta(t) {
       DSthetaDot1Array[index] = DSdtheta1;
       DSthetaDot2Array[index] = DSdtheta2;
       DSthetaDot4Array[index] = DSdtheta4;
+      
       }
-
+      return false;
   }
 
   function DataProcess(marrayX, marrayY, minterRatio){
