@@ -83,19 +83,19 @@ var Stheta0_2 = -15.0;
 var Stheta0_2_Input;
 var Stheta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var Stheta0_3 = -15.0;
+var Stheta0_3 = -49.0;
 var Stheta0_3_Input;
 var Stheta0_3_Label;
 // Initial Angular Velocity of First Pendulum
-var SthetaDot0_1 = 200.0;
+var SthetaDot0_1 = -300.0;
 var SthetaDot0_1_Input;
 var SthetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var SthetaDot0_2 = 500.0;
+var SthetaDot0_2 = 200.0;
 var SthetaDot0_2_Input;
 var SthetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
-var SthetaDot0_3 = 500.0;
+var SthetaDot0_3 = -200.0;
 var SthetaDot0_3_Input;
 var SthetaDot0_3_Label;
 // Initial Angle of First Pendulum
@@ -119,7 +119,7 @@ var thetaDot0_1 = -100.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 300.0;
+var thetaDot0_2 = 200.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
@@ -977,23 +977,24 @@ function draw() {
 /*     console.log('drawIndex:' + drawIndex);
     console.log('length1:' + T1);
     console.log('length2:' + T2); */
+    //alert(Tswing+','+T2+','+T3+','+T4);
     if(drawIndex == 0)
     rownum = 0;
-    else if(drawIndex < round(Tswing * 0.2))
+    else if(drawIndex < round(Tswing*100))
     rownum = 1;
-    else if(drawIndex == round(Tswing * 0.2))
+    else if(drawIndex == round(Tswing*100))
     rownum = 2;
-    else if((drawIndex > round(Tswing * 0.2))&&(drawIndex < round((Tswing+T2) * 0.2)))
+    else if((drawIndex > round(Tswing*100))&&(drawIndex < round((T2) * 0.2 )))
     rownum = 3;
-    else if(drawIndex == round((Tswing+T2) * 0.2))
+    else if(drawIndex == round((T2) * 0.2+ Tswing*100))
     rownum = 4;
-    else if((drawIndex < round((Tswing + T3 + T2) * 0.2))&&(drawIndex > round((Tswing+T2) * 0.2)))
+    else if((drawIndex < round((T3 + T2) * 0.2+ Tswing*100))&&(drawIndex > round((T2) * 0.2+ Tswing*100)))
     rownum = 5;
-    else if(drawIndex == round((Tswing + T3 + T2) * 0.2))
+    else if(drawIndex == round((T3 + T2) * 0.2+ Tswing*100))
     rownum = 6;
-    else if((drawIndex > round((Tswing + T3 + T2) * 0.2))&&(drawIndex< round((Tswing+T2+T3+T4) * 0.2)))
+    else if((drawIndex > round((T3 + T2) * 0.2+ Tswing*100))&&(drawIndex< round((T2+T3+T4) * 0.2+ Tswing*100)))
     rownum = 7;
-    else if(drawIndex == round((Tswing+T2+T3+T4) * 0.2))
+    else if(drawIndex == round((T2+T3+T4) * 0.2+ Tswing*100))
     rownum = 8;
     else
     rownum = -1;
@@ -1131,33 +1132,18 @@ if(Optimizestep.checked())
   var TimeReport;
   TimeReport = calculateSW();   
   alert("Predicted SW Time: "+ TimeReport + " sec");
+  Tswing = TimeReport;
 //Rest Phases
 alert("The rest optimization process may take up to several minutes. Please wait.");
 var StartT = Date.now();
 iterationST = 0;
-
 iteration = 0;
-var validation = 1;
-var temp = [];
 StepsearchST(TimeReport);
-try{
-  temp = intertheta1V;
-}
-catch (err){
-  validation = 0;
-}
-if((ErrorvecST > 998)||(validation == 0))
-alert("No feaible solution, please try other initial input.");
-else{
 var EndT = Date.now();
-var Time = EndT-StartT;
-alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec"+"\nError:"+ErrorvecST);
+    var Time = EndT-StartT;
+    alert("\nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec"+"\nError:"+ErrorvecST);
 }
-var TimeReport;
-TimeReport = calculateST(CalculatedT, 1);   
-alert("Predicted ST Time: "+ TimeReport[0]*deltaT);
-}
-else{
+    else{
   calculateThetaAFO(time_,true);   
 }
 
@@ -1395,7 +1381,7 @@ function Stepsearch(){
   theta0_2 = Stheta0_1-theta0_1;
   theta0_4 = BETA[0];
   thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
-  thetaDot0_4 = BETA[1];
+  thetaDot0_4 = -abs(BETA[1]);
   try{
       calculateThetaAFO(time_,false);   
       res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
@@ -1628,8 +1614,8 @@ function UpdateinitSW(){
   BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
   theta0_2 = Stheta0_1-theta0_1;
   theta0_4 = BETA[0];
-  thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
-  thetaDot0_4 = BETA[1];
+  thetaDot0_2 = -SthetaDot0_1+thetaDot0_1;
+  thetaDot0_4 = -abs(BETA[1]);
   theta0_1_Input.value(-theta0_1);
   theta0_2_Input.value(theta0_2);
   theta0_4_Input.value(-Math.round(theta0_4));
@@ -1690,7 +1676,7 @@ function findfronthip(len1,len2,len3,len5,footFraction,alpha,theta,Dalpha,Dtheta
   var beta = [];
   beta[0] = -180/PI*acos((len1*cos(alpha/180*PI)+len2*cos(theta/180*PI)+len5*cos(theta/180*PI+10/180*PI)+(1-footFraction)*len3*sin(theta/180*PI+10/180*PI)-len5)/(len1+len2));
   beta[1] = 180/PI*(Dalpha/180*PI*len1*sin(alpha/180*PI)+Dtheta/180*PI*len2*sin(theta/180*PI)+Dtheta/180*PI*len5*sin(theta/180*PI+10/180*PI)-Dtheta/180*PI*(1-footFraction)*len3*cos(theta/180*PI+10/180*PI))/((len1+len2)*sin(beta[0]/180*PI));
-return beta;
+  return beta;
 }
 
 function StepsearchSW(){
@@ -1896,6 +1882,7 @@ function StepsearchST(T){
       VEC = calculateST(T,0); 
       alert(VEC);
       res = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
+      //alert("line 1897: " +VEC + "\nres: " + res);
       //alert(res);
   }
   catch(err)
@@ -2155,12 +2142,33 @@ function StepsearchST(T){
   UpdateinitSW();
   //alert("ErrorvecST: "+ErrorvecST+"   min errorlist: "+min(errorlist));
   //alert(errorlist);
-  if(min(errorlist) >= ErrorvecST)
+  if((min(errorlist) >= ErrorvecST)||(Number.isNaN(min(errorlist))))
   {
+    var temp = [];
+    var validation = 1;
+    var TimeReport;
+    TimeReport = calculateST(T, 1); 
+    try{
+      temp = intertheta1V;
+    }
+    catch (err){
+      validation = 0;
+    }
+    if((ErrorvecST > 998)||(validation == 0)){
+    alert("No feaible solution, please try other initial input.");
     return;
   }
+    else{
+      alert("Optimal input found.");
+    //alert(TimeReport);
+    alert("Predicted ST Time (TimeReport): "+ TimeReport[0]*deltaT);
+    return;
+    }
+  }
   else{
+    //alert(errorlist);
     var index = errorlist.indexOf(min(errorlist));
+    //alert("index: "+index+"\nerrorlist: "+errorlist);
     if( index == 0)
     {
       k_3 = k_3 + musclesteplength;

@@ -1051,7 +1051,8 @@ timeArray = [];
     else{
       NewT = NewTA;
     }
-    
+    if(Final){
+      alert(NewT);
     //plot
     var trace1 = {
       x: NewT,
@@ -1119,6 +1120,7 @@ timeArray = [];
       };
 
     Plotly.newPlot('myDiv', data, layout); 
+    }
   }
 
   function calculateSwingHeel(index) {
@@ -1565,25 +1567,29 @@ timeArray = [];
    //DSthetaDbDot2Array = [];
     DStheta4Array = [];
     DSthetaDot4Array = [];
+    DStheta0ArrayV = [];
+    DStheta1ArrayV = [];
+    DStheta2ArrayV = [];
+    DStheta4ArrayV = [];
     T1stswing = T1;
     //double stance phase, need to define T
-    timeArray = timeArray.slice(0,T1/deltaT);
-    theta1Array = theta1Array.slice(0,T1/deltaT);
-    theta2Array = theta2Array.slice(0,T1/deltaT);
-    theta3Array = theta3Array.slice(0,T1/deltaT);
-    theta4Array = theta4Array.slice(0,T1/deltaT);
-    thetaDot1Array = thetaDot1Array.slice(0,T1/deltaT);
-    thetaDot2Array = thetaDot2Array.slice(0,T1/deltaT);
-    thetaDot3Array = thetaDot3Array.slice(0,T1/deltaT);
-    thetaDot4Array = thetaDot4Array.slice(0,T1/deltaT);
-    thetaDbDot1Array = thetaDbDot1Array.slice(0,T1/deltaT);
-    thetaDbDot2Array = thetaDbDot2Array.slice(0,T1/deltaT);
-    thetaDbDot3Array = thetaDbDot3Array.slice(0,T1/deltaT);
-    thetaDbDot4Array = thetaDbDot4Array.slice(0,T1/deltaT);
+    timeArrayDS = timeArray.slice(0,T1/deltaT);
+    theta1ArrayDS = theta1Array.slice(0,T1/deltaT);
+    theta2ArrayDS = theta2Array.slice(0,T1/deltaT);
+    theta3ArrayDS = theta3Array.slice(0,T1/deltaT);
+    theta4ArrayDS = theta4Array.slice(0,T1/deltaT);
+    thetaDot1ArrayDS = thetaDot1Array.slice(0,T1/deltaT);
+    thetaDot2ArrayDS = thetaDot2Array.slice(0,T1/deltaT);
+    thetaDot3ArrayDS = thetaDot3Array.slice(0,T1/deltaT);
+    thetaDot4ArrayDS = thetaDot4Array.slice(0,T1/deltaT);
+    thetaDbDot1ArrayDS = thetaDbDot1Array.slice(0,T1/deltaT);
+    thetaDbDot2ArrayDS = thetaDbDot2Array.slice(0,T1/deltaT);
+    thetaDbDot3ArrayDS = thetaDbDot3Array.slice(0,T1/deltaT);
+    thetaDbDot4ArrayDS = thetaDbDot4Array.slice(0,T1/deltaT);
     //calculate theta0
     DStheta0Array[0] = 0;
-    DSthetaDot0Array[0] = PI - thetaDot4Array[T1/deltaT - 1];
-    DStheta1Array[0] = PI - theta4Array[T1/deltaT - 1];
+    DSthetaDot0Array[0] = PI - thetaDot4ArrayDS[T1/deltaT - 1];
+    DStheta1Array[0] = PI - theta4ArrayDS[T1/deltaT - 1];
     DSthetaDot1Array[0] = 0;
     //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
     //DSthetaDot4Array[0] = thetaDot1Array[T1/deltaT - 1];
@@ -1606,6 +1612,7 @@ timeArray = [];
     //alert(DStheta);
     //alert(DSdtheta);
     //alert(T1stswing)
+    //alert("DStheta: "+DStheta+"\nDSdtheta: "+DSdtheta+"\nT23: "+T23+"\nk_7: "+k_7+"\nk_8: "+k_8+"\nT1stswing: "+T1stswing);
     Doublestance(DStheta, DSdtheta, T23, k_7, k_8,T1stswing);
 
     DStheta0Array;
@@ -1648,7 +1655,7 @@ timeArray = [];
     }
     catch(err)
     {
-      alert("The first DS has no length.");
+      console.log("The first DS has no length.");
       VEC = [9999,9999,9999];
       return VEC;
     }
@@ -1694,10 +1701,10 @@ timeArray = [];
     }    
     //Correct Hip angle
     for (var i = 0; i < length1; i = i + 1){
-      theta4Array[i] = theta4Array[i] - PI;
+      theta4ArrayDS[i] = theta4ArrayDS[i] - PI;
      }
      for (var i = 0; i < length1; i = i + 1){
-      theta1Array[i] = -theta1Array[i];
+      theta1ArrayDS[i] = -theta1ArrayDS[i];
      }
      //Correct DSKnee angle
      for (var i = 0; i < length2; i = i + 1){
@@ -1707,7 +1714,7 @@ timeArray = [];
     //Ankle during stnace
     anklestance = [];
     for (var i = 0; i < length1; i = i + 1){
-     anklestance[i] = -theta4Array[i];
+     anklestance[i] = -theta4ArrayDS[i];
     }
     //later hip during DS
     latterhip = [];
@@ -1735,8 +1742,8 @@ timeArray = [];
           //shrink knee and hip angle during double stance
       VEC[1] = -DStheta4ArrayV[DStheta4ArrayV.length - 1] + Kneezero2[Kneezero2.length - 1];
      if(0){
-       Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
-       Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
+       Ratioknee = theta2ArrayDS[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
+       Ratiohip = theta1ArrayDS[0]/latterhip[latterhip.length-1];
        //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
        Ratioankle = ankleswing[0]/DStheta1ArrayV[DStheta1ArrayV.length-1];
            for (var i = 0; i < length2; i = i + 1){
@@ -1753,11 +1760,11 @@ timeArray = [];
               DStheta4ArrayV[i] = -DStheta4ArrayV[i]/5;
               }
              // alert(latterhip);
-             elevatehip = theta4Array[theta4Array.length-1] - latterhip[0];
+             elevatehip = theta4ArrayDS[theta4ArrayDS.length-1] - latterhip[0];
              //alert('elevatehip: '+elevatehip);
              //alert('theta4end: '+theta4Array[theta4Array.length-1]);
-             diffknee = theta2Array[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
-             diffhip = theta1Array[0]-latterhip[latterhip.length-1]-elevatehip;
+             diffknee = theta2ArrayDS[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
+             diffhip = theta1ArrayDS[0]-latterhip[latterhip.length-1]-elevatehip;
             // alert('diffhip: '+diffhip);
              //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
              diffankle = ankleswing[0]-DStheta1ArrayV[DStheta1ArrayV.length-1];
@@ -1776,9 +1783,9 @@ timeArray = [];
                 // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
                  DStheta1ArrayV[i] = DStheta1ArrayV[i] + diffankle * ((i+1)/length2);
                   }
-                  elevatehip = theta1Array[theta1Array.length-1] - DStheta4ArrayV[0];
+                  elevatehip = theta1ArrayDS[theta1ArrayDS.length-1] - DStheta4ArrayV[0];
                   //diffknee = Kneezero1[0]-Kneezero2[Kneezero2.length-1];
-                  diffhip = theta4Array[0]-DStheta4ArrayV[DStheta4ArrayV.length-1]-elevatehip;
+                  diffhip = theta4ArrayDS[0]-DStheta4ArrayV[DStheta4ArrayV.length-1]-elevatehip;
                   //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
                   diffankle = anklestance[0]-Kneezero2[Kneezero2.length-1];
                   for (var i = 0; i < length2; i = i + 1){
@@ -1809,31 +1816,31 @@ intertheta6 = ankleswing.concat(Anklezero2);
 
 intertheta2 = Kneezero1.concat(DStheta2ArrayV);
 //console.log('DStheta2ArrayV-1st'+ DStheta2ArrayV);
-intertheta5 = theta2Array.concat(Kneezero2);
+intertheta5 = theta2ArrayDS.concat(Kneezero2);
 //correct knee angle
 for  (var i = 0; i < intertheta2.length; i = i + 1){
   if (intertheta2[i] < 0)  intertheta2[i] = 0;
   if (intertheta5[i] < 0)  intertheta5[i] = 0;
  }   
 //left and right hip
-intertheta3 = theta4Array.concat(latterhip);
+intertheta3 = theta4ArrayDS.concat(latterhip);
 //alert(latterhip);
 //alert(theta1Array[theta1Array.length-1]+'vs'+DStheta4ArrayV[0]);
-intertheta4 = theta1Array.concat(DStheta4ArrayV);
+intertheta4 = theta1ArrayDS.concat(DStheta4ArrayV);
 
-timeArray = [];
-    theta1Array = [];
-    theta2Array = [];
-    theta3Array = [];
-    theta4Array = [];
-    thetaDot1Array = [];
-    thetaDot2Array = []; 
-    thetaDot3Array = [];
-    thetaDot4Array = [];
-    thetaDbDot1Array = [];
-    thetaDbDot2Array = [];
-    thetaDbDot3Array = [];
-    thetaDbDot4Array =[];         
+timeArrayDS = [];
+    theta1ArrayDS = [];
+    theta2ArrayDS = [];
+    theta3ArrayDS = [];
+    theta4ArrayDS = [];
+    thetaDot1ArrayDS = [];
+    thetaDot2ArrayDS = []; 
+    thetaDot3ArrayDS = [];
+    thetaDot4ArrayDS = [];
+    thetaDbDot1ArrayDS = [];
+    thetaDbDot2ArrayDS = [];
+    thetaDbDot3ArrayDS = [];
+    thetaDbDot4ArrayDS =[];         
 
        //double pendulum Left Second
        var Tolerance = 1.1;
@@ -1887,16 +1894,16 @@ timeArray = [];
          thetaDot1SEC = thetaDot1SEC + thetaDoubleDot1SEC * deltaT;
          thetaDot2SEC = thetaDot2SEC + thetaDoubleDot2SEC * deltaT;
          thetaDot3SEC = thetaDot3SEC + thetaDoubleDot3SEC * deltaT;
-         timeArray[indexSEC] = i;
-         theta1Array[indexSEC] = theta1SEC;
-         theta2Array[indexSEC] = theta2SEC;
-            thetaDot2Array[indexSEC] = thetaDot2SEC;
-            thetaDbDot2Array[indexSEC] = thetaDoubleDot2SEC;
-          theta3Array[indexSEC] = theta3SEC;
-          thetaDot1Array[indexSEC] = thetaDot1SEC;
-          thetaDot3Array[indexSEC] = thetaDot3SEC;
-          thetaDbDot1Array[indexSEC] = thetaDoubleDot1SEC;
-          thetaDbDot3Array[indexSEC] = thetaDoubleDot3SEC;
+         timeArrayDS[indexSEC] = i;
+         theta1ArrayDS[indexSEC] = theta1SEC;
+         theta2ArrayDS[indexSEC] = theta2SEC;
+            thetaDot2ArrayDS[indexSEC] = thetaDot2SEC;
+            thetaDbDot2ArrayDS[indexSEC] = thetaDoubleDot2SEC;
+          theta3ArrayDS[indexSEC] = theta3SEC;
+          thetaDot1ArrayDS[indexSEC] = thetaDot1SEC;
+          thetaDot3ArrayDS[indexSEC] = thetaDot3SEC;
+          thetaDbDot1ArrayDS[indexSEC] = thetaDoubleDot1SEC;
+          thetaDbDot3ArrayDS[indexSEC] = thetaDoubleDot3SEC;
     
           indexSEC = indexSEC + 1;
         }
@@ -1932,9 +1939,9 @@ timeArray = [];
          theta4SEC = theta4SEC + theta4DotSEC * deltaT;
          theta4DotSEC = theta4DotSEC + theta4DoubleDotSEC * deltaT;
          //timeArray[index] = i;
-         theta4Array[indexSEC] = theta4SEC;
-         thetaDot4Array[indexSEC] = theta4DotSEC;
-         thetaDbDot4Array[indexSEC] = theta4DoubleDotSEC;
+         theta4ArrayDS[indexSEC] = theta4SEC;
+         thetaDot4ArrayDS[indexSEC] = theta4DotSEC;
+         thetaDbDot4ArrayDS[indexSEC] = theta4DoubleDotSEC;
          indexSEC = indexSEC + 1;
        }
        SECT1 = calculateSwingHeel(t/deltaT);
@@ -1965,23 +1972,23 @@ timeArray = [];
     //DSthetaDot4Array = [];
     //second half
      //double stance phase, need to define T
-     timeArray = timeArray.slice(0,length3);
-     theta1Array = theta1Array.slice(0,length3);
-     theta2Array = theta2Array.slice(0,length3);
-     theta3Array = theta3Array.slice(0,length3);
-     theta4Array = theta4Array.slice(0,length3);
-     thetaDot1Array = thetaDot1Array.slice(0,length3);
-     thetaDot2Array = thetaDot2Array.slice(0,length3);
-     thetaDot3Array = thetaDot3Array.slice(0,length3);
-     thetaDot4Array = thetaDot4Array.slice(0,length3);
-     thetaDbDot1Array = thetaDbDot1Array.slice(0,length3);
-     thetaDbDot2Array = thetaDbDot2Array.slice(0,length3);
-     thetaDbDot3Array = thetaDbDot3Array.slice(0,length3);
-     thetaDbDot4Array = thetaDbDot4Array.slice(0,length3);
+     timeArrayDS = timeArray.slice(0,length3);
+     theta1ArrayDS = theta1ArrayDS.slice(0,length3);
+     theta2ArrayDS = theta2ArrayDS.slice(0,length3);
+     theta3ArrayDS = theta3ArrayDS.slice(0,length3);
+     theta4ArrayDS = theta4ArrayDS.slice(0,length3);
+     thetaDot1ArrayDS = thetaDot1ArrayDS.slice(0,length3);
+     thetaDot2ArrayDS = thetaDot2ArrayDS.slice(0,length3);
+     thetaDot3ArrayDS = thetaDot3ArrayDS.slice(0,length3);
+     thetaDot4ArrayDS = thetaDot4ArrayDS.slice(0,length3);
+     thetaDbDot1ArrayDS = thetaDbDot1ArrayDS.slice(0,length3);
+     thetaDbDot2ArrayDS = thetaDbDot2ArrayDS.slice(0,length3);
+     thetaDbDot3ArrayDS = thetaDbDot3ArrayDS.slice(0,length3);
+     thetaDbDot4ArrayDS = thetaDbDot4ArrayDS.slice(0,length3);
      //calculate theta0
      DStheta0Array[0] = 0;
-     DSthetaDot0Array[0] = thetaDot4Array[length3 - 1];
-     DStheta1Array[0] = theta4Array[length3 - 1];
+     DSthetaDot0Array[0] = thetaDot4ArrayDS[length3 - 1];
+     DStheta1Array[0] = theta4ArrayDS[length3 - 1];
      DSthetaDot1Array[0] = 0;
      //DStheta4Array[0] = theta1Array[T1/deltaT - 1];
      //DSthetaDot4Array[0] = thetaDot1Array[T1/deltaT - 1];
@@ -2047,7 +2054,7 @@ timeArray = [];
       
      //Length for Doublestance
 
-     console.log(length1 + ',' + length2 + ',' + length3 + ',' + length4);
+     //alert(length1 + ',' + length2 + ',' + length3 + ',' + length4);
      LenT1 = length1;
      T2 = length2;
      T3 = length3;
@@ -2059,10 +2066,10 @@ timeArray = [];
     }     */
      //Correct Hip angle
      for (var i = 0; i < length3; i = i + 1){
-       theta4Array[i] = theta4Array[i];
+       theta4ArrayDS[i] = theta4ArrayDS[i];
       }
       for (var i = 0; i < length3; i = i + 1){
-       theta1Array[i] = -theta1Array[i];
+       theta1ArrayDS[i] = -theta1ArrayDS[i];
       }
       //Correct DSKnee angle
       for (var i = 0; i < length4; i = i + 1){
@@ -2072,7 +2079,7 @@ timeArray = [];
      //Ankle during stnace
      anklestance = [];
      for (var i = 0; i < length3; i = i + 1){
-      anklestance[i] = -theta4Array[i];
+      anklestance[i] = -theta4ArrayDS[i];
      }
      //later hip during DS
      latterhip = [];
@@ -2099,8 +2106,8 @@ timeArray = [];
       }
       VEC[2] = -latterhip[latterhip.length-1] + DStheta2ArrayV[DStheta2ArrayV.length-1];
    if(0){
-     Ratioknee = theta2Array[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
-     Ratiohip = theta1Array[0]/latterhip[latterhip.length-1];
+     Ratioknee = theta2ArrayDS[0]/DStheta2ArrayV[DStheta2ArrayV.length-1];
+     Ratiohip = theta1ArrayDS[0]/latterhip[latterhip.length-1];
      //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
      Ratioankle = ankleswing[0]/DStheta1ArrayV[DStheta1ArrayV.length-1];
          for (var i = 0; i < length2; i = i + 1){
@@ -2112,20 +2119,20 @@ timeArray = [];
          }
          
                    //hip1 start with stance
-                   Realdiffhip1 = theta1Array[0] - latterhip[latterhip.length-1];
+                   Realdiffhip1 = theta1ArrayDS[0] - latterhip[latterhip.length-1];
                    //hip2 start with swing
-                   Realdiffhip2 = abs(theta4Array[0]) - abs(DStheta4ArrayV[DStheta4ArrayV.length-1]);
-                   Realdiffknee = theta2Array[0] - DStheta2ArrayV[DStheta2ArrayV.length-1];
+                   Realdiffhip2 = abs(theta4ArrayDS[0]) - abs(DStheta4ArrayV[DStheta4ArrayV.length-1]);
+                   Realdiffknee = theta2ArrayDS[0] - DStheta2ArrayV[DStheta2ArrayV.length-1];
                    
           if(Final){
-
+           // alert("line 2128");
           for (var i = 0; i < length4; i = i + 1){
             latterhip[i] = latterhip[i]/5;
             DStheta4ArrayV[i] = DStheta4ArrayV[i]/5;
             }
-           elevatehip = theta4Array[theta4Array.length-1] - latterhip[0];
-           diffknee = theta2Array[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
-           diffhip = theta1Array[0]-latterhip[latterhip.length-1]-elevatehip;
+           elevatehip = theta4ArrayDS[theta4ArrayDS.length-1] - latterhip[0];
+           diffknee = theta2ArrayDS[0]-DStheta2ArrayV[DStheta2ArrayV.length-1];
+           diffhip = theta1ArrayDS[0]-latterhip[latterhip.length-1]-elevatehip;
            //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
            diffankle = ankleswing[0]-DStheta1ArrayV[DStheta1ArrayV.length-1];
 
@@ -2143,9 +2150,9 @@ timeArray = [];
                 // DStheta4ArrayV[i] = DStheta4ArrayV[i] * (1 + (i+1)*(Ratiohip1 - 1)/length2);
                  DStheta1ArrayV[i] = DStheta1ArrayV[i] + diffankle * ((i+1)/length4);
                 }
-                elevatehip = theta1Array[theta1Array.length-1] - DStheta4ArrayV[0];
+                elevatehip = theta1ArrayDS[theta1ArrayDS.length-1] - DStheta4ArrayV[0];
                 //diffknee = Kneezero1[0]-Kneezero2[Kneezero2.length-1];
-                diffhip = theta4Array[0]-DStheta4ArrayV[DStheta4ArrayV.length-1]-elevatehip;
+                diffhip = theta4ArrayDS[0]-DStheta4ArrayV[DStheta4ArrayV.length-1]-elevatehip;
                 //Ratiohip1 = theta4Array[0]/DStheta4ArrayV[DStheta4ArrayV.length-1];
                 diffankle = anklestance[0]-Kneezero2[Kneezero2.length-1];
                 for (var i = 0; i < length4; i = i + 1){
@@ -2174,7 +2181,7 @@ timeArray = [];
     //console.log(intertheta6);
     //left and right knee
     //alert("Length for 6: "+intertheta6.length+"\n Last element" + intertheta6[intertheta6.length-1]);
-    intertheta2 = intertheta2.concat(theta2Array, Kneezero2);
+    intertheta2 = intertheta2.concat(theta2ArrayDS, Kneezero2);
     
     intertheta5 = intertheta5.concat(Kneezero1, DStheta2ArrayV);
     //correct knee angle
@@ -2183,8 +2190,8 @@ timeArray = [];
       if (intertheta5[i] < 0)  intertheta5[i] = 0;
      }   
     //left and right hip
-    intertheta3 = intertheta3.concat(theta1Array, DStheta4ArrayV);
-    intertheta4 = intertheta4.concat(theta4Array, latterhip);
+    intertheta3 = intertheta3.concat(theta1ArrayDS, DStheta4ArrayV);
+    intertheta4 = intertheta4.concat(theta4ArrayDS, latterhip);
     /*for (var i = 0; i < intertheta2.length; i = i + 1){
       if (intertheta2[i] < 0)
       intertheta2[i] = 0;
@@ -2280,8 +2287,9 @@ timeArray = [];
     NewT[i] = NewarrayX[i] - interT[interT.length -1];
     }*/
     //slice data for plotting
-    
+
     if(Final){
+     // alert("line 2292");
      // alert("line 2284 in leg solver");
      TotalT = NewTA.length;
     NewTA.splice(NewTA.length-T4/(LenT1+T2+T3+T4)*TotalT,T4/(LenT1+T2+T3+T4)*TotalT);
@@ -2320,6 +2328,7 @@ timeArray = [];
       NewT[num] = i;
       num = num + 1;
     }
+    alert(NewT);
      //plot
      var trace1 = {
       x: NewT,
