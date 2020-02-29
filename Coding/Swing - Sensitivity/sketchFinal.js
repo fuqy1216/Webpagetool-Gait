@@ -83,19 +83,19 @@ var Stheta0_2 = -15.0;
 var Stheta0_2_Input;
 var Stheta0_2_Label;
 // Initial Angle of Stance Inverted Pendulum
-var Stheta0_3 = -15.0;
+var Stheta0_3 = -49.0;
 var Stheta0_3_Input;
 var Stheta0_3_Label;
 // Initial Angular Velocity of First Pendulum
-var SthetaDot0_1 = 200.0;
+var SthetaDot0_1 = -300.0;
 var SthetaDot0_1_Input;
 var SthetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var SthetaDot0_2 = 500.0;
+var SthetaDot0_2 = 200.0;
 var SthetaDot0_2_Input;
 var SthetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
-var SthetaDot0_3 = 500.0;
+var SthetaDot0_3 = -200.0;
 var SthetaDot0_3_Input;
 var SthetaDot0_3_Label;
 // Initial Angle of First Pendulum
@@ -119,7 +119,7 @@ var thetaDot0_1 = -100.0;
 var thetaDot0_1_Input;
 var thetaDot0_1_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_2 = 300.0;
+var thetaDot0_2 = 200.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
@@ -650,7 +650,6 @@ thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
  loadB.position(resetB.x + resetB.width + 10, resetB.y);
  loadB.style('width', '100px');
  loadB.style('height', '30px');
- loadB.mousePressed(load);
  //LoadB.attribute('disabled', '');
   // Loop Checkbox;
   loopC = createCheckbox('Loop Animation', true);
@@ -977,23 +976,24 @@ function draw() {
 /*     console.log('drawIndex:' + drawIndex);
     console.log('length1:' + T1);
     console.log('length2:' + T2); */
+    //alert(Tswing+','+T2+','+T3+','+T4);
     if(drawIndex == 0)
     rownum = 0;
-    else if(drawIndex < round(Tswing * 0.2))
+    else if(drawIndex < round(Tswing*100))
     rownum = 1;
-    else if(drawIndex == round(Tswing * 0.2))
+    else if(drawIndex == round(Tswing*100))
     rownum = 2;
-    else if((drawIndex > round(Tswing * 0.2))&&(drawIndex < round((Tswing+T2) * 0.2)))
+    else if((drawIndex > round(Tswing*100))&&(drawIndex < round((T2) * 0.2 )))
     rownum = 3;
-    else if(drawIndex == round((Tswing+T2) * 0.2))
+    else if(drawIndex == round((T2) * 0.2+ Tswing*100))
     rownum = 4;
-    else if((drawIndex < round((Tswing + T3 + T2) * 0.2))&&(drawIndex > round((Tswing+T2) * 0.2)))
+    else if((drawIndex < round((T3 + T2) * 0.2+ Tswing*100))&&(drawIndex > round((T2) * 0.2+ Tswing*100)))
     rownum = 5;
-    else if(drawIndex == round((Tswing + T3 + T2) * 0.2))
+    else if(drawIndex == round((T3 + T2) * 0.2+ Tswing*100))
     rownum = 6;
-    else if((drawIndex > round((Tswing + T3 + T2) * 0.2))&&(drawIndex< round((Tswing+T2+T3+T4) * 0.2)))
+    else if((drawIndex > round((T3 + T2) * 0.2+ Tswing*100))&&(drawIndex< round((T2+T3+T4) * 0.2+ Tswing*100)))
     rownum = 7;
-    else if(drawIndex == round((Tswing+T2+T3+T4) * 0.2))
+    else if(drawIndex == round((T2+T3+T4) * 0.2+ Tswing*100))
     rownum = 8;
     else
     rownum = -1;
@@ -1110,57 +1110,55 @@ function start() {
 //add loop to search for optimal solution
 //Errorvec = [theta1, theta2, theta4, dtheta1, dtheta2, dtheta4]
 
-Refervec = [];
-Errorvec = 999;
+var Refervec = [];
+var T = 0;
+var res = [];
+var iteration = 0;
 if(Optimizestep.checked())
 { 
-  //first SW phase
-  alert("This SW optimization process may take up to several minutes. Please wait.");
-  var StartT = Date.now();
-  iterationSW = 0;
-
-  iteration = 0;
-  var CalculatedT = StepsearchSW();
-  if((Errorvec == 999)||(CheckNaNSW(CalculatedT)))
-  alert("No feaible solution, please try other initial input.");
-  else{
-  var EndT = Date.now();
-  var Time = EndT-StartT;
-  alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec"+"\nError:"+Errorvec);
-  }
-  var TimeReport;
-  TimeReport = calculateSW();   
-  alert("Predicted SW Time: "+ TimeReport + " sec");
-//Rest Phases
-alert("The rest optimization process may take up to several minutes. Please wait.");
-var StartT = Date.now();
-iterationST = 0;
-
-iteration = 0;
-var validation = 1;
-var temp = [];
-StepsearchST(TimeReport);
-try{
-  temp = intertheta1V;
+  var Refervec = [];
+  
+    for(theta0_1 = 5; theta0_1<(Stheta0_1-19); theta0_1 = theta0_1 + 2)
+    {
+      for(thetaDot0_1 = -50; thetaDot0_1>-300; thetaDot0_1 = thetaDot0_1 - 50)
+      {
+        for(theta0_5 = 5; theta0_5<30; theta0_5 = theta0_5 + 2)
+    {
+      for(thetaDot0_5 = -50; thetaDot0_5>-300; thetaDot0_5 = thetaDot0_5 - 50)
+      {
+        for(k_2 = 0; k_2<10; k_2 = k_2 + 1)
+        {
+          for(k_1 = 0; k_1<20; k_1 = k_1+1)
+          {
+            iteration = iteration + 1;
+            if(iteration%10000000 == 0)
+            {
+              alert("Progress: "+round(iteration/15912)+"%")
+            }
+            res = [];
+            valid = UpdateinitSW();
+            res = calculateSW();
+            //alert(res);
+            if(Number.isNaN(min(res))||(valid == false)||(res[0]>1))
+            {
+              continue;
+            }
+            else{
+            Refervec.push([theta0_1, theta0_2,theta0_5,theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_5, thetaDot0_4,
+              res,"enter"]);
+            //alert(Refervec);
+            }
+          }
+        }
+      }
+    }
 }
-catch (err){
-  validation = 0;
 }
-if((ErrorvecST > 998)||(validation == 0))
-alert("No feaible solution, please try other initial input.");
-else{
-var EndT = Date.now();
-var Time = EndT-StartT;
-alert("Optimal input found. \nIterations: "+ iteration+1 +"\nProcess Time: "+round(Time/1000)+" sec"+"\nError:"+ErrorvecST);
 }
-var TimeReport;
-TimeReport = calculateST(CalculatedT, 1);   
-alert("Predicted ST Time: "+ TimeReport[0]*deltaT);
-}
-else{
-  calculateThetaAFO(time_,true);   
-}
-
+alert("Save Data!");
+    var data = new Blob([Refervec], {type: 'text/plain'});
+    var url = window.URL.createObjectURL(data);
+    document.getElementById('download_link').href = url;
   // Print Min/Max of Motion
   //console.log('Theta 1:');
  /* findMotionData(theta1Array, 1);
@@ -1178,62 +1176,6 @@ else{
   active = 1;
   pause();
 }
-
-function load() {
-
-      var rawFile = new XMLHttpRequest();
-      rawFile.open("GET", "IMUDATA.TXT", false);
-      rawFile.onreadystatechange = function ()
-      {
-          if(rawFile.readyState === 4)
-          {
-              if(rawFile.status === 200 || rawFile.status == 0)
-              {
-                  var allText = rawFile.responseText;
-                  IMUdata = allText.split("\n");
-                  //console.log(IMUdata);
-              }else{
-                alert("Open IMU Data Failed.");
-                return;
-              }
-          }
-          else{
-            alert("Open IMU Data Failed.");
-            return;
-          }
-      }
-      rawFile.send(null);
-      for(var i = 0; i<IMUdata.length; i = i +1){
-        IMUMatrix[i] = IMUdata[i].split(",");
-        for(var j = 0; j<IMUMatrix[i].length;j = j+1){
-          IMUMatrix[i][j] = parseFloat(IMUMatrix[i][j]);
-        }
-      }
-      //coloumn 0 time stamp; 1-3 acc; 4-6 orientation (4 for lateral axis rotation)
-      
-      for(var i = 0; i<IMUMatrix.length; i = i +1){
-        ACC[i] = pow(pow(IMUMatrix[i][1],2)+pow(IMUMatrix[i][2],2)+pow(IMUMatrix[i][3],2),0.5);//resultant acc
-      }
-      StrikeValue = ACC.filter(isStrike);
-      for(var i = 0; i<StrikeValue.length; i = i +1){
-        if(i == 1)
-        StrikeIndexRaw[i] = ACC.indexOf(StrikeValue[i]);
-        else
-         StrikeIndexRaw[i] = ACC.indexOf(StrikeValue[i],StrikeIndexRaw[i-1]);
-      }
-      //Find strikes that longer than 0.5 sec
-      StrikeIndexnum = 0;
-      for(var i = 0; i<StrikeIndexRaw.length-1; i = i +1){
-        if (IMUMatrix[StrikeIndexRaw[i+1]][0] - IMUMatrix[StrikeIndexRaw[i]][0]>0.5)
-        {
-          StrikeIndex[StrikeIndexnum] = StrikeIndexRaw[i];
-          StrikeIndexnum = StrikeIndexnum + 1;
-        }
-      }
-      alert("Identified Stride Numbers: " + StrikeIndexnum.toString());
-      //use orientation for further phase identification
-
-} 
 
 function isStrike(value) {
   return value >= 15;
@@ -1386,250 +1328,14 @@ function loadScript( url, callback ) {
   document.getElementsByTagName( "head" )[0].appendChild( script );
 }
 
-function Stepsearch(){
-  var anglesteplength = 2;
-  var speedsteplength = 50;
-  var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
-  //calculate theta
-  BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
-  theta0_2 = Stheta0_1-theta0_1;
-  theta0_4 = BETA[0];
-  thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
-  thetaDot0_4 = BETA[1];
-  try{
-      calculateThetaAFO(time_,false);   
-      res = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-  }
-  catch(err)
-    {
-      console.error(err);
-      res = 999;
-    }
-  if(res <= Errorvec)
-  {
-  Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
-  Errorvec = res;
-  //alert("New error is: "+Errorvec);
-  }
-  //theta0_1
-  theta0_1 = theta0_1 + anglesteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-  if(CheckNaN())
-  errorlist[0] = 999;
-  else
-  errorlist[0] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-  }
-  catch(err)
-  {
-    console.error(err);
-    errorlist[0] = 999;
-  }
-  theta0_1 = theta0_1 - 2*anglesteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[1] = 999;
-    else
-    errorlist[1] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[1] = 999;
-    }
-  theta0_1 = theta0_1 + anglesteplength;
-  //theta0_4
-  theta0_4 = theta0_4 + anglesteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[2] = 999;
-    else
-    errorlist[2] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[2] = 999;
-    }
-  theta0_4 = theta0_4 - 2*anglesteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[3] = 999;
-    else
-    errorlist[3] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[3] = 999;
-    }
-  theta0_4 = theta0_4 + anglesteplength;
-  //thetaDot0_1
-  thetaDot0_1 = thetaDot0_1 + speedsteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[4] = 999;
-    else
-    errorlist[4] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[4] = 999;
-    }
-  thetaDot0_1 = thetaDot0_1 - 2*speedsteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[5] = 999;
-    else
-    errorlist[5] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[5] = 999;
-    }
-  thetaDot0_1= thetaDot0_1 + speedsteplength;
-  //thetaDot0_2
-  thetaDot0_2 = thetaDot0_2 + speedsteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[6] = 999;
-    else
-    errorlist[6] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[6] = 999;
-    }
-  thetaDot0_2 = thetaDot0_2 - 2*speedsteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[7] = 999;
-    else
-    errorlist[7] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[7] = 999;
-    }
-  thetaDot0_2= thetaDot0_2 + speedsteplength;
-  //thetaDot0_4
-  thetaDot0_4 = thetaDot0_4 + speedsteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[8] = 999;
-    else
-    errorlist[8] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[8] = 999;
-    }
-  thetaDot0_4 = thetaDot0_4 - 2*speedsteplength;
-  Updateinit();
-  try{
-      calculateThetaAFO(time_,false);   
-    if(CheckNaN())
-    errorlist[9] = 999;
-    else
-    errorlist[9] = pow(pow(Realdiffhip1,2)+pow(Realdiffhip2,2)+pow(Realdiffknee,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[9] = 999;
-    }
-  thetaDot0_4= thetaDot0_4 + speedsteplength;  
-  Updateinit();
-  if(min(errorlist) >= Errorvec)
-  {
-    return;
-  }
-  else{
-    var index = errorlist.indexOf(min(errorlist));
-    if( index == 0)
-    {
-      theta0_1 = theta0_1 + anglesteplength;
-    }
-    else if(index == 1)
-    {
-      theta0_1 = theta0_1 - anglesteplength;
-    }
-    else if( index == 2)
-    {
-      theta0_4 = theta0_4 + anglesteplength;
-    }
-    else if(index == 3)
-    {
-      theta0_4 = theta0_4 - anglesteplength;
-    }
-    else if( index == 4)
-    {
-      thetaDot0_1 = thetaDot0_1 + speedsteplength;
-    }
-    else if(index == 5)
-    {
-      thetaDot0_1 = thetaDot0_1 - speedsteplength;
-    }
-    else if( index == 6)
-    {
-      thetaDot0_2 = thetaDot0_2 + speedsteplength;
-    }
-    else if(index == 7)
-    {
-      thetaDot0_2 = thetaDot0_2 - speedsteplength;
-    }
-    else if( index == 8)
-    {
-      thetaDot0_4 = thetaDot0_4 + speedsteplength;
-    }
-    else if(index == 9)
-    {
-      thetaDot0_4 = thetaDot0_4 - speedsteplength;
-    }
-    Updateinit();
-    iteration = iteration + 1;
-    Stepsearch();
-  }
-}
-
-function Updateinit(){
-  theta0_2 = round(180/PI*acos(((len1+len2+len5)*cos(-theta0_4/180*PI)+len3*footFraction*sin(-theta0_4/180*PI)-0.1-len3*(1-footFraction)*sin(1.5*theta0_1/180*PI)-len1*cos(theta0_1/180*PI))/(len2+len5)))-theta0_1;
-  theta0_1_Input.value(-theta0_1);
-  theta0_2_Input.value(theta0_2);
-  theta0_4_Input.value(-theta0_4);
-  thetaDot0_1_Input.value(-thetaDot0_1);
-  thetaDot0_2_Input.value(thetaDot0_2);
-  thetaDot0_4_Input.value(thetaDot0_4);
-}
-
 function UpdateinitSW(){
-  BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1);
+  BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1,theta0_5,thetaDot0_5);
   theta0_2 = Stheta0_1-theta0_1;
   theta0_4 = BETA[0];
-  thetaDot0_2 = SthetaDot0_1-thetaDot0_1;
-  thetaDot0_4 = BETA[1];
+  thetaDot0_2 = -SthetaDot0_1+thetaDot0_1;
+  thetaDot0_4 = -BETA[1];
+  if(Number.isNaN(BETA[0])||(Number.isNaN(BETA[1])))
+  return false;
   theta0_1_Input.value(-theta0_1);
   theta0_2_Input.value(theta0_2);
   theta0_4_Input.value(-Math.round(theta0_4));
@@ -1646,6 +1352,7 @@ function UpdateinitSW(){
   k8_Input.value(k_8);
   T13_Input.value(T13);
   T23_Input.value(T23);
+  return true;
 }
 
 function CheckNaN(){
@@ -1665,15 +1372,6 @@ function CheckNaNSW(T){
   return false;
 }
 
-function CheckNaNST(T){
-  if(T*deltaT > 2)
-  {
-    return true;
-  }
-  else 
-  return false;
-}
-
 function ifnan(vector){
 for(i=0;i<vector.length;i++)
 {
@@ -1686,549 +1384,9 @@ for(i=0;i<vector.length;i++)
 return false;
 }
 
-function findfronthip(len1,len2,len3,len5,footFraction,alpha,theta,Dalpha,Dtheta){
+function findfronthip(len1,len2,len3,len5,footFraction,alpha,theta,Dalpha,Dtheta,gamma,Dgamma){
   var beta = [];
-  beta[0] = -180/PI*acos((len1*cos(alpha/180*PI)+len2*cos(theta/180*PI)+len5*cos(theta/180*PI+10/180*PI)+(1-footFraction)*len3*sin(theta/180*PI+10/180*PI)-len5)/(len1+len2));
-  beta[1] = 180/PI*(Dalpha/180*PI*len1*sin(alpha/180*PI)+Dtheta/180*PI*len2*sin(theta/180*PI)+Dtheta/180*PI*len5*sin(theta/180*PI+10/180*PI)-Dtheta/180*PI*(1-footFraction)*len3*cos(theta/180*PI+10/180*PI))/((len1+len2)*sin(beta[0]/180*PI));
-return beta;
-}
-
-function StepsearchSW(){
-  var anglesteplength = 2;
-  var speedsteplength = 10;
-  var musclesteplength = 0.5;
-  var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
-  var CalculatedT;
-  //calculate theta
-  UpdateinitSW();
-  try{
-      CalculatedT = calculateSW();   
-      res = abs(CalculatedT - Tsw);
-  }
-  catch(err)
-    {
-      console.error(err);
-      res = 999;
-    }
-  if(res <= Errorvec)
-  {
-  Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
-  Errorvec = res;
-  //alert("New error is: "+Errorvec);
-  }
-  //theta0_1
-  theta0_1 = theta0_1 + anglesteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    
-  if(CheckNaNSW(CalculatedT))
-  errorlist[0] = 999;
-  else
-  errorlist[0] = abs(CalculatedT - Tsw);
-  }
-  catch(err)
-  {
-    console.error(err);
-    errorlist[0] = 999;
-  }
-  theta0_1 = theta0_1 - 2*anglesteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    if(CheckNaNSW(CalculatedT))
-    errorlist[1] = 999;
-    else
-    errorlist[1] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[1] = 999;
-    }
-  theta0_1 = theta0_1 + anglesteplength;
-  //thetaDot0_1
-  thetaDot0_1 = thetaDot0_1 + speedsteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    if(CheckNaNSW(CalculatedT))
-    errorlist[2] = 999;
-    else
-    errorlist[2] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[2] = 999;
-    }
-  thetaDot0_1 = thetaDot0_1 - 2*speedsteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    if(CheckNaNSW(CalculatedT))
-    errorlist[3] = 999;
-    else
-    errorlist[3] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[3] = 999;
-    }
-  thetaDot0_1= thetaDot0_1 + speedsteplength;
-  //KneeSWMuscle
-  k_2 = k_2 + musclesteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    if(CheckNaNSW(CalculatedT))
-    errorlist[4] = 999;
-    else
-    errorlist[4] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[4] = 999;
-    }
-    k_2 = k_2 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    if(CheckNaNSW(CalculatedT))
-    errorlist[5] = 999;
-    else
-    errorlist[5] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[5] = 999;
-    }
-    k_2 = k_2 + musclesteplength;
-  //thetaDot0_4
-  k_1 = k_1 + musclesteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();    
-    if(CheckNaNSW(CalculatedT))
-    errorlist[6] = 999;
-    else
-    errorlist[6] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[6] = 999;
-    }
-    k_1 = k_1 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    CalculatedT = calculateSW();   
-    if(CheckNaNSW(CalculatedT))
-    errorlist[7] = 999;
-    else
-    errorlist[7] = abs(CalculatedT - Tsw);
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[7] = 999;
-    }
-    k_1 = k_1 + musclesteplength;
-  UpdateinitSW();
-  if(min(errorlist) >= Errorvec)
-  {
-    return;
-  }
-  else{
-    var index = errorlist.indexOf(min(errorlist));
-    if( index == 0)
-    {
-      theta0_1 = theta0_1 + anglesteplength;
-    }
-    else if(index == 1)
-    {
-      theta0_1 = theta0_1 - anglesteplength;
-    }
-    else if( index == 2)
-    {
-      thetaDot0_1 = thetaDot0_1 + speedsteplength;
-    }
-    else if(index == 3)
-    {
-      thetaDot0_1 = thetaDot0_1 - speedsteplength;
-    }
-    else if( index == 4)
-    {
-      k_2 = k_2 + musclesteplength;
-    }
-    else if(index == 5)
-    {
-      k_2 = k_2 - musclesteplength;
-    }
-    else if( index == 6)
-    {
-      k_1 = k_1 + musclesteplength;
-    }
-    else if(index == 7)
-    {
-      k_1 = k_1 - musclesteplength;
-    }
-    UpdateinitSW();
-    iteration = iteration + 1;
-    StepsearchSW();
-    return CalculatedT;
-  }
-}
-
-function StepsearchST(T){
-  var anglesteplength = 2;
-  var speedsteplength = 10;
-  var torquesteplength = 10;
-  var musclesteplength = 0.5;
-  var errorlist = [];//theta0_1, theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_$
-  
-  //calculate theta
-  UpdateinitSW();
-  try{
-      VEC = calculateST(T,0); 
-      alert(VEC);
-      res = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-      //alert(res);
-  }
-  catch(err)
-    {
-      console.error(err);
-      res = 998;
-    }
-  if(res <= ErrorvecST)
-  {
-  Refervec =  [theta0_1,theta0_2, theta0_4, thetaDot0_1,thetaDot0_2,thetaDot0_4];
-  ErrorvecST = res;
-  //alert("New error is: "+ErrorvecST);
-  }
-  //DS hip left
-  k_3 = k_3 + musclesteplength;
-
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    //alert(VEC);
-  if(CheckNaNST(VEC[0]))
-  errorlist[0] = 999;
-  else
-  errorlist[0] =  pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-  }
-  catch(err)
-  {
-    console.error(err);
-    errorlist[0] = 999;
-  }
-  k_3 = k_3 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0); 
-    //alert(VEC);  
-    if(CheckNaNST(VEC[0]))
-    errorlist[1] = 999;
-    else
-    errorlist[1] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-  }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[1] = 999;
-    }
-    k_3 = k_3 + musclesteplength;
-  //DS knee left
-  k_4 = k_4 + musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-  if(CheckNaNST(VEC[0]))
-    errorlist[2] = 999;
-    else
-    errorlist[2] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[2] = 999;
-    }
-    k_4 = k_4 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[3] = 999;
-    else
-    errorlist[3] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[3] = 999;
-    }
-    k_4 = k_4 + musclesteplength;
-  //DS ankle left
-  T13 = T13 + torquesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[4] = 999;
-    else
-    errorlist[4] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[4] = 999;
-    }
-    T13 = T13 - 2 * torquesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-  if(CheckNaNST(VEC[0]))
-    errorlist[5] = 999;
-    else
-    errorlist[5] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[5] = 999;
-    }
-    T13 = T13 + torquesteplength;
-  //SW hip right
-  k_5 = k_5 + musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[6] = 999;
-    else
-    errorlist[6] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[6] = 999;
-    }
-    k_5 = k_5 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[7] = 999;
-    else
-    errorlist[7] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[7] = 999;
-    }
-    k_5 = k_5 + musclesteplength;
-    //SW knee right
-  k_6 = k_6 + musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-  if(CheckNaNST(VEC[0]))
-  errorlist[8] = 999;
-  else
-  errorlist[8] =  pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-  }
-  catch(err)
-  {
-    console.error(err);
-    errorlist[8] = 999;
-  }
-  k_6 = k_6 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[9] = 999;
-    else
-    errorlist[9] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[9] = 999;
-    }
-    k_6 = k_6 + musclesteplength;
-  //DS right hip
-  k_7 = k_7 + musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-  if(CheckNaNST(VEC[0]))
-    errorlist[10] = 999;
-    else
-    errorlist[10] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[10] = 999;
-    }
-    k_7 = k_7 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[11] = 999;
-    else
-    errorlist[11] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[11] = 999;
-    }
-    k_7 = k_7 + musclesteplength;
-  //DS ankle right
-  T23 = T23 + torquesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[12] = 999;
-    else
-    errorlist[12] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[12] = 999;
-    }
-    T23 = T23 - 2 * torquesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-  if(CheckNaNST(VEC[0]))
-    errorlist[13] = 999;
-    else
-    errorlist[13] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[13] = 999;
-    }
-    T23 = T23 + torquesteplength;
-  //DS knee right
-  k_8 = k_8 + musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[14] = 999;
-    else
-    errorlist[14] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[14] = 999;
-    }
-    k_8 = k_8 - 2 * musclesteplength;
-  UpdateinitSW();
-  try{
-    VEC = calculateST(T,0);   
-    if(CheckNaNST(VEC[0]))
-    errorlist[15] = 999;
-    else
-    errorlist[15] = pow(pow(VEC[0]*deltaT-Tst,2)+0.05*pow(VEC[1]*180/PI-Stheta0_2,2)+0.05*pow(VEC[2]*180/PI-Stheta0_3,2),0.5)/3;
-    }
-    catch(err)
-    {
-      console.error(err);
-      errorlist[15] = 999;
-    }
-    k_8 = k_8 + musclesteplength;
-  UpdateinitSW();
-  //alert("ErrorvecST: "+ErrorvecST+"   min errorlist: "+min(errorlist));
-  //alert(errorlist);
-  if(min(errorlist) >= ErrorvecST)
-  {
-    return;
-  }
-  else{
-    var index = errorlist.indexOf(min(errorlist));
-    if( index == 0)
-    {
-      k_3 = k_3 + musclesteplength;
-    }
-    else if(index == 1)
-    {
-      k_3 = k_3 - musclesteplength;
-    }
-    else if( index == 2)
-    {
-      k_4 = k_4 + musclesteplength;
-    }
-    else if(index == 3)
-    {
-      k_4 = k_4 - musclesteplength;
-    }
-    else if( index == 4)
-    {
-      T13 = T13 + torquesteplength;
-    }
-    else if(index == 5)
-    {
-      T13 = T13 - torquesteplength;
-    }
-    else if( index == 6)
-    {
-      k_5 = k_5 + musclesteplength;
-    }
-    else if(index == 7)
-    {
-      k_5 = k_5 - musclesteplength;
-    }
-    else if(index == 8)
-    {
-      k_6 = k_6 + musclesteplength;
-    }
-    else if( index == 9)
-    {
-      k_6 = k_6 - musclesteplength;
-    }
-    else if( index == 10)
-    {
-      k_7 = k_7 + musclesteplength;
-    }
-    else if(index == 11)
-    {
-      k_7 = k_7 - musclesteplength;
-    }
-    else if( index == 12)
-    {
-      T23 = T23 + torquesteplength;
-    }
-    else if(index == 13)
-    {
-      T23 = T23 - torquesteplength;
-    }
-    else if( index == 14)
-    {
-      k_8 = k_8 + musclesteplength;
-    }
-    else if(index == 15)
-    {
-      k_8 = k_8 - musclesteplength;
-    }
-    UpdateinitSW();
-    iteration = iteration + 1;
-    //alert(min(errorlist));
-    StepsearchST(T);
-    return;
-  }
+  beta[0] = 180/PI*acos((len1*cos(alpha/180*PI)+len2*cos(theta/180*PI)+len5*cos(theta/180*PI+gamma/180*PI)+(1-footFraction)*len3*sin(theta/180*PI+gamma/180*PI)-len5)/(len1+len2));
+  beta[1] = 180/PI*(Dalpha/180*PI*len1*sin(alpha/180*PI)+Dtheta/180*PI*len2*sin(theta/180*PI)+(Dtheta+Dgamma)/180*PI*len5*sin(theta/180*PI+gamma/180*PI)-(Dtheta+Dgamma)/180*PI*(1-footFraction)*len3*cos(theta/180*PI+gamma/180*PI))/((len1+len2)*sin(beta[0]/180*PI));
+  return beta;
 }

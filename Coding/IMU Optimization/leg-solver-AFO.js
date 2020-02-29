@@ -1481,7 +1481,6 @@ timeArray = [];
   }
 
   function calculateSW(){
-   
     var t = 2;
      timeArray = [];
     theta1Array = [];

@@ -131,11 +131,11 @@ function clearTable() {
   myTable.innerHTML = "";
 }
 
-function UpdateRow(rownum,T1,T2,T3,T4) {
+function UpdateRow(rownum,Tswing,T2,T3,T4) {
   var myTable = document.getElementById('dataTable');
   //myTable.style.backgroundColor = "white";
   //myTable.setAttribute("bgcolor","#FF0000");
-  myTable.rows[1].cells[4].innerHTML = round(T1 * 0.2)/100;
+  myTable.rows[1].cells[4].innerHTML = Tswing;
   myTable.rows[3].cells[4].innerHTML = round(T2 * 0.2)/100;
   myTable.rows[5].cells[4].innerHTML = round(T3 * 0.2)/100;
   myTable.rows[7].cells[4].innerHTML = round(T4 * 0.2)/100;
