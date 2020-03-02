@@ -11,8 +11,8 @@ var StrikeIndex = [];
 var ACC = [];
 // G
 var g = 9.8;
-var height = [1.51,1.64,1.63,1.88,1.74,1.76];
-var weight = [50.8,62.3,72.1,125,115.1,86.4];
+var heightvec = [1.64,1.88,1.76];
+var weightvec = [62.3,125,86.4];
 var heighti;
 var weighti;
 var IMUdata;
@@ -1080,7 +1080,7 @@ function updateICs() {
   Stheta0_3_Label.html('Shank Flex Angle \u03B8(t<sub>3</sub>) (deg): ');
 /*   theta0_5 = Number(theta0_5_Input.value());
   theta0_5_Label.html('Initial \u0398 5: ' + theta0_5 + ' deg'); */
-  SthetaDot0_1 = -Number(SthetaDot0_1_Input.value());
+  SthetaDot0_1 = Number(SthetaDot0_1_Input.value());
   SthetaDot0_1_Label.html('Shank Flex Vel \u03C9(t<sub>1</sub>) (deg/s): ');
   SthetaDot0_2 = Number(SthetaDot0_2_Input.value());
   SthetaDot0_2_Label.html('Shank Flex Vel \u03C9(t<sub>2</sub>) (deg/s): ');
@@ -1123,21 +1123,21 @@ if(Optimizestep.checked())
 { 
   var Refervec = [];
   console.log("start iteration");
-  for(heighti = 0;heighti<6;heighti = heighti + 1){
-    for(weighti = 0;weighti<6;weighti = weighti + 1){
-  for(SthetaDot0_1 = -200; SthetaDot0_1 > -450; SthetaDot0_1 = SthetaDot0_1 -50){
+  for(heighti = 0;heighti<3;heighti = heighti + 1){
+    for(weighti = 0;weighti<3;weighti = weighti + 1){
+  for(SthetaDot0_1 = -200; SthetaDot0_1 > -450; SthetaDot0_1 = SthetaDot0_1 -100){
   for(Stheta0_1 = 25; Stheta0_1 < 76; Stheta0_1 = Stheta0_1 + 10){
-    for(theta0_1 = 5; theta0_1<(Stheta0_1-19); theta0_1 = theta0_1 + 5)
+    for(theta0_1 = 5; theta0_1<(Stheta0_1-19); theta0_1 = theta0_1 + 10)
     {
-      for(thetaDot0_1 = -50; thetaDot0_1>-300; thetaDot0_1 = thetaDot0_1 - 50)
+      for(thetaDot0_1 = -50; thetaDot0_1>-350; thetaDot0_1 = thetaDot0_1 - 100)
       {
-        for(theta0_5 = 5; theta0_5<30; theta0_5 = theta0_5 + 5)
+        for(theta0_5 = 5; theta0_5<30; theta0_5 = theta0_5 + 10)
     {
-      for(thetaDot0_5 = -50; thetaDot0_5>-300; thetaDot0_5 = thetaDot0_5 - 50)
+      for(thetaDot0_5 = -50; thetaDot0_5>-350; thetaDot0_5 = thetaDot0_5 - 100)
       {
         for(k_2 = 0; k_2<10; k_2 = k_2 + 2)
         {
-          for(k_1 = 0; k_1<20; k_1 = k_1+4)
+          for(k_1 = 0; k_1<20; k_1 = k_1+5)
           {
             iteration = iteration + 1;
 /*             if(iteration%10000000 == 0)
@@ -1151,6 +1151,10 @@ if(Optimizestep.checked())
             //alert(res);
             if(Number.isNaN(min(res))||(valid == false)||(res[0]>1)||(res[0]<0.05)||(res[5]<1)||(res[3]<-90)||(res[1]<-90)||(res[1]>-1)||(res[3]>0))
             {
+/*               if(valid == true)
+              {
+              alert("res[0]: "+res[0]+"res[1]: "+res[1]+"res[3]: "+res[3]+"res[5]: "+res[5]);
+              } */
               continue;
             }
             else{
@@ -1305,11 +1309,11 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 
 
 function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
-  return - (6*g*(mass1*len1+mass2*len2+2*mass1*len2+2*mass4*(len1+len2))/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2))) * Math.sin(myTheta) - 12*mu_*180/PI * (PI - myTheta)/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2));
+  return - (6*g*(mass1*len1+mass2*len2+2*mass1*len2+2*mass4*(len1+len2))/(mass2*pow(len2,2)+mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2))) * Math.sin(myTheta) - 12*mu_*180/PI * (PI - myTheta)/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2));
   //return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
-  return  - (6*g*(mass1*len1+mass2*len2+2*mass1*len2+2*mass4*(len1+len2))/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2))) * Math.sin(myTheta) ;
+  return  - (6*g*(mass1*len1+mass2*len2+2*mass1*len2+2*mass4*(len1+len2))/(mass2*pow(len2,2)+mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2))) * Math.sin(myTheta) ;
 }
 //www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2, khip, kknee) {
@@ -1345,19 +1349,19 @@ function loadScript( url, callback ) {
 }
 
 function UpdateinitSW(){
+  len1 = heightvec[heighti]*0.257;
+  len2 = heightvec[heighti]*0.229;
+  len3 = heightvec[heighti]*0.156;
+  len5 = heightvec[heighti]*0.042;
+  mass1 = weightvec[weighti]*0.132;
+  mass2 = weightvec[weighti]*0.044;
+  mass3 = weightvec[weighti]*0.014;
+  mass4 = weightvec[weighti]*0.62;
   BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1,theta0_5,thetaDot0_5);
   theta0_2 = Stheta0_1-theta0_1;
   theta0_4 = BETA[0];
   thetaDot0_2 = -SthetaDot0_1+thetaDot0_1;
   thetaDot0_4 = -BETA[1];
-  len1 = height[heighti]*0.257;
-  len2 = height[heighti]*0.229;
-  len3 = height[heighti]*0.156;
-  len5 = height[heighti]*0.042;
-  mass1 = weight[weighti]*0.132;
-  mass2 = weight[weighti]*0.044;
-  mass3 = weight[weighti]*0.014;
-  mass4 = weight[weighti]*0.62;
   if(Number.isNaN(BETA[0])||(Number.isNaN(BETA[1])))
   return false;
   theta0_1_Input.value(-theta0_1);
