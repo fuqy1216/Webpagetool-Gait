@@ -1125,8 +1125,8 @@ if(Optimizestep.checked())
   console.log("start iteration");
   for(heighti = 0;heighti<3;heighti = heighti + 1){
     for(weighti = 0;weighti<3;weighti = weighti + 1){
-  for(SthetaDot0_1 = -200; SthetaDot0_1 > -450; SthetaDot0_1 = SthetaDot0_1 -100){
-  for(Stheta0_1 = 25; Stheta0_1 < 76; Stheta0_1 = Stheta0_1 + 10){
+  for(SthetaDot0_2 = -200; SthetaDot0_2 > -450; SthetaDot0_2 = SthetaDot0_2 -100){
+  for(Stheta0_2 = 25; Stheta0_2 < 76; Stheta0_2 = Stheta0_2 + 10){
     for(theta0_1 = 5; theta0_1<min((Stheta0_1-19),35); theta0_1 = theta0_1 + 10)
     {
       for(thetaDot0_1 = -50; thetaDot0_1>-350; thetaDot0_1 = thetaDot0_1 - 100)
@@ -1144,10 +1144,11 @@ if(Optimizestep.checked())
             {
               alert("Progress: "+round(iteration/15912)+"%")
             } */
+            valid = UpdateinitSW();
             console.log("Iteration: " + iteration);
             res = [];
-            valid = UpdateinitSW();
-            res = calculateSW();
+            var init = [Dtheta21,0,0,theta21,0,0,0,theta21,Dtheta21*cos(theta21*PI/180)*cos(theta21),theta21];
+            res = calculateST(init);
             //alert(res);
             if(Number.isNaN(min(res))||(valid == false)||(res[0]>0.8)||(res[0]<0.2)||(res[5]<1)||(res[3]<-90)||(res[1]<-90)||(res[1]>-1)||(res[3]>0))
             {
