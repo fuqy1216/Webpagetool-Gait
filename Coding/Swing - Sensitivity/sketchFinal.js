@@ -11,6 +11,10 @@ var StrikeIndex = [];
 var ACC = [];
 // G
 var g = 9.8;
+var height = [1.51,1.64,1.63,1.88,1.74,1.76];
+var weight = [50.8,62.3,72.1,125,115.1,86.4];
+var heighti;
+var weighti;
 var IMUdata;
 var IMUMatrix = [];
 //For interpolation
@@ -1114,45 +1118,57 @@ var Refervec = [];
 var T = 0;
 var res = [];
 var iteration = 0;
+
 if(Optimizestep.checked())
 { 
   var Refervec = [];
-  
-    for(theta0_1 = 5; theta0_1<(Stheta0_1-19); theta0_1 = theta0_1 + 2)
+  console.log("start iteration");
+  for(heighti = 0;heighti<6;heighti = heighti + 1){
+    for(weighti = 0;weighti<6;weighti = weighti + 1){
+  for(SthetaDot0_1 = -200; SthetaDot0_1 > -450; SthetaDot0_1 = SthetaDot0_1 -50){
+  for(Stheta0_1 = 25; Stheta0_1 < 76; Stheta0_1 = Stheta0_1 + 10){
+    for(theta0_1 = 5; theta0_1<(Stheta0_1-19); theta0_1 = theta0_1 + 5)
     {
       for(thetaDot0_1 = -50; thetaDot0_1>-300; thetaDot0_1 = thetaDot0_1 - 50)
       {
-        for(theta0_5 = 5; theta0_5<30; theta0_5 = theta0_5 + 2)
+        for(theta0_5 = 5; theta0_5<30; theta0_5 = theta0_5 + 5)
     {
       for(thetaDot0_5 = -50; thetaDot0_5>-300; thetaDot0_5 = thetaDot0_5 - 50)
       {
-        for(k_2 = 0; k_2<10; k_2 = k_2 + 1)
+        for(k_2 = 0; k_2<10; k_2 = k_2 + 2)
         {
-          for(k_1 = 0; k_1<20; k_1 = k_1+1)
+          for(k_1 = 0; k_1<20; k_1 = k_1+4)
           {
             iteration = iteration + 1;
-            if(iteration%10000000 == 0)
+/*             if(iteration%10000000 == 0)
             {
               alert("Progress: "+round(iteration/15912)+"%")
-            }
+            } */
+            console.log("Iteration: " + iteration);
             res = [];
             valid = UpdateinitSW();
             res = calculateSW();
             //alert(res);
-            if(Number.isNaN(min(res))||(valid == false)||(res[0]>1))
+            if(Number.isNaN(min(res))||(valid == false)||(res[0]>1)||(res[0]<0.05)||(res[5]<1)||(res[3]<-90)||(res[1]<-90)||(res[1]>-1)||(res[3]>0))
             {
               continue;
             }
             else{
-            Refervec.push([theta0_1, theta0_2,theta0_5,theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_5, thetaDot0_4,
-              res,"enter"]);
+            Rstepl = (len1+len2)*sin(theta0_4/180*PI)+len1*sin(theta0_1/180*PI)+len2*sin((theta0_1+theta0_2)/180*PI)+len5*sin((theta0_1+theta0_2+theta0_5)/180*PI)-len3*(1-footFraction)*cos((theta0_1+theta0_2+theta0_5)/180*PI)+len3*(1-footFraction);
+            Lstepl = len3*footFraction+(len1+len2)*sin(-res[1]/180*PI)+(len1)*sin(-res[3]/180*PI)+(len2+len5)*sin((-res[3]+res[5])/180*PI)-len3*footFraction*cos((-res[3]+res[5])/180*PI);
+            Refervec.push([theta0_1, theta0_2,theta0_5,theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_5, thetaDot0_4, k_1, k_2,
+              res,Rstepl,Lstepl,"enter"]);
             //alert(Refervec);
             }
           }
         }
+        }
+      }
+    }
       }
     }
 }
+    }
 }
 }
 alert("Save Data!");
@@ -1289,11 +1305,11 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
 
 
 function singlePendAFO_getThetaDoubleDot(myTheta, myThetaDot) {
-  return -1 * mu_*180/PI * myTheta*3/pow(len1+len2,2)/(mass1+mass2) - (g/(len1+len2) * Math.sin(myTheta));
+  return - (6*g*(mass1*len1+mass2*len2+2*mass1*len2+2*mass4*(len1+len2))/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2))) * Math.sin(myTheta) - 12*mu_*180/PI * (PI - myTheta)/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2));
   //return  - (g/(len1+len2)) * Math.sin(myTheta);
 }
 function singlePend_getThetaDoubleDot(myTheta, myThetaDot) {
-  return  - (g/(len1+len2)) * Math.sin(myTheta);
+  return  - (6*g*(mass1*len1+mass2*len2+2*mass1*len2+2*mass4*(len1+len2))/(mass2*pow(len2,2)+3*mass1*pow(len1+2*len2,2)+12*mass4*pow(len1+len2,2))) * Math.sin(myTheta) ;
 }
 //www.myphysicslab.com/pendulum/double-pendulum-en.html
 function doublePend_getThetaDoubleDot_1(myTheta1, myTheta2, myThetaDot1, myThetaDot2, khip, kknee) {
@@ -1334,6 +1350,14 @@ function UpdateinitSW(){
   theta0_4 = BETA[0];
   thetaDot0_2 = -SthetaDot0_1+thetaDot0_1;
   thetaDot0_4 = -BETA[1];
+  len1 = height[heighti]*0.257;
+  len2 = height[heighti]*0.229;
+  len3 = height[heighti]*0.156;
+  len5 = height[heighti]*0.042;
+  mass1 = weight[weighti]*0.132;
+  mass2 = weight[weighti]*0.044;
+  mass3 = weight[weighti]*0.014;
+  mass4 = weight[weighti]*0.62;
   if(Number.isNaN(BETA[0])||(Number.isNaN(BETA[1])))
   return false;
   theta0_1_Input.value(-theta0_1);

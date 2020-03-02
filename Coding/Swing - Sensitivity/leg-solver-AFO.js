@@ -668,7 +668,7 @@ function solvedoublestanceAFO(){
       var theta4DoubleDot;
       var index = 0;
       for (var i = 0; i < t; i = i + deltaT) {
-        theta4DoubleDot = singlePendAFO_getThetaDoubleDot(theta4, theta4Dot);
+        theta4DoubleDot = singlePend_getThetaDoubleDot(theta4, theta4Dot);
         theta4 = theta4 + theta4Dot * deltaT;
         theta4Dot = theta4Dot + theta4DoubleDot * deltaT;
         //timeArray[index] = i;
@@ -678,6 +678,9 @@ function solvedoublestanceAFO(){
         index = index + 1;
       }
       var T1 = calculateSwingHeel(t/deltaT);
+      /* alert(theta4Array);
+      alert(theta4Array[T1/deltaT]);
+      alert((PI-theta4Array[T1/deltaT])/PI*180); */
       var VEC = [T1, round((PI-theta4Array[T1/deltaT])/PI*180*100)/100, round(thetaDot4Array[T1/deltaT]/PI*180*100)/100, 
       round(theta1Array[T1/deltaT]/PI*180*100)/100, round(thetaDot1Array[T1/deltaT]/PI*180*100)/100, 
       round(theta2Array[T1/deltaT]/PI*180*100)/100, round(thetaDot2Array[T1/deltaT]/PI*180*100)/100];
