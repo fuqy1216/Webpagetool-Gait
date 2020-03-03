@@ -50,7 +50,7 @@ function solvedoublestanceAFO(DSItheta0,DSItheta1,DSItheta2,DSIdtheta0,DSIdtheta
       DSItheta4 = acos((len3*sin(DSItheta0) + len5*cos(DSItheta0) + len2*cos(DSItheta0+DSItheta1) + len1*cos(DSItheta0+DSItheta1-DSItheta2) - Radius)/(len1+len2+len5-Radius));
       if(isNaN(DSItheta4)) 
       {DSItheta4 = 0;
-        alert("DSItheta4 NaN");
+        //alert("DSItheta4 NaN");
       }
       a24 = [
         [-len1*sin(DSItheta0+DSItheta1-DSItheta2), (len1+len2+len5-Radius)*sin(DSItheta4)],
@@ -670,20 +670,22 @@ return LandingT;
     //alert(DStheta);
     //alert(DSdtheta);
     //alert(T1stswing)
-    //alert("DStheta: "+DStheta+"\nDSdtheta: "+DSdtheta+"\nT23: "+T23+"\nk_7: "+k_7+"\nk_8: "+k_8);
+    //alert("line 673: DStheta: "+DStheta+"\nDSdtheta: "+DSdtheta+"\nT23: "+T23+"\nk_7: "+k_7+"\nk_8: "+k_8);
     Doublestance(DStheta, DSdtheta, T23, k_7, k_8, 1);
-    //alert("(line 687) length: "+DStheta0Array.length);
+    //alert("(line 675) length: "+DStheta0Array.length);
     //alert("DStheta0Array: " + DStheta0Array+"\nDStheta1Array: "+DStheta1Array+"\nDStheta2Array: "+DStheta2Array+"\nDStheta4Array: "+DStheta4Array);
     //for trim purpose
     DSthetainit = [DStheta0Array[0], DStheta1Array[0], DStheta2Array[0], DStheta4Array[0]];
     if(DStheta0Array.length == 1)
     {
+      return NaN;
+    }
      // length2 = 1;
       DStheta0ArrayV = DStheta0Array;
       DStheta1ArrayV = DStheta1Array;
       DStheta2ArrayV = DStheta2Array;
       DStheta4ArrayV = DStheta4Array;
-    }
+    /*}
     else{
       //alert("DStheta0Array length: "+DStheta0Array.length);
     DStheta0ArrayM = [];
@@ -703,7 +705,7 @@ return LandingT;
 /*     if(DStheta0Array.length < 8)
     interRatio = 20;
     else */
-    interRatio = 4;
+    /*interRatio = 4;
     //alert("DStheta0ArrayM: "+DStheta0ArrayM);
     //interpolation
     //alert(DStheta1Array);
@@ -737,6 +739,7 @@ return LandingT;
     DStheta4ArrayV = DStheta4ArrayV.slice(0,ENDT2);  
     //length2 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
   } 
+  */
   //alert("DStheta0ArrayV length: "+DStheta0ArrayV.length);
   length2 = DStheta0ArrayV.length;
   //alert("line 750");
@@ -1126,21 +1129,24 @@ intertheta41 = DStheta4ArrayV;
      //corrisponding to trigger double stance
      var DStheta = [DS2theta0Array[0], DS2theta1Array[0], DS2theta2Array[0], DS2theta4Array[0]];
      var DSdtheta = [DS2thetaDot0Array[0], DS2thetaDot1Array[0], DS2thetaDot2Array[0], DS2thetaDot4Array[0]];
-
-     //alert("line 1130, DStheta: "+DStheta+"\nDSdtheta: "+DSdtheta+"\nT23: "+T13+"\nk_7: "+k_3+"\nk_8: "+k_4);
-     DoublestanceAFO(DStheta, DSdtheta, T13, k_3,k_4);
-     //alert("DS2theta0Array length: "+DS2theta0Array.length);
+/*     DStheta = [0,0.087,0,0.087];
+    DSdtheta = [1.745,0,0,-1.732]; */
+     //alert("line 1133, DStheta: "+DStheta+"\nDSdtheta: "+DSdtheta+"\nT23: "+T13+"\nk_7: "+k_3+"\nk_8: "+k_4);
+     DoublestanceAFO(DStheta, DSdtheta, T13, k_3,k_4,1);
+     //alert("(line 1135) length: "+DS2theta0Array.length);
      
      //for trim purpose
      DSthetainit = [DS2theta0Array[0], DS2theta1Array[0], DS2theta2Array[0], DS2theta4Array[0]];
      if(DS2theta0Array.length == 1)
     {
+      return NaN;
+    }
      // length2 = 1;
       DS2theta0ArrayV = DS2theta0Array;
       DS2theta1ArrayV = DS2theta1Array;
       DS2theta2ArrayV = DS2theta2Array;
       DS2theta4ArrayV = DS2theta4Array;
-    }
+    /*}
     else{
      DS2theta0ArrayM = [];
      DS2theta1ArrayM = [];
@@ -1158,7 +1164,7 @@ intertheta41 = DStheta4ArrayV;
 /*      if(DStheta0Array.length < 8)
      interRatio = 20;
      else */
-     interRatio = 4;
+     /*interRatio = 4;
      //interpolation
      try{
       DS2theta0ArrayV = DataProcess(arrayX, DS2theta0ArrayM, interRatio);
@@ -1190,6 +1196,7 @@ intertheta41 = DStheta4ArrayV;
       DS2theta4ArrayV = DS2theta4ArrayV.slice(0,ENDT2);  
       //length2 = DStheta0ArrayM.length * interRatio - (interRatio-1)+1;
     } 
+    */
     //alert("DStheta0ArrayV length: "+DStheta0ArrayV.length);
     length4 = DS2theta0ArrayV.length;
      //Length for swing+stance
@@ -1200,19 +1207,19 @@ intertheta41 = DStheta4ArrayV;
 
      //alert(length1 + ',' + length2 + ',' + length3 + ',' + length4);
      //LenT1 = length1;
-     T2 = length2;
+     T2 = length2*4;
      T3 = length3;
-     T4 = length4;
-     Step = -len3*(1-footFraction)*cos(DS2theta0ArrayV[DS2theta0ArrayV.length-1])+len5*sin(DS2theta0ArrayV[DS2theta0ArrayV.length-1])
-     +len2*sin(DS2theta0ArrayV[DS2theta0ArrayV.length-1]+DS2theta1ArrayV[DS2theta1ArrayV.length-1])
-     +len1*sin(DS2theta0ArrayV[DS2theta0ArrayV.length-1]+DS2theta1ArrayV[DS2theta1ArrayV.length-1]-DS2theta2ArrayV[DS2theta2ArrayV.length-1])
-     +(len1+len2)*sin(DS2theta4ArrayV[DS2theta4ArrayV.length-1])+len3*(1-footFraction);
+     T4 = length4*4;
+     Step = -len3*(1-footFraction)*cos(DS2theta0ArrayV[DS2theta0ArrayV.length-1])+len5*sin(abs(DS2theta0ArrayV[DS2theta0ArrayV.length-1]))
+     +len2*sin(abs(DS2theta0ArrayV[DS2theta0ArrayV.length-1]+DS2theta1ArrayV[DS2theta1ArrayV.length-1]))
+     +len1*sin(abs(DS2theta0ArrayV[DS2theta0ArrayV.length-1]+DS2theta1ArrayV[DS2theta1ArrayV.length-1]-DS2theta2ArrayV[DS2theta2ArrayV.length-1]))
+     +(len1+len2)*sin(abs(DS2theta4ArrayV[DS2theta4ArrayV.length-1]))+len3*(1-footFraction);
      //alert("DS2theta4ArrayV: "+DS2theta4Array);
-     VEC = [T2, T3, T4, (T2+T3+T4)*deltaT, 
-     DS2theta0ArrayV[DS2theta0ArrayV.length-1], (DS2theta0ArrayV[DS2theta0ArrayV.length-1]-DS2theta0ArrayV[DS2theta0ArrayV.length-2])/deltaT/10, 
-     DS2theta1ArrayV[DS2theta1ArrayV.length-1], (DS2theta1ArrayV[DS2theta1ArrayV.length-1]-DS2theta1ArrayV[DS2theta1ArrayV.length-2])/deltaT/10, 
-     DS2theta2ArrayV[DS2theta2ArrayV.length-1], (DS2theta2ArrayV[DS2theta2ArrayV.length-1]-DS2theta2ArrayV[DS2theta2ArrayV.length-2])/deltaT/10, 
-     DS2theta4ArrayV[DS2theta4ArrayV.length-1], (DS2theta4ArrayV[DS2theta4ArrayV.length-1]-DS2theta4ArrayV[DS2theta4ArrayV.length-2])/deltaT/10,
+     VEC = [T2*deltaT, T3*deltaT, T4*deltaT, 
+     DS2theta0ArrayV[DS2theta0ArrayV.length-1]/PI*180, (DS2theta0ArrayV[DS2theta0ArrayV.length-1]-DS2theta0ArrayV[DS2theta0ArrayV.length-2])/deltaT/10/PI*180, 
+     DS2theta1ArrayV[DS2theta1ArrayV.length-1]/PI*180, (DS2theta1ArrayV[DS2theta1ArrayV.length-1]-DS2theta1ArrayV[DS2theta1ArrayV.length-2])/deltaT/10/PI*180, 
+     DS2theta2ArrayV[DS2theta2ArrayV.length-1]/PI*180, (DS2theta2ArrayV[DS2theta2ArrayV.length-1]-DS2theta2ArrayV[DS2theta2ArrayV.length-2])/deltaT/10/PI*180, 
+     DS2theta4ArrayV[DS2theta4ArrayV.length-1]/PI*180, (DS2theta4ArrayV[DS2theta4ArrayV.length-1]-DS2theta4ArrayV[DS2theta4ArrayV.length-2])/deltaT/10/PI*180,
      Step];
      /*      interT = [];
      for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){

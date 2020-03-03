@@ -13,6 +13,8 @@ var ACC = [];
 var g = 9.8;
 var heightvec = [1.64,1.88,1.76];
 var weightvec = [62.3,125,86.4];
+var mu_vec = [0,3.4,6.9];
+var mu_i;
 var heighti;
 var weighti;
 var IMUdata;
@@ -1118,7 +1120,7 @@ var Refervec = [];
 var T = 0;
 var res = [];
 var iteration = 0;
-
+var validnum = 0;
 if(Optimizestep.checked())
 { 
   var Refervec = [];
@@ -1127,21 +1129,22 @@ if(Optimizestep.checked())
   theta21 = 20;
   var init = [Dtheta21,0,0,theta21,0,0,0,theta21,-Dtheta21*cos(theta21*PI/180)*cos(theta21*PI/180),theta21];
   res = calculateST(init,0); */
+  for(mu_i = 0;mu_i<3;mu_i=mu_i+1){
   for(heighti = 0;heighti<3;heighti = heighti + 1){
     for(weighti = 0;weighti<3;weighti = weighti + 1){
   for(SthetaDot0_2 = -100; SthetaDot0_2 > -350; SthetaDot0_2 = SthetaDot0_2 -100){
   for(Stheta0_2 = 5; Stheta0_2 < 35; Stheta0_2 = Stheta0_2 + 10){
-    for(k_3 = 0; k_3<30; k_3 = k_3 + 10)
+    for(k_3 = 15; k_3<30; k_3 = k_3 + 10)
     {
-      for(k_4 = 0; k_4<30; k_4 = k_4 + 10)
+      for(k_4 = 15; k_4<30; k_4 = k_4 + 10)
       {
         for(k_6 = 0; k_6<11; k_6 = k_6 + 5)
         {
           for(k_5 = 0; k_5<30; k_5 = k_5+10)
           {
-            for(k_7 = 0; k_7<30; k_7 = k_7 + 10)
+            for(k_7 = 15; k_7<30; k_7 = k_7 + 10)
             {
-              for(k_8 = 0; k_8<30; k_8 = k_8 + 10)
+              for(k_8 = 15; k_8<30; k_8 = k_8 + 10)
               {
                 for(T13 = 110; T13<171; T13 = T13 + 30)
                 {
@@ -1153,14 +1156,23 @@ if(Optimizestep.checked())
               alert("Progress: "+round(iteration/15912)+"%")
             } */
             valid = UpdateinitSW();
+            if(iteration%10000==0)
             console.log("Iteration: " + iteration);
             res = [];
             var Dtheta21 = abs(SthetaDot0_2);
             var theta21 = abs(Stheta0_2);
             var init = [Dtheta21,0,0,theta21,0,0,0,theta21,-Dtheta21*cos(theta21*PI/180)*cos(theta21*PI/180),theta21];
+/*             k_3 = 20;
+            k_4 = 20;
+            k_5 = 20;
+            k_6 = 10;
+            k_7 = 20;
+            k_8 = 20;
+            T13 = 140;
+            T23 = 140; */
             res = calculateST(init);
             //alert(res);
-            if(Number.isNaN(min(res)))
+            if(Number.isNaN(min(res))||(res[0]>1)||(res[0]<0.2)||(res[9]>1)||(res[9]<0.2))
             {
 /*               if(valid == true)
               {
@@ -1170,11 +1182,15 @@ if(Optimizestep.checked())
             }
             else{
             Refervec.push([heightvec[heighti], weightvec[weighti], Stheta0_2, SthetaDot0_2,
-              K_3, K_4, K_5, K_6, K_7, K_8, T13, T23,
+              k_3, k_4, k_5, k_6, k_7, k_8, T13, T23,
               res,"enter"]);
+              validnum = validnum + 1;
+              console.log("valid: "+validnum);
             //alert(Refervec);
             }
+
           }
+        }
         }
           }
         }
@@ -1369,7 +1385,7 @@ function UpdateinitSW(){
   mass2 = weightvec[weighti]*0.044;
   mass3 = weightvec[weighti]*0.014;
   mass4 = weightvec[weighti]*0.62;
-  
+  mu_ = mu_vec[mu_i];
   theta0_1_Input.value(-theta0_1);
   theta0_2_Input.value(theta0_2);
   theta0_4_Input.value(-Math.round(theta0_4));
