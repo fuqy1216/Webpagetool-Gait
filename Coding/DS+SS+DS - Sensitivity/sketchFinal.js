@@ -1123,22 +1123,30 @@ if(Optimizestep.checked())
 { 
   var Refervec = [];
   console.log("start iteration");
+/*   Dtheta21 = 150;
+  theta21 = 20;
+  var init = [Dtheta21,0,0,theta21,0,0,0,theta21,-Dtheta21*cos(theta21*PI/180)*cos(theta21*PI/180),theta21];
+  res = calculateST(init,0); */
   for(heighti = 0;heighti<3;heighti = heighti + 1){
     for(weighti = 0;weighti<3;weighti = weighti + 1){
-  for(SthetaDot0_2 = -200; SthetaDot0_2 > -450; SthetaDot0_2 = SthetaDot0_2 -100){
-  for(Stheta0_2 = 25; Stheta0_2 < 76; Stheta0_2 = Stheta0_2 + 10){
-    for(theta0_1 = 5; theta0_1<min((Stheta0_1-19),35); theta0_1 = theta0_1 + 10)
+  for(SthetaDot0_2 = -100; SthetaDot0_2 > -350; SthetaDot0_2 = SthetaDot0_2 -100){
+  for(Stheta0_2 = 5; Stheta0_2 < 35; Stheta0_2 = Stheta0_2 + 10){
+    for(k_3 = 0; k_3<30; k_3 = k_3 + 10)
     {
-      for(thetaDot0_1 = -50; thetaDot0_1>-350; thetaDot0_1 = thetaDot0_1 - 100)
+      for(k_4 = 0; k_4<30; k_4 = k_4 + 10)
       {
-        for(theta0_5 = 5; theta0_5<30; theta0_5 = theta0_5 + 10)
-    {
-      for(thetaDot0_5 = -50; thetaDot0_5>-350; thetaDot0_5 = thetaDot0_5 - 100)
-      {
-        for(k_2 = 0; k_2<10; k_2 = k_2 + 2)
+        for(k_6 = 0; k_6<11; k_6 = k_6 + 5)
         {
-          for(k_1 = 0; k_1<20; k_1 = k_1+5)
+          for(k_5 = 0; k_5<30; k_5 = k_5+10)
           {
+            for(k_7 = 0; k_7<30; k_7 = k_7 + 10)
+            {
+              for(k_8 = 0; k_8<30; k_8 = k_8 + 10)
+              {
+                for(T13 = 110; T13<171; T13 = T13 + 30)
+                {
+                  for(T23 = 110; T23<171; T23 = T23 + 30)
+                  {
             iteration = iteration + 1;
 /*             if(iteration%10000000 == 0)
             {
@@ -1147,10 +1155,12 @@ if(Optimizestep.checked())
             valid = UpdateinitSW();
             console.log("Iteration: " + iteration);
             res = [];
-            var init = [Dtheta21,0,0,theta21,0,0,0,theta21,Dtheta21*cos(theta21*PI/180)*cos(theta21),theta21];
+            var Dtheta21 = abs(SthetaDot0_2);
+            var theta21 = abs(Stheta0_2);
+            var init = [Dtheta21,0,0,theta21,0,0,0,theta21,-Dtheta21*cos(theta21*PI/180)*cos(theta21*PI/180),theta21];
             res = calculateST(init);
             //alert(res);
-            if(Number.isNaN(min(res))||(valid == false)||(res[0]>0.8)||(res[0]<0.2)||(res[5]<1)||(res[3]<-90)||(res[1]<-90)||(res[1]>-1)||(res[3]>0))
+            if(Number.isNaN(min(res)))
             {
 /*               if(valid == true)
               {
@@ -1159,12 +1169,13 @@ if(Optimizestep.checked())
               continue;
             }
             else{
-            Rstepl = (len1+len2)*sin(theta0_4/180*PI)+len1*sin(theta0_1/180*PI)+len2*sin((theta0_1+theta0_2)/180*PI)+len5*sin((theta0_1+theta0_2+theta0_5)/180*PI)-len3*(1-footFraction)*cos((theta0_1+theta0_2+theta0_5)/180*PI)+len3*(1-footFraction);
-            Lstepl = len3*footFraction+(len1+len2)*sin(-res[1]/180*PI)+(len1)*sin(-res[3]/180*PI)+(len2+len5)*sin((-res[3]+res[5])/180*PI)-len3*footFraction*cos((-res[3]+res[5])/180*PI);
-            Refervec.push([heightvec[heighti], weightvec[weighti], Stheta0_1, SthetaDot0_1, theta0_1, theta0_2,theta0_5,theta0_4, thetaDot0_1, thetaDot0_2, thetaDot0_5, thetaDot0_4, k_1, k_2,
-              res,Rstepl,Lstepl,"enter"]);
+            Refervec.push([heightvec[heighti], weightvec[weighti], Stheta0_2, SthetaDot0_2,
+              K_3, K_4, K_5, K_6, K_7, K_8, T13, T23,
+              res,"enter"]);
             //alert(Refervec);
             }
+          }
+        }
           }
         }
         }
@@ -1304,7 +1315,7 @@ function findPeriod(inputArr) { // No longer wanted by TJA (5/2/2019)
   var myTotal = 0;
   for (var k = 0; k < myDiffs.length; k++) myTotal = myTotal + myDiffs[k];
   var myAvg = myTotal/myDiffs.length;
-  // console.log('Estimated Period: ' + round(myAvg*2/1000*100)/100 + ' seconds');
+  //console.log('Estimated Period: ' + round(myAvg*2/1000*100)/100 + ' seconds');
 }
 */
 
@@ -1358,13 +1369,7 @@ function UpdateinitSW(){
   mass2 = weightvec[weighti]*0.044;
   mass3 = weightvec[weighti]*0.014;
   mass4 = weightvec[weighti]*0.62;
-  BETA = findfronthip(len1,len2,len3,len5,footFraction,theta0_1,Stheta0_1,thetaDot0_1,SthetaDot0_1,theta0_5,thetaDot0_5);
-  theta0_2 = Stheta0_1-theta0_1;
-  theta0_4 = BETA[0];
-  thetaDot0_2 = -SthetaDot0_1+thetaDot0_1;
-  thetaDot0_4 = -BETA[1];
-  if(Number.isNaN(BETA[0])||(Number.isNaN(BETA[1])))
-  return false;
+  
   theta0_1_Input.value(-theta0_1);
   theta0_2_Input.value(theta0_2);
   theta0_4_Input.value(-Math.round(theta0_4));

@@ -3,3 +3,4 @@ swingheel
 DS:
 DSthetaDot0Array no PI
 
+DStheta0Array
