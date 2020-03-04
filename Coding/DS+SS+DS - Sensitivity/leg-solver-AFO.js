@@ -1220,7 +1220,7 @@ intertheta41 = DStheta4ArrayV;
      DS2theta1ArrayV[DS2theta1ArrayV.length-1]/PI*180, (DS2theta1ArrayV[DS2theta1ArrayV.length-1]-DS2theta1ArrayV[DS2theta1ArrayV.length-2])/deltaT/10/PI*180, 
      DS2theta2ArrayV[DS2theta2ArrayV.length-1]/PI*180, (DS2theta2ArrayV[DS2theta2ArrayV.length-1]-DS2theta2ArrayV[DS2theta2ArrayV.length-2])/deltaT/10/PI*180, 
      DS2theta4ArrayV[DS2theta4ArrayV.length-1]/PI*180, (DS2theta4ArrayV[DS2theta4ArrayV.length-1]-DS2theta4ArrayV[DS2theta4ArrayV.length-2])/deltaT/10/PI*180,
-     Step];
+     abs(Step)];
      /*      interT = [];
      for (var i = 0; i < 2*(T1/deltaT + DStheta0ArrayM.length * interRatio - (interRatio-1)+1); i = i + 1){
       interT[i] = i * deltaT;
