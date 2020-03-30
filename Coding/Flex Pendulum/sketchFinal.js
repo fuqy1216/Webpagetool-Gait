@@ -109,6 +109,10 @@ var theta0_1_Label;
 var theta0_2 = 30.0;
 var theta0_2_Input;
 var theta0_2_Label;
+// Initial Angle of Second Pendulum
+var theta0_3 = -20.0;
+var theta0_3_Input;
+var theta0_3_Label;
 // Initial Angle of Stance Inverted Pendulum
 var theta0_4 = -15.0;
 var theta0_4_Input;
@@ -126,7 +130,7 @@ var thetaDot0_2 = 500.0;
 var thetaDot0_2_Input;
 var thetaDot0_2_Label;
 // Initial Angular Velocity of Second Pendulum
-var thetaDot0_3 = 500.0;
+var thetaDot0_3 = -200.0;
 var thetaDot0_3_Input;
 var thetaDot0_3_Label;
 // Initial Angular Velocity of Inverted Pendulum
@@ -374,7 +378,7 @@ function setup() {
     mass4Label = createDiv('Upperbody Mass M (kg): ');
     mass4Label.position(len5Label.x, mass4Input.y);
 //AFO
-  AFO = createDiv('AFO stiffness (AFO the Left, Green Side)');
+  AFO = createDiv('AFO stiffness (AFO on the Left, Green Side)');
   AFO.position(10, mass1Input.y+40);
   AFO.style('font-weight', 'bold');
   AFO.style('font-size', '26px');
@@ -480,7 +484,7 @@ function setup() {
  SthetaDot0_3_Label.position(mass2Label.x, SthetaDot0_3_Input.y); */
 
  //Optimization Result:
- Optangle = createDiv('Initial Joint Angles and Angular Velocities, Left - Green, Right - Black');
+ Optangle = createDiv('Initial Joint Angles and Angular Velocities (Left - Green, Right - Black)');
  Optangle.position(10, mu_Input.y+40);
  Optangle.style('font-weight', 'bold');
  Optangle.style('font-size', '26px');
@@ -501,9 +505,17 @@ theta0_2_Input.value(theta0_2);
 theta0_2_Input.input(updateICs);
 theta0_2_Label = createDiv('L Knee Angle \u03B8<sub>12</sub>(t<sub>1</sub>) (deg): ');
 theta0_2_Label.position(mass1Label.x, theta0_2_Input.y);
+// Initial Angle of Second Pendulum
+theta0_3_Input = createInput();
+theta0_3_Input.position(mass1Input.x, theta0_2_Input.y + 30);
+theta0_3_Input.style('width', '70px');
+theta0_3_Input.value(theta0_3);
+theta0_3_Input.input(updateICs);
+theta0_3_Label = createDiv('L Ankle Angle \u03B8<sub>12</sub>(t<sub>1</sub>) (deg): ');
+theta0_3_Label.position(mass1Label.x, theta0_3_Input.y);
   // Initial Angle of Inverted Pendulum
   theta0_4_Input = createInput();
-  theta0_4_Input.position(mass1Input.x, theta0_2_Input.y + 30);
+  theta0_4_Input.position(mass1Input.x, theta0_3_Input.y + 30);
   theta0_4_Input.style('width', '70px');
   theta0_4_Input.value(-Math.round(theta0_4));
   theta0_4_Input.input(updateICs);
@@ -525,6 +537,14 @@ thetaDot0_2_Input.value(thetaDot0_2);
 thetaDot0_2_Input.input(updateICs);
 thetaDot0_2_Label = createDiv('L Knee Vel \u03C9<sub>12</sub>(t<sub>1</sub>) (deg/s): ')
 thetaDot0_2_Label.position(mass2Label.x, theta0_2_Input.y);
+// Initial Angular Velocity of Second Pendulum
+thetaDot0_3_Input = createInput();
+thetaDot0_3_Input.position(mass2Input.x, theta0_3_Input.y);
+thetaDot0_3_Input.style('width', '70px');
+thetaDot0_3_Input.value(thetaDot0_3);
+thetaDot0_3_Input.input(updateICs);
+thetaDot0_3_Label = createDiv('L Ankle Vel \u03C9<sub>12</sub>(t<sub>1</sub>) (deg/s): ')
+thetaDot0_3_Label.position(mass2Label.x, theta0_3_Input.y);
   // Initial Angular Velocity of Inverted Pendulum
   thetaDot0_4_Input = createInput();
   thetaDot0_4_Input.position(mass2Input.x, theta0_4_Input.y);
@@ -770,7 +790,7 @@ Optright.style('font-size', '22px');
 
   enterHeaders();
 
-  theta0_1_Input.attribute('disabled', '');
+/*   theta0_1_Input.attribute('disabled', '');
   theta0_2_Input.attribute('disabled', '');
   thetaDot0_1_Input.attribute('disabled', '');
   thetaDot0_2_Input.attribute('disabled', '');
@@ -785,7 +805,7 @@ Optright.style('font-size', '22px');
   k7_Input.attribute('disabled', '');
   k8_Input.attribute('disabled', '');
   T13_Input.attribute('disabled', '');
-  T23_Input.attribute('disabled', '');
+  T23_Input.attribute('disabled', ''); */
 }
 
 
@@ -1117,8 +1137,10 @@ function start() {
   mass4Input.attribute('disabled', '');
   theta0_1_Input.attribute('disabled', '');
   theta0_2_Input.attribute('disabled', '');
+  theta0_3_Input.attribute('disabled', '');
   thetaDot0_1_Input.attribute('disabled', '');
   thetaDot0_2_Input.attribute('disabled', '');
+  thetaDot0_3_Input.attribute('disabled', '');
   theta0_4_Input.attribute('disabled', '');
   thetaDot0_4_Input.attribute('disabled', '');
   mu_Input.attribute('disabled', '');
@@ -1126,6 +1148,12 @@ function start() {
   k2_Input.attribute('disabled', '');
   k3_Input.attribute('disabled', '');
   k4_Input.attribute('disabled', '');
+  k5_Input.attribute('disabled', '');
+  k6_Input.attribute('disabled', '');
+  k7_Input.attribute('disabled', '');
+  k8_Input.attribute('disabled', '');
+  T13_Input.attribute('disabled', '');
+  T23_Input.attribute('disabled', '');
   //time_Input.attribute('disabled', '');
   startB.attribute('disabled', '');
   loadB.attribute('disabled', '');
@@ -1290,6 +1318,8 @@ function reset() {
   theta0_2_Input.removeAttribute('disabled');
   thetaDot0_1_Input.removeAttribute('disabled');
   thetaDot0_2_Input.removeAttribute('disabled');
+  theta0_3_Input.removeAttribute('disabled');
+  thetaDot0_3_Input.removeAttribute('disabled');
   theta0_4_Input.removeAttribute('disabled');
   thetaDot0_4_Input.removeAttribute('disabled');
   mu_Input.removeAttribute('disabled');
@@ -1297,6 +1327,12 @@ function reset() {
   k2_Input.removeAttribute('disabled');
   k3_Input.removeAttribute('disabled');
   k4_Input.removeAttribute('disabled');
+  k5_Input.removeAttribute('disabled');
+  k6_Input.removeAttribute('disabled');
+  k7_Input.removeAttribute('disabled');
+  k8_Input.removeAttribute('disabled');
+  T13_Input.removeAttribute('disabled');
+  T23_Input.removeAttribute('disabled');
   time_Input.removeAttribute('disabled');
   startB.removeAttribute('disabled');
   loadB.removeAttribute('disabled');
