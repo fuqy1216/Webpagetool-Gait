@@ -927,12 +927,12 @@ timeArray = [];
     }*/
     //slice data for plotting
     if(Final){
-      alert('Final');
+      //alert('Final');
      TotalT = NewTA.length;
     NewTA.splice(NewTA.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT);
     NewTA.splice(NewTA.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
     //alert(NewTA);
-    alert('Final 935');
+    //alert('Final 935');
     intertheta1V.splice(intertheta1V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
     intertheta1V = intertheta1V.concat(intertheta1V[0]);
     intertheta1V.splice(intertheta1V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
@@ -951,7 +951,7 @@ timeArray = [];
     intertheta6V.splice(intertheta6V.length-T4/(T1+T2+T3+T4)*TotalT,T4/(T1+T2+T3+T4)*TotalT+1);
     intertheta6V = intertheta6V.concat(intertheta6V[0]);
     intertheta6V.splice(intertheta6V.length-(T3+T2)/(T1+T2+T3+T4)*TotalT,T2/(T1+T2+T3+T4)*TotalT+1);
-    alert('line 954');
+    //alert('line 954');
     intertheta1V = ProcessDSphasedata(NewTA, intertheta1V);
     intertheta2V = ProcessDSphasedata(NewTA, intertheta2V);
     intertheta3V = ProcessDSphasedata(NewTA, intertheta3V);
@@ -959,7 +959,7 @@ timeArray = [];
     intertheta5V = ProcessDSphasedata(NewTA, intertheta5V);
     intertheta6V = ProcessDSphasedata(NewTA, intertheta6V);
     var num = 0;
-    alert('line 962');
+    //alert('line 962');
     for(i = 0;i<NewTA[NewTA.length-1];i=i+0.01)
     {
       NewT[num] = i;
@@ -970,7 +970,7 @@ timeArray = [];
       NewT = NewTA;
     }
     if(Final){
-    alert('line 972 - Start Plot');
+    //alert('line 972 - Start Plot');
     }
     //plot
     var trace1 = {
@@ -1040,7 +1040,7 @@ timeArray = [];
 
     Plotly.newPlot('myDiv', data, layout);
     if(Final){
-    alert('line 1040');
+    //alert('line 1040');
     }
   }
 
